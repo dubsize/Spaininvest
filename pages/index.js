@@ -407,8 +407,8 @@ export default function Home() {
           <p style={{fontSize:19,color:C.muted,maxWidth:580,margin:'0 auto 28px',lineHeight:1.6}}>{t.subtitle}</p>
 
           <div style={{display:'flex',justifyContent:'center',gap:10,flexWrap:'wrap'}}>
-            {Object.entries(CITY_COLORS).map(([city,color])=>(
-              <span key={city} style={{background:color+'14',color,border:`1px solid ${color}33`,borderRadius:20,padding:'7px 20px',fontSize:13,fontWeight:600}}>{city}</span>
+            {Object.entries(CITY_COLORS).map(([city])=>(
+              <span key={city} style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:20,padding:'7px 20px',fontSize:13,fontWeight:600,color:C.accent,boxShadow:'0 2px 8px rgba(0,0,0,0.06)'}}>{city}</span>
             ))}
           </div>
         </div>
