@@ -34,16 +34,24 @@ function stripHtml(html) {
 }
 
 async function fetchViaProxy(url) {
-  const res = await fetch('/api/fetch-listing', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ url }),
-    signal: AbortSignal.timeout(28000),
-  });
-  if (!res.ok) throw new Error('proxy_failed');
-  const data = await res.json();
-  if (data.error) throw new Error(data.error);
-  return data.content;
+  // Call ScraperAPI directly from browser (avoids Vercel timeout limits)
+  const SCRAPER_KEY = 'f5779bfd8d4a12533930560ac6faca10';
+  const scraperUrl = `http://api.scraperapi.com?api_key=${SCRAPER_KEY}&url=${encodeURIComponent(url)}&country_code=es&render=false`;
+  try {
+    const res = await fetch(scraperUrl, { signal: AbortSignal.timeout(40000) });
+    if (!res.ok) throw new Error('proxy_failed');
+    const html = await res.text();
+    if (html.length < 500) throw new Error('proxy_failed');
+    return html
+      .replace(/<script[\s\S]*?<\/script>/gi, '')
+      .replace(/<style[\s\S]*?<\/style>/gi, '')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 8000);
+  } catch(e) {
+    throw new Error('proxy_failed');
+  }
 }
 
 // ─── Email Gate Modal ─────────────────────────────────────
@@ -282,6 +290,8 @@ export default function Home() {
   const [lang, setLang] = useState('fr');
   const [url, setUrl] = useState('');
   const [manualText, setManualText] = useState('');
+  const [imageData, setImageData] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [mode, setMode] = useState('url');
   const [status, setStatus] = useState(null);
   const [statusMsg, setStatusMsg] = useState('');
@@ -340,16 +350,21 @@ export default function Home() {
       } catch {
         setStatus('error'); setStatusMsg(t.proxyError); return;
       }
+    } else if (mode === 'image') {
+      if (!imageData) return;
     } else {
       if (manualText.trim().length < 50) return;
       content = manualText;
     }
     setStatus('analyzing'); setStatusMsg(t.analyzing);
     try {
+      const body = mode === 'image'
+        ? { imageData, lang, email: userEmail }
+        : { content: `URL: ${url||'N/A'}\n\n${content}`, lang, email: userEmail };
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: `URL: ${url||'N/A'}\n\n${content}`, lang, email: userEmail }),
+        body: JSON.stringify(body),
       });
       if (response.status === 403) {
         setStatus(null);
@@ -374,10 +389,10 @@ export default function Home() {
     }
   });
 
-  function reset() { setResult(null); setStatus(null); setUrl(''); setManualText(''); }
+  function reset() { setResult(null); setStatus(null); setUrl(''); setManualText(''); setImageData(null); setImagePreview(null); }
 
   const isLoading = status === 'fetching' || status === 'analyzing';
-  const canRun = mode === 'url' ? url.trim().length > 0 : manualText.trim().length >= 50;
+  const canRun = mode === 'url' ? url.trim().length > 0 : mode === 'image' ? !!imageData : manualText.trim().length >= 50;
 
   return (
     <>
@@ -447,11 +462,11 @@ export default function Home() {
           <div style={{animation:'fadeUp 0.5s ease 0.1s both'}}>
             <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:28,padding:48,boxShadow:'0 8px 48px rgba(0,0,0,0.08)',marginBottom:18}}>
               <div style={{display:'flex',background:C.bg,borderRadius:14,padding:4,marginBottom:30,border:`1px solid ${C.border}`}}>
-                {[{k:'url',label:t.modeUrl},{k:'manual',label:t.modeManual}].map(m=>(
+                {[{k:'url',label:t.modeUrl},{k:'image',label:t.modeImage},{k:'manual',label:t.modeManual}].map(m=>(
                   <button key={m.k} onClick={()=>setMode(m.k)} style={{
                     flex:1,padding:'13px 16px',borderRadius:11,border:'none',cursor:'pointer',
                     background:mode===m.k?C.accent:'transparent',
-                    color:mode===m.k?'#fff':C.muted,fontSize:15,fontWeight:600,transition:'all 0.2s'
+                    color:mode===m.k?'#fff':C.muted,fontSize:13,fontWeight:600,transition:'all 0.2s'
                   }}>{m.label}</button>
                 ))}
               </div>
@@ -463,6 +478,36 @@ export default function Home() {
                     style={{width:'100%',background:C.bg,border:`1px solid ${C.border2}`,borderRadius:14,padding:'18px 20px',color:C.text,fontSize:16,transition:'border-color 0.2s'}}
                     onFocus={e=>e.target.style.borderColor=C.accent} onBlur={e=>e.target.style.borderColor=C.border2}/>
                   <div style={{marginTop:10,fontSize:12,color:C.muted,lineHeight:1.6}}>{t.urlNote}</div>
+                </div>
+              ):mode==='image'?(
+                <div>
+                  <label style={{fontSize:11,letterSpacing:2,color:C.accent,textTransform:'uppercase',fontWeight:700,display:'block',marginBottom:10}}>{t.imageLabel}</label>
+                  <div onClick={()=>document.getElementById('imgUpload').click()}
+                    style={{width:'100%',minHeight:200,background:C.bg,border:`2px dashed ${imagePreview?C.accent:C.border2}`,borderRadius:14,
+                    display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',cursor:'pointer',overflow:'hidden',transition:'border-color 0.2s'}}>
+                    {imagePreview?(
+                      <img src={imagePreview} style={{width:'100%',maxHeight:280,objectFit:'contain'}}/>
+                    ):(
+                      <div style={{textAlign:'center',padding:32}}>
+                        <div style={{fontSize:40,marginBottom:12}}>📸</div>
+                        <div style={{color:C.muted,fontSize:14,fontWeight:500}}>{t.imagePlaceholder}</div>
+                        <div style={{color:C.muted,fontSize:12,marginTop:8,opacity:0.7}}>{t.imageNote}</div>
+                      </div>
+                    )}
+                  </div>
+                  <input id='imgUpload' type='file' accept='image/*' capture='environment' style={{display:'none'}} onChange={e=>{
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = ev => {
+                      const base64 = ev.target.result.split(',')[1];
+                      setImageData({base64, mediaType: file.type});
+                      setImagePreview(ev.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                  }}/>
+                  {imagePreview&&<button onClick={()=>{setImageData(null);setImagePreview(null);document.getElementById('imgUpload').value='';}}
+                    style={{marginTop:10,background:'transparent',border:'none',color:C.muted,fontSize:12,cursor:'pointer',display:'block',margin:'10px auto 0'}}>{t.imageRemove}</button>}
                 </div>
               ):(
                 <div>
