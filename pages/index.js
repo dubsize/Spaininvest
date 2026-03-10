@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import T from '../components/translations';
 
@@ -652,7 +652,7 @@ export default function Home() {
                       {h.result.ville&&<span style={{fontSize:11,color:cityColor,fontWeight:700}}>● {h.result.ville}</span>}
                       <span style={{fontSize:14,fontWeight:700,color:C.text}}>{h.result.titre}</span>
                     </div>
-                    <div style={{fontSize:12,color:C.muted}}>{h.result.prix?.toLocaleString('fr')} € · {h.result.loyer_estime_median?.toLocaleString('fr')} €/mois</div>
+                    <div style={{fontSize:12,color:C.muted}}>{h.result.prix?.toLocaleString('fr')} {'€'} — {h.result.loyer_estime_median?.toLocaleString('fr')} €/mois</div>
                   </div>
                   <div style={{width:42,height:42,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,
                     border:`2px solid ${h.result.note_globale>=7?C.green:h.result.note_globale>=5?'#d97706':C.red}`,
