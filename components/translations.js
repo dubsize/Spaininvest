@@ -53,6 +53,9 @@ const T = {
     ipvaNote: "Annual change (official INE figures)",
     marketTitle: "Live Market Data — Spain",
     marketSource: "Sources: Banco de España + INE",
+    mortgageRate: "Avg. mortgage rate",
+    ipvLabel: "Prices",
+    ipvNacional: "Spain",
   },
   fr: {
     badge: "Analyse Investissement Locatif · Espagne",
