@@ -498,11 +498,11 @@ export default function Home() {
               ))}
             </div>
             <div style={{marginTop:12,fontSize:10,color:C.muted,borderTop:`1px solid ${C.border}`,paddingTop:10}}>
-              📊 {t.marketSource} {marketData.live ? '· Live' : '· Données de référence'}
+              📊 {t.marketSource} {marketData.live ? 'Live' : 'Données de référence'}
             </div>
           </div>
         )}
-        {/* Email status bar */
+        {/* Email status bar */}
         {userEmail && (
           <div style={{background:C.accentBg,border:`1px solid #fde68a`,borderRadius:14,padding:'12px 20px',marginBottom:20,display:'flex',alignItems:'center',justifyContent:'space-between',fontSize:13}}>
             <span style={{color:C.tag}}>✅ {userEmail}</span>
@@ -666,7 +666,7 @@ export default function Home() {
         )}
 
         <div style={{textAlign:'center',marginTop:64,fontSize:12,color:C.muted}}>
-          buy2rent.io · 2026
+          buy2rent.io — 2026
         </div>
       </div>
     </>
