@@ -8,8 +8,8 @@
 
 html, body {
   font-family: 'DM Sans', sans-serif;
-  background: #0c0a14;
-  color: #f1f5f9;
+  background: #f5f0e8;
+  color: #1c1917;
   min-height: 100vh;
 }
 
@@ -22,7 +22,7 @@ input:focus, textarea:focus {
 }
 
 ::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-thumb { background: #2d2640; border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: #d6cfc4; border-radius: 2px; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
