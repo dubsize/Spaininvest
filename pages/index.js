@@ -495,7 +495,7 @@ export default function Home() {
                       </div>
                     )}
                   </div>
-                  <input id='imgUpload' type='file' accept='image/*' capture='environment' style={{display:'none'}} onChange={e=>{
+                  <input id='imgUpload' type='file' accept='image/*' style={{display:'none'}} onChange={e=>{
                     const file = e.target.files[0];
                     if (!file) return;
                     const reader = new FileReader();
