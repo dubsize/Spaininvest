@@ -255,6 +255,28 @@ function ResultCard({ data, url, t }) {
         <span style={{fontWeight:800,color:C.accent}}>{t.verdict} : </span>{data.verdict}
         {url&&<div style={{marginTop:10}}><a href={url} target="_blank" rel="noopener noreferrer" style={{fontSize:12,color:C.accent,textDecoration:'none',fontWeight:600}}>{t.sourceLink} ↗</a></div>}
       </div>
+
+      {/* INE Data block */}
+      {(data.irav || data.ipva_city_change) && (
+        <div style={{background:'#fffbeb',border:`1px solid #fde68a`,borderRadius:18,padding:20,marginTop:14,display:'flex',gap:20,flexWrap:'wrap'}}>
+          <div style={{fontSize:11,letterSpacing:2,color:C.tag,textTransform:'uppercase',fontWeight:700,width:'100%',marginBottom:4}}>📊 {t.ineData}</div>
+          {data.irav && (
+            <div style={{flex:1,minWidth:180}}>
+              <div style={{fontSize:11,color:C.muted,marginBottom:4}}>{t.iravLabel} <span style={{fontSize:10,color:C.muted}}>({data.irav_period})</span></div>
+              <div style={{fontSize:26,fontWeight:800,color:C.accent}}>{data.irav}%</div>
+              <div style={{fontSize:11,color:C.muted,marginTop:2}}>{t.iravNote}</div>
+            </div>
+          )}
+          {data.ipva_city_change && (
+            <div style={{flex:1,minWidth:180}}>
+              <div style={{fontSize:11,color:C.muted,marginBottom:4}}>{t.ipvaLabel} {data.ville}</div>
+              <div style={{fontSize:26,fontWeight:800,color:data.ipva_city_change>0?C.green:C.red}}>{data.ipva_city_change>0?'+':''}{data.ipva_city_change}%</div>
+              <div style={{fontSize:11,color:C.muted,marginTop:2}}>{t.ipvaNote}</div>
+            </div>
+          )}
+          <div style={{width:'100%',fontSize:10,color:C.muted,borderTop:`1px solid ${C.border}`,paddingTop:8,marginTop:4}}>Source : INE — Instituto Nacional de Estadística</div>
+        </div>
+      )}
     </div>
   );
 }
