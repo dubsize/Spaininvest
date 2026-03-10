@@ -50,6 +50,71 @@ async function fetchViaProxy(url) {
   throw new Error('proxy_failed');
 }
 
+// ─── Email Gate Modal ─────────────────────────────────────
+function EmailModal({ t, onConfirm, onClose, loading, error }) {
+  const [email, setEmail] = useState('');
+  const valid = email.includes('@') && email.includes('.');
+
+  return (
+    <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.4)',zIndex:1000,display:'flex',alignItems:'center',justifyContent:'center',padding:24}}>
+      <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:24,padding:40,maxWidth:460,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.15)',animation:'fadeUp 0.3s ease both'}}>
+        <div style={{textAlign:'center',marginBottom:28}}>
+          <div style={{fontSize:40,marginBottom:12}}>🏠</div>
+          <h2 style={{fontSize:24,fontWeight:800,color:C.text,marginBottom:8}}>{t.emailTitle}</h2>
+          <p style={{fontSize:15,color:C.muted,lineHeight:1.6}}>{t.emailSubtitle}</p>
+        </div>
+        <div style={{background:C.accentBg,border:`1px solid #fde68a`,borderRadius:14,padding:'12px 16px',marginBottom:20,fontSize:13,color:C.tag,textAlign:'center',fontWeight:600}}>
+          ✨ {t.emailFreeOffer}
+        </div>
+        <input
+          type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          onKeyDown={e => e.key === 'Enter' && valid && !loading && onConfirm(email)}
+          placeholder={t.emailPlaceholder}
+          autoFocus
+          style={{width:'100%',background:C.bg,border:`1px solid ${valid?C.accent:C.border2}`,borderRadius:12,padding:'14px 16px',color:C.text,fontSize:15,marginBottom:12,transition:'border-color 0.2s'}}
+        />
+        {error && <div style={{fontSize:13,color:C.red,marginBottom:12,textAlign:'center'}}>⚠️ {error}</div>}
+        <button onClick={() => onConfirm(email)} disabled={!valid||loading} style={{
+          width:'100%',padding:'16px',borderRadius:12,border:'none',
+          background:valid&&!loading?C.accent:C.border,
+          color:valid&&!loading?'#fff':C.muted,fontSize:15,fontWeight:800,
+          cursor:valid&&!loading?'pointer':'not-allowed',transition:'all 0.2s',
+          display:'flex',alignItems:'center',justifyContent:'center',gap:10,
+          boxShadow:valid&&!loading?'0 4px 16px rgba(180,83,9,0.3)':'none'
+        }}>
+          {loading?<><div style={{width:18,height:18,border:'2px solid #fff',borderTopColor:'transparent',borderRadius:'50%',animation:'spin 0.7s linear infinite'}}/>{t.emailLoading}</>:t.emailCta}
+        </button>
+        <p style={{textAlign:'center',fontSize:11,color:C.muted,marginTop:12,lineHeight:1.5}}>{t.emailPrivacy}</p>
+      </div>
+    </div>
+  );
+}
+
+// ─── Quota Exceeded Modal ─────────────────────────────────
+function QuotaModal({ t, onClose }) {
+  return (
+    <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.4)',zIndex:1000,display:'flex',alignItems:'center',justifyContent:'center',padding:24}}>
+      <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:24,padding:40,maxWidth:460,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.15)',animation:'fadeUp 0.3s ease both',textAlign:'center'}}>
+        <div style={{fontSize:40,marginBottom:16}}>🔒</div>
+        <h2 style={{fontSize:24,fontWeight:800,color:C.text,marginBottom:10}}>{t.quotaTitle}</h2>
+        <p style={{fontSize:15,color:C.muted,lineHeight:1.6,marginBottom:24}}>{t.quotaSubtitle}</p>
+        <div style={{background:C.accentBg,border:`1px solid #fde68a`,borderRadius:16,padding:20,marginBottom:24}}>
+          <div style={{fontSize:28,fontWeight:800,color:C.accent,marginBottom:4}}>19€ <span style={{fontSize:14,fontWeight:400,color:C.muted}}>{t.quotaPerMonth}</span></div>
+          <div style={{fontSize:13,color:C.tag}}>{t.quotaUnlimited}</div>
+        </div>
+        <button style={{width:'100%',padding:'16px',borderRadius:12,border:'none',background:C.accent,color:'#fff',fontSize:15,fontWeight:800,cursor:'pointer',boxShadow:'0 4px 16px rgba(180,83,9,0.3)',marginBottom:12}}>
+          {t.quotaCta}
+        </button>
+        <button onClick={onClose} style={{width:'100%',padding:'12px',borderRadius:12,border:`1px solid ${C.border2}`,background:'transparent',color:C.muted,fontSize:13,cursor:'pointer'}}>
+          {t.quotaClose}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // ─── Sub-components ───────────────────────────────────────
 function ScoreGauge({ score, t, size = 110 }) {
   const r = size * 0.38, circ = 2 * Math.PI * r, fill = (score / 10) * circ;
@@ -136,7 +201,6 @@ function ResultCard({ data, url, t }) {
           </div>
           <ScoreGauge score={data.note_globale||5} t={t} size={110}/>
         </div>
-
         <div style={{background:C.accentBg,border:`1px solid #fde68a`,borderRadius:16,padding:20,marginTop:20}}>
           <div style={{fontSize:11,letterSpacing:2,color:C.tag,textTransform:'uppercase',fontWeight:700,marginBottom:14}}>{t.estimatedRent}</div>
           <div style={{display:'flex',gap:14,marginBottom:12}}>
@@ -206,9 +270,47 @@ export default function Home() {
   const [result, setResult] = useState(null);
   const [history, setHistory] = useState([]);
 
+  // Email gate
+  const [userEmail, setUserEmail] = useState(null);
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [showQuotaModal, setShowQuotaModal] = useState(false);
+  const [emailLoading, setEmailLoading] = useState(false);
+  const [emailError, setEmailError] = useState('');
+  const [pendingRun, setPendingRun] = useState(false);
+
   const t = T[lang];
 
+  async function handleEmailConfirm(email) {
+    setEmailLoading(true);
+    setEmailError('');
+    try {
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      if (!data.can_analyze) {
+        setShowEmailModal(false);
+        setShowQuotaModal(true);
+        return;
+      }
+      setUserEmail(email);
+      setShowEmailModal(false);
+      setPendingRun(true);
+    } catch {
+      setEmailError(t.emailError);
+    } finally {
+      setEmailLoading(false);
+    }
+  }
+
   async function run() {
+    if (!userEmail) {
+      setShowEmailModal(true);
+      return;
+    }
     setResult(null); setStatus(null);
     let content = '';
     if (mode === 'url') {
@@ -229,8 +331,13 @@ export default function Home() {
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: `URL: ${url||'N/A'}\n\n${content}`, lang }),
+        body: JSON.stringify({ content: `URL: ${url||'N/A'}\n\n${content}`, lang, email: userEmail }),
       });
+      if (response.status === 403) {
+        setStatus(null);
+        setShowQuotaModal(true);
+        return;
+      }
       const parsed = await response.json();
       if (!response.ok) throw new Error(parsed.error);
       setResult(parsed);
@@ -240,6 +347,14 @@ export default function Home() {
       setStatus('error'); setStatusMsg(t.analyzeError);
     }
   }
+
+  // Run after email confirmed
+  useState(() => {
+    if (pendingRun && userEmail) {
+      setPendingRun(false);
+      run();
+    }
+  });
 
   function reset() { setResult(null); setStatus(null); setUrl(''); setManualText(''); }
 
@@ -257,6 +372,9 @@ export default function Home() {
         <meta property="og:description" content="Paste any Idealista listing. Get rental yield, estimated rent and investment score instantly."/>
         <meta property="og:type" content="website"/>
       </Head>
+
+      {showEmailModal && <EmailModal t={t} onConfirm={handleEmailConfirm} onClose={()=>setShowEmailModal(false)} loading={emailLoading} error={emailError}/>}
+      {showQuotaModal && <QuotaModal t={t} onClose={()=>setShowQuotaModal(false)}/>}
 
       <div style={{position:'fixed',inset:0,pointerEvents:'none',zIndex:0,
         background:'radial-gradient(ellipse at 80% 0%,#fde68a22 0%,transparent 60%),radial-gradient(ellipse at 20% 100%,#fed7aa18 0%,transparent 60%)'}}/>
@@ -294,6 +412,14 @@ export default function Home() {
             ))}
           </div>
         </div>
+
+        {/* Email status bar */}
+        {userEmail && (
+          <div style={{background:C.accentBg,border:`1px solid #fde68a`,borderRadius:14,padding:'12px 20px',marginBottom:20,display:'flex',alignItems:'center',justifyContent:'space-between',fontSize:13}}>
+            <span style={{color:C.tag}}>✅ {userEmail}</span>
+            <span style={{color:C.muted,fontSize:12}}>{t.analysesLeft}</span>
+          </div>
+        )}
 
         {/* Form */}
         {!result && (
@@ -335,7 +461,7 @@ export default function Home() {
                 boxShadow:isLoading||!canRun?'none':'0 6px 20px rgba(180,83,9,0.3)'
               }}>
                 {isLoading?(
-                  <><div style={{width:20,height:20,border:`2px solid #fff`,borderTopColor:'transparent',borderRadius:'50%',animation:'spin 0.7s linear infinite'}}/>{statusMsg}</>
+                  <><div style={{width:20,height:20,border:'2px solid #fff',borderTopColor:'transparent',borderRadius:'50%',animation:'spin 0.7s linear infinite'}}/>{statusMsg}</>
                 ):(canRun?t.cta:t.ctaDisabled)}
               </button>
 
