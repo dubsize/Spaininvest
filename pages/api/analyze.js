@@ -53,10 +53,10 @@ function buildINEBlock(ine) {
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { content, imageData, lang, email } = req.body;
+  const { content, images, lang, email } = req.body;
   if (!email) return res.status(401).json({ error: 'email_required' });
-  if (!content && !imageData) return res.status(400).json({ error: 'No content or image provided' });
-  if (content && content.length < 50 && !imageData) return res.status(400).json({ error: 'Content too short' });
+  if (!content && (!images || images.length === 0)) return res.status(400).json({ error: 'No content or image provided' });
+  if (content && content.length < 50 && (!images || images.length === 0)) return res.status(400).json({ error: 'Content too short' });
 
   const normalizedEmail = email.toLowerCase().trim();
   const ip = getIP(req);
@@ -198,9 +198,9 @@ ${ineBlock}`;
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1400,
         system: systemPrompt,
-        messages: [{ role: 'user', content: imageData ? [
-          { type: 'image', source: { type: 'base64', media_type: imageData.mediaType, data: imageData.base64 } },
-          { type: 'text', text: 'Analyze this Spanish real estate listing screenshot and return the JSON analysis.' }
+        messages: [{ role: 'user', content: (images && images.length > 0) ? [
+          ...images.map(img => ({ type: 'image', source: { type: 'base64', media_type: img.mediaType, data: img.base64 } })),
+          { type: 'text', text: 'Analyze these Spanish real estate listing screenshots and return the JSON analysis.' }
         ] : content }],
       }),
     });
