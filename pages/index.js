@@ -466,7 +466,7 @@ export default function Home() {
                   <button key={m.k} onClick={()=>setMode(m.k)} style={{
                     flex:1,padding:'13px 16px',borderRadius:11,border:'none',cursor:'pointer',
                     background:mode===m.k?C.accent:'transparent',
-                    color:mode===m.k?'#fff':C.muted,fontSize:13,fontWeight:600,transition:'all 0.2s'
+                    color:mode===m.k?'#fff':C.text,fontSize:13,fontWeight:600,transition:'all 0.2s'
                   }}>{m.label}</button>
                 ))}
               </div>
