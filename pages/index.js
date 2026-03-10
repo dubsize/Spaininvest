@@ -228,12 +228,12 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Spain Invest — AI Rental Property Analysis</title>
+        <title>buy2rent.io — Rental Investment Analysis Spain</title>
         <meta name="description" content="Analyze any Spanish property listing and get instant rental yield, market rent estimate and investment score. Madrid, Barcelona, Valencia, Málaga."/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="icon" href="/favicon.ico"/>
         {/* OG tags for sharing */}
-        <meta property="og:title" content="Spain Invest — AI Rental Property Analysis"/>
+        <meta property="og:title" content="buy2rent.io — Rental Investment Analysis Spain"/>
         <meta property="og:description" content="Paste any Idealista listing. Get rental yield, estimated rent and investment score instantly."/>
         <meta property="og:type" content="website"/>
       </Head>
@@ -243,7 +243,7 @@ export default function Home() {
         <div style={{position:'absolute',bottom:-100,left:-100,width:350,height:350,background:'radial-gradient(circle,#4f46e50a 0%,transparent 70%)',borderRadius:'50%'}}/>
       </div>
 
-      <div style={{position:'relative',zIndex:1,maxWidth:660,margin:'0 auto',padding:'28px 16px'}}>
+      <div style={{position:'relative',zIndex:1,maxWidth:860,margin:'0 auto',padding:'48px 32px'}}>
 
         {/* Header */}
         <div style={{textAlign:'center',marginBottom:32,animation:'fadeUp 0.4s ease both'}}>
@@ -263,8 +263,8 @@ export default function Home() {
             <div style={{width:7,height:7,borderRadius:'50%',background:'#9333ea',animation:'blink 2s infinite'}}/>
             <span style={{fontSize:10,letterSpacing:3,color:'#9333ea',fontWeight:700,textTransform:'uppercase'}}>{t.badge}</span>
           </div>
-          <h1 style={{fontSize:34,fontWeight:800,background:'linear-gradient(135deg,#fff 40%,#c084fc)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',marginBottom:8}}>{t.title}</h1>
-          <p style={{fontSize:13,color:'#6b7280',maxWidth:400,margin:'0 auto 12px'}}>{t.subtitle}</p>
+          <h1 style={{fontSize:52,fontWeight:800,background:'linear-gradient(135deg,#fff 40%,#c084fc)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',marginBottom:12}}>{t.title}</h1>
+          <p style={{fontSize:16,color:'#6b7280',maxWidth:500,margin:'0 auto 16px'}}>{t.subtitle}</p>
           {/* City pills */}
           <div style={{display:'flex',justifyContent:'center',gap:6,flexWrap:'wrap'}}>
             {Object.entries(CITY_COLORS).map(([city,color])=>(
@@ -276,7 +276,7 @@ export default function Home() {
         {/* Form */}
         {!result && (
           <div style={{animation:'fadeUp 0.5s ease 0.1s both'}}>
-            <div style={{background:'#13111c',border:'1px solid #2d2640',borderRadius:20,padding:24,boxShadow:'0 0 60px #7c3aed11',marginBottom:14}}>
+            <div style={{background:'#13111c',border:'1px solid #2d2640',borderRadius:24,padding:36,boxShadow:'0 0 80px #7c3aed11',marginBottom:16}}>
               <div style={{display:'flex',background:'#0c0a14',borderRadius:12,padding:4,marginBottom:20,border:'1px solid #1e1b2e'}}>
                 {[{k:'url',label:t.modeUrl},{k:'manual',label:t.modeManual}].map(m=>(
                   <button key={m.k} onClick={()=>setMode(m.k)} style={{
@@ -299,13 +299,13 @@ export default function Home() {
                 <div>
                   <label style={{fontSize:10,letterSpacing:2,color:'#7c3aed',textTransform:'uppercase',fontWeight:600,display:'block',marginBottom:8}}>{t.textLabel}</label>
                   <textarea value={manualText} onChange={e=>setManualText(e.target.value)} placeholder={t.textPlaceholder}
-                    style={{width:'100%',height:180,background:'#0c0a14',border:'1px solid #2d2640',borderRadius:11,padding:'12px 14px',color:'#e2e8f0',fontSize:13,resize:'vertical',lineHeight:1.6}}
+                    style={{width:'100%',height:220,background:'#0c0a14',border:'1px solid #2d2640',borderRadius:11,padding:'14px 16px',color:'#e2e8f0',fontSize:14,resize:'vertical',lineHeight:1.6}}
                     onFocus={e=>e.target.style.borderColor='#7c3aed'} onBlur={e=>e.target.style.borderColor='#2d2640'}/>
                 </div>
               )}
 
               <button onClick={run} disabled={isLoading||!canRun} style={{
-                width:'100%',marginTop:16,padding:'14px',borderRadius:12,border:'none',
+                width:'100%',marginTop:20,padding:'18px',borderRadius:14,border:'none',
                 background:isLoading||!canRun?'#1e1b2e':'linear-gradient(135deg,#7c3aed,#4f46e5)',
                 color:isLoading||!canRun?'#4b5563':'#fff',fontSize:14,fontWeight:700,
                 cursor:isLoading||!canRun?'not-allowed':'pointer',
@@ -370,7 +370,7 @@ export default function Home() {
         )}
 
         <div style={{textAlign:'center',marginTop:40,fontSize:11,color:'#374151'}}>
-          Spain Invest · Powered by Claude AI · {new Date().getFullYear()}
+          buy2rent.io · {new Date().getFullYear()}
         </div>
       </div>
     </>
