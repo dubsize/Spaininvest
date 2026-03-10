@@ -40,6 +40,11 @@ const T = {
     quotaCta: "Subscribe now →",
     quotaClose: "Maybe later",
     analysesLeft: "2 free analyses",
+    ineData: "Official INE data — live",
+    iravLabel: "IRAV — Max. annual rent increase",
+    iravNote: "Legal cap for contracts signed after May 2023",
+    ipvaLabel: "Rental price evolution —",
+    ipvaNote: "Annual change (official INE figures)",
   },
   fr: {
     badge: "Analyse Investissement Locatif · Espagne",
@@ -82,6 +87,11 @@ const T = {
     quotaCta: "S'abonner maintenant →",
     quotaClose: "Peut-être plus tard",
     analysesLeft: "2 analyses gratuites",
+    ineData: "Données INE officielles — en direct",
+    iravLabel: "IRAV — Hausse annuelle max. du loyer",
+    iravNote: "Plafond légal pour les contrats signés après mai 2023",
+    ipvaLabel: "Évolution des loyers —",
+    ipvaNote: "Variation annuelle (données officielles INE)",
   },
   es: {
     badge: "Análisis de Inversión en Alquiler · España",
@@ -124,6 +134,11 @@ const T = {
     quotaCta: "Suscribirse ahora →",
     quotaClose: "Quizás más tarde",
     analysesLeft: "2 análisis gratuitos",
+    ineData: "Datos INE oficiales — en directo",
+    iravLabel: "IRAV — Subida anual máx. del alquiler",
+    iravNote: "Límite legal para contratos firmados tras mayo 2023",
+    ipvaLabel: "Evolución del precio del alquiler —",
+    ipvaNote: "Variación anual (datos oficiales INE)",
   },
 };
 
