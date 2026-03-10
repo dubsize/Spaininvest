@@ -476,37 +476,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* Market Data Widget */}
-        {marketData && (
-          <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:20,padding:'20px 24px',marginBottom:24,boxShadow:'0 4px 24px rgba(0,0,0,0.06)'}}>
-            <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:16}}>
-              <div style={{width:7,height:7,borderRadius:'50%',background:'#22c55e',animation:'blink 2s infinite'}}/>
-              <span style={{fontSize:10,letterSpacing:2,color:C.muted,textTransform:'uppercase',fontWeight:700}}>{t.marketTitle}</span>
-            </div>
-            <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(130px,1fr))',gap:12}}>
-              <div style={{background:C.bg,borderRadius:14,padding:'14px 16px'}}>
-                <div style={{fontSize:10,color:C.muted,marginBottom:4,fontWeight:600}}>Euribor 12M</div>
-                <div style={{fontSize:22,fontWeight:800,color:C.text}}>{marketData.euribor.value}%</div>
-                <div style={{fontSize:10,color:C.muted,marginTop:2}}>{marketData.euribor.period}</div>
-              </div>
-              <div style={{background:C.bg,borderRadius:14,padding:'14px 16px'}}>
-                <div style={{fontSize:10,color:C.muted,marginBottom:4,fontWeight:600}}>{t.mortgageRate}</div>
-                <div style={{fontSize:22,fontWeight:800,color:C.text}}>{marketData.mortgage_rate.value}%</div>
-                <div style={{fontSize:10,color:C.muted,marginTop:2}}>{marketData.mortgage_rate.period}</div>
-              </div>
-              {Object.entries(marketData.ipv).map(([city, d]) => (
-                <div key={city} style={{background:C.bg,borderRadius:14,padding:'14px 16px'}}>
-                  <div style={{fontSize:10,color:C.muted,marginBottom:4,fontWeight:600,textTransform:'capitalize'}}>{t.ipvLabel} {city === 'nacional' ? t.ipvNacional : city.charAt(0).toUpperCase()+city.slice(1)}</div>
-                  <div style={{fontSize:22,fontWeight:800,color:parseFloat(d.change)>0?'#22c55e':C.red}}>{parseFloat(d.change)>0?'+':''}{d.change}%</div>
-                  <div style={{fontSize:10,color:C.muted,marginTop:2}}>{d.period}</div>
-                </div>
-              ))}
-            </div>
-            <div style={{marginTop:12,fontSize:10,color:C.muted,borderTop:`1px solid ${C.border}`,paddingTop:10}}>
-              📊 {t.marketSource} {marketData.live ? 'Live' : 'Données de référence'}
-            </div>
-          </div>
-        )}
         {/* Form */}
         {!result && (
           <div style={{animation:'fadeUp 0.5s ease 0.1s both'}}>
@@ -521,6 +490,36 @@ export default function Home() {
                 ))}
               </div>
 
+              {marketData && (
+                <div style={{marginBottom:24,paddingBottom:20,borderBottom:`1px solid ${C.border}`}}>
+                  <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:12}}>
+                    <div style={{width:7,height:7,borderRadius:'50%',background:'#22c55e',animation:'blink 2s infinite'}}/>
+                    <span style={{fontSize:10,letterSpacing:2,color:C.muted,textTransform:'uppercase',fontWeight:700}}>{t.marketTitle}</span>
+                  </div>
+                  <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(120px,1fr))',gap:10}}>
+                    <div style={{background:C.bg,borderRadius:12,padding:'12px 14px'}}>
+                      <div style={{fontSize:10,color:C.muted,marginBottom:3,fontWeight:600}}>Euribor 12M</div>
+                      <div style={{fontSize:20,fontWeight:800,color:C.text}}>{marketData.euribor.value}%</div>
+                      <div style={{fontSize:10,color:C.muted,marginTop:2}}>{marketData.euribor.period}</div>
+                    </div>
+                    <div style={{background:C.bg,borderRadius:12,padding:'12px 14px'}}>
+                      <div style={{fontSize:10,color:C.muted,marginBottom:3,fontWeight:600}}>{t.mortgageRate}</div>
+                      <div style={{fontSize:20,fontWeight:800,color:C.text}}>{marketData.mortgage_rate.value}%</div>
+                      <div style={{fontSize:10,color:C.muted,marginTop:2}}>{marketData.mortgage_rate.period}</div>
+                    </div>
+                    {Object.entries(marketData.ipv).map(([city, d]) => (
+                      <div key={city} style={{background:C.bg,borderRadius:12,padding:'12px 14px'}}>
+                        <div style={{fontSize:10,color:C.muted,marginBottom:3,fontWeight:600,textTransform:'capitalize'}}>{t.ipvLabel} {city === 'nacional' ? t.ipvNacional : city.charAt(0).toUpperCase()+city.slice(1)}</div>
+                        <div style={{fontSize:20,fontWeight:800,color:parseFloat(d.change)>0?'#22c55e':C.red}}>{parseFloat(d.change)>0?'+':''}{d.change}%</div>
+                        <div style={{fontSize:10,color:C.muted,marginTop:2}}>{d.period}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{marginTop:10,fontSize:10,color:C.muted}}>
+                    📊 {t.marketSource} {marketData.live ? 'Live' : 'Données de référence'}
+                  </div>
+                </div>
+              )}
               {mode==='url'?(
                 <div>
                   <label style={{fontSize:11,letterSpacing:2,color:C.accent,textTransform:'uppercase',fontWeight:700,display:'block',marginBottom:10}}>{t.urlLabel}</label>
