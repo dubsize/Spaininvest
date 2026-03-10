@@ -350,7 +350,7 @@ export default function Home() {
         setStatus('error'); setStatusMsg(t.proxyError); return;
       }
     } else if (mode === 'image') {
-      if (!imageData) return;
+      if (!images || images.length === 0) return;
     } else {
       if (manualText.trim().length < 50) return;
       content = manualText;
