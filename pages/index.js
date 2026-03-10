@@ -637,21 +637,21 @@ export default function Home() {
               <span style={{fontSize:18,letterSpacing:2,color:C.muted,textTransform:'uppercase',fontWeight:700}}>{t.marketTitle}</span>
             </div>
             <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(120px,1fr))',gap:10}}>
-              <div style={{background:C.bg,borderRadius:12,padding:'12px 14px'}}>
-                <div style={{fontSize:18,color:C.muted,marginBottom:3,fontWeight:600}}>Euribor 12M</div>
+              <div style={{background:C.bg,borderRadius:12,padding:'12px 14px',display:'flex',flexDirection:'column'}}>
+                <div style={{fontSize:12,color:C.muted,fontWeight:600,height:34,lineHeight:1.3,display:'flex',alignItems:'center'}}>Euribor 12M</div>
                 <div style={{fontSize:24,fontWeight:800,color:C.text}}>{marketData.euribor.value}%</div>
-                <div style={{fontSize:18,color:C.muted,marginTop:2}}>{marketData.euribor.period}</div>
+                <div style={{fontSize:12,color:C.muted,marginTop:2}}>{marketData.euribor.period}</div>
               </div>
-              <div style={{background:C.bg,borderRadius:12,padding:'12px 14px'}}>
-                <div style={{fontSize:18,color:C.muted,marginBottom:3,fontWeight:600}}>{t.mortgageRate}</div>
+              <div style={{background:C.bg,borderRadius:12,padding:'12px 14px',display:'flex',flexDirection:'column'}}>
+                <div style={{fontSize:12,color:C.muted,fontWeight:600,height:34,lineHeight:1.3,display:'flex',alignItems:'center'}}>{t.mortgageRate}</div>
                 <div style={{fontSize:24,fontWeight:800,color:C.text}}>{marketData.mortgage_rate.value}%</div>
-                <div style={{fontSize:18,color:C.muted,marginTop:2}}>{marketData.mortgage_rate.period}</div>
+                <div style={{fontSize:12,color:C.muted,marginTop:2}}>{marketData.mortgage_rate.period}</div>
               </div>
               {Object.entries(marketData.ipv).map(([city, d]) => (
-                <div key={city} style={{background:C.bg,borderRadius:12,padding:'12px 14px'}}>
-                  <div style={{fontSize:18,color:C.muted,marginBottom:3,fontWeight:600,textTransform:'capitalize'}}>{t.ipvLabel} {city === 'nacional' ? t.ipvNacional : city.charAt(0).toUpperCase()+city.slice(1)}</div>
+                <div key={city} style={{background:C.bg,borderRadius:12,padding:'12px 14px',display:'flex',flexDirection:'column'}}>
+                  <div style={{fontSize:12,color:C.muted,fontWeight:600,height:34,lineHeight:1.3,display:'flex',alignItems:'center',textTransform:'capitalize'}}>{t.ipvLabel} {city === 'nacional' ? t.ipvNacional : city.charAt(0).toUpperCase()+city.slice(1)}</div>
                   <div style={{fontSize:24,fontWeight:800,color:parseFloat(d.change)>0?'#22c55e':C.red}}>{parseFloat(d.change)>0?'+':''}{d.change}%</div>
-                  <div style={{fontSize:18,color:C.muted,marginTop:2}}>{d.period}</div>
+                  <div style={{fontSize:12,color:C.muted,marginTop:2}}>{d.period}</div>
                 </div>
               ))}
             </div>
