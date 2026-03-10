@@ -290,8 +290,7 @@ export default function Home() {
   const [lang, setLang] = useState('fr');
   const [url, setUrl] = useState('');
   const [manualText, setManualText] = useState('');
-  const [imageData, setImageData] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [images, setImages] = useState([]); // [{base64, mediaType, preview}]
   const [mode, setMode] = useState('url');
   const [status, setStatus] = useState(null);
   const [statusMsg, setStatusMsg] = useState('');
@@ -359,7 +358,7 @@ export default function Home() {
     setStatus('analyzing'); setStatusMsg(t.analyzing);
     try {
       const body = mode === 'image'
-        ? { imageData, lang, email: userEmail }
+        ? { images, lang, email: userEmail }
         : { content: `URL: ${url||'N/A'}\n\n${content}`, lang, email: userEmail };
       const response = await fetch('/api/analyze', {
         method: 'POST',
@@ -389,10 +388,10 @@ export default function Home() {
     }
   });
 
-  function reset() { setResult(null); setStatus(null); setUrl(''); setManualText(''); setImageData(null); setImagePreview(null); }
+  function reset() { setResult(null); setStatus(null); setUrl(''); setManualText(''); setImages([]); }
 
   const isLoading = status === 'fetching' || status === 'analyzing';
-  const canRun = mode === 'url' ? url.trim().length > 0 : mode === 'image' ? !!imageData : manualText.trim().length >= 50;
+  const canRun = mode === 'url' ? url.trim().length > 0 : mode === 'image' ? images.length > 0 : manualText.trim().length >= 50;
 
   return (
     <>
@@ -482,32 +481,58 @@ export default function Home() {
               ):mode==='image'?(
                 <div>
                   <label style={{fontSize:11,letterSpacing:2,color:C.accent,textTransform:'uppercase',fontWeight:700,display:'block',marginBottom:10}}>{t.imageLabel}</label>
-                  <div onClick={()=>document.getElementById('imgUpload').click()}
-                    style={{width:'100%',minHeight:200,background:C.bg,border:`2px dashed ${imagePreview?C.accent:C.border2}`,borderRadius:14,
-                    display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',cursor:'pointer',overflow:'hidden',transition:'border-color 0.2s'}}>
-                    {imagePreview?(
-                      <img src={imagePreview} style={{width:'100%',maxHeight:280,objectFit:'contain'}}/>
-                    ):(
-                      <div style={{textAlign:'center',padding:32}}>
-                        <div style={{fontSize:40,marginBottom:12}}>📸</div>
-                        <div style={{color:C.muted,fontSize:14,fontWeight:500}}>{t.imagePlaceholder}</div>
-                        <div style={{color:C.muted,fontSize:12,marginTop:8,opacity:0.7}}>{t.imageNote}</div>
+                  {/* Image previews */}
+                  <div style={{display:'flex',gap:10,marginBottom:images.length>0?12:0,flexWrap:'wrap'}}>
+                    {images.map((img,i)=>(
+                      <div key={i} style={{position:'relative',width:120,height:100,borderRadius:10,overflow:'hidden',border:`1px solid ${C.border}`}}>
+                        <img src={img.preview} style={{width:'100%',height:'100%',objectFit:'cover'}}/>
+                        <button onClick={()=>setImages(prev=>prev.filter((_,j)=>j!==i))}
+                          style={{position:'absolute',top:4,right:4,background:'rgba(0,0,0,0.6)',border:'none',color:'#fff',borderRadius:'50%',width:22,height:22,cursor:'pointer',fontSize:12,display:'flex',alignItems:'center',justifyContent:'center'}}>✕</button>
+                      </div>
+                    ))}
+                    {images.length < 2 && (
+                      <div onClick={()=>document.getElementById('imgUpload').click()}
+                        style={{width:images.length===0?'100%':120,minHeight:images.length===0?180:100,background:C.bg,
+                        border:`2px dashed ${images.length>0?C.border2:C.border2}`,borderRadius:images.length===0?14:10,
+                        display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',cursor:'pointer',transition:'border-color 0.2s',flex:images.length===0?1:'none'}}>
+                        {images.length===0?(
+                          <div style={{textAlign:'center',padding:24}}>
+                            <div style={{fontSize:36,marginBottom:10}}>📸</div>
+                            <div style={{color:C.muted,fontSize:14,fontWeight:500}}>{t.imagePlaceholder}</div>
+                            <div style={{color:C.muted,fontSize:11,marginTop:6,opacity:0.7}}>{t.imageNote}</div>
+                          </div>
+                        ):(
+                          <div style={{textAlign:'center',padding:8}}>
+                            <div style={{fontSize:22}}>+</div>
+                            <div style={{color:C.muted,fontSize:10}}>{t.imageAdd}</div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
                   <input id='imgUpload' type='file' accept='image/*' style={{display:'none'}} onChange={e=>{
                     const file = e.target.files[0];
                     if (!file) return;
-                    const reader = new FileReader();
-                    reader.onload = ev => {
-                      const base64 = ev.target.result.split(',')[1];
-                      setImageData({base64, mediaType: file.type});
-                      setImagePreview(ev.target.result);
+                    const imgEl = new Image();
+                    const objectUrl = URL.createObjectURL(file);
+                    imgEl.onload = () => {
+                      const MAX = 1200;
+                      let w = imgEl.width, h = imgEl.height;
+                      if (w > MAX || h > MAX) {
+                        if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+                        else { w = Math.round(w * MAX / h); h = MAX; }
+                      }
+                      const canvas = document.createElement('canvas');
+                      canvas.width = w; canvas.height = h;
+                      canvas.getContext('2d').drawImage(imgEl, 0, 0, w, h);
+                      const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+                      URL.revokeObjectURL(objectUrl);
+                      const base64 = dataUrl.split(',')[1];
+                      setImages(prev => [...prev, {base64, mediaType:'image/jpeg', preview:dataUrl}]);
+                      e.target.value = '';
                     };
-                    reader.readAsDataURL(file);
+                    imgEl.src = objectUrl;
                   }}/>
-                  {imagePreview&&<button onClick={()=>{setImageData(null);setImagePreview(null);document.getElementById('imgUpload').value='';}}
-                    style={{marginTop:10,background:'transparent',border:'none',color:C.muted,fontSize:12,cursor:'pointer',display:'block',margin:'10px auto 0'}}>{t.imageRemove}</button>}
                 </div>
               ):(
                 <div>
