@@ -309,9 +309,22 @@ export default function Home() {
   const t = T[lang];
 
   useEffect(() => {
+    const fallback = {
+      euribor: { value: 2.45, period: 'Fév. 2026', trend: 'down' },
+      mortgage_rate: { value: 2.81, period: 'Jan. 2026', trend: 'stable' },
+      ipv: {
+        nacional: { change: 8.1, period: 'T4 2025' },
+        madrid:   { change: 9.2, period: 'T4 2025' },
+        barcelona:{ change: 7.8, period: 'T4 2025' },
+        valencia: { change: 11.3, period: 'T4 2025' },
+        malaga:   { change: 12.1, period: 'T4 2025' },
+      },
+      live: false,
+    };
+    setMarketData(fallback); // show immediately with fallback
     fetch('/api/market-data')
-      .then(r => r.json())
-      .then(d => setMarketData(d))
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d) setMarketData(d); })
       .catch(() => {});
   }, []);
 
