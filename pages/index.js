@@ -260,6 +260,44 @@ function ResultCard({ data, url, t }) {
         {url&&<div style={{marginTop:10}}><a href={url} target="_blank" rel="noopener noreferrer" style={{fontSize:12,color:C.accent,textDecoration:'none',fontWeight:600}}>{t.sourceLink} ↗</a></div>}
       </div>
 
+      {/* Socio-demographic block */}
+      {(data.renta_district_persona || data.paro_region) && (
+        <div style={{background:'#f0f9ff',border:`1px solid #bae6fd`,borderRadius:18,padding:20,marginTop:14}}>
+          <div style={{fontSize:11,letterSpacing:2,color:'#0369a1',textTransform:'uppercase',fontWeight:700,marginBottom:14}}>🏘 {t.socioTitle}</div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))',gap:10,marginBottom:12}}>
+            {data.renta_district_persona && (
+              <div style={{background:'#fff',borderRadius:12,padding:'12px 14px'}}>
+                <div style={{fontSize:10,color:'#64748b',marginBottom:3,fontWeight:600}}>{t.socioRentaPersona}</div>
+                <div style={{fontSize:20,fontWeight:800,color:'#0c4a6e'}}>{data.renta_district_persona.toLocaleString('fr')} €</div>
+                <div style={{fontSize:10,color:'#94a3b8',marginTop:2}}>{t.socioPerYear}</div>
+              </div>
+            )}
+            {data.renta_district_hogar && (
+              <div style={{background:'#fff',borderRadius:12,padding:'12px 14px'}}>
+                <div style={{fontSize:10,color:'#64748b',marginBottom:3,fontWeight:600}}>{t.socioRentaHogar}</div>
+                <div style={{fontSize:20,fontWeight:800,color:'#0c4a6e'}}>{data.renta_district_hogar.toLocaleString('fr')} €</div>
+                <div style={{fontSize:10,color:'#94a3b8',marginTop:2}}>{t.socioPerYear}</div>
+              </div>
+            )}
+            {data.paro_region && (
+              <div style={{background:'#fff',borderRadius:12,padding:'12px 14px'}}>
+                <div style={{fontSize:10,color:'#64748b',marginBottom:3,fontWeight:600}}>{t.socioParo}</div>
+                <div style={{fontSize:20,fontWeight:800,color:data.paro_region>12?'#dc2626':data.paro_region>10?'#d97706':'#16a34a'}}>{data.paro_region}%</div>
+                <div style={{fontSize:10,color:'#94a3b8',marginTop:2}}>EPA T4 2025</div>
+              </div>
+            )}
+          </div>
+          {data.district_profile && (
+            <div style={{fontSize:12,color:'#0369a1',background:'rgba(255,255,255,0.6)',borderRadius:10,padding:'8px 12px',lineHeight:1.6}}>
+              👥 {data.district_profile}
+            </div>
+          )}
+          <div style={{width:'100%',fontSize:10,color:'#94a3b8',borderTop:`1px solid #e0f2fe`,paddingTop:8,marginTop:10}}>
+            {t.socioSource}
+          </div>
+        </div>
+      )}
+
       {/* INE Data block */}
       {(data.irav || data.ipva_city_change) && (
         <div style={{background:'#fffbeb',border:`1px solid #fde68a`,borderRadius:18,padding:20,marginTop:14,display:'flex',gap:20,flexWrap:'wrap'}}>
