@@ -5,28 +5,50 @@ const supabase = createClient(
   process.env.SUPABASE_SECRET_KEY
 );
 
+function getIP(req) {
+  const forwarded = req.headers['x-forwarded-for'];
+  if (forwarded) return forwarded.split(',')[0].trim();
+  return req.socket?.remoteAddress || 'unknown';
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const { content, lang, email } = req.body;
   if (!content || content.length < 50) return res.status(400).json({ error: 'Content too short' });
-
-  // ── Quota check ──────────────────────────────────────────
   if (!email) return res.status(401).json({ error: 'email_required' });
 
   const normalizedEmail = email.toLowerCase().trim();
-  const { data: user, error: fetchError } = await supabase
+  const ip = getIP(req);
+
+  // ── Check email quota ─────────────────────────────────────
+  const { data: user, error: userError } = await supabase
     .from('users')
     .select('analyses_count, is_subscribed')
     .eq('email', normalizedEmail)
     .single();
 
-  if (fetchError || !user) return res.status(401).json({ error: 'email_required' });
-  if (!user.is_subscribed && user.analyses_count >= 2) {
-    return res.status(403).json({ error: 'quota_exceeded' });
+  if (userError || !user) return res.status(401).json({ error: 'email_required' });
+
+  if (!user.is_subscribed) {
+    // Check email count
+    if (user.analyses_count >= 2) {
+      return res.status(403).json({ error: 'quota_exceeded' });
+    }
+
+    // Check IP count
+    const { data: ipData } = await supabase
+      .from('ip_usage')
+      .select('analyses_count')
+      .eq('ip', ip)
+      .single();
+
+    if (ipData && ipData.analyses_count >= 2) {
+      return res.status(403).json({ error: 'quota_exceeded' });
+    }
   }
 
-  // ── Claude analysis ──────────────────────────────────────
+  // ── Claude analysis ───────────────────────────────────────
   const langNames = { en: 'English', fr: 'French', es: 'Spanish' };
   const langName = langNames[lang] || 'French';
 
@@ -140,11 +162,29 @@ SCORING GUIDANCE:
     const raw = data.content?.[0]?.text || '';
     const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
 
-    // ── Increment count ──────────────────────────────────────
+    // ── Increment email count ─────────────────────────────────
     await supabase
       .from('users')
       .update({ analyses_count: user.analyses_count + 1 })
       .eq('email', normalizedEmail);
+
+    // ── Increment IP count ────────────────────────────────────
+    const { data: ipData } = await supabase
+      .from('ip_usage')
+      .select('analyses_count')
+      .eq('ip', ip)
+      .single();
+
+    if (ipData) {
+      await supabase
+        .from('ip_usage')
+        .update({ analyses_count: ipData.analyses_count + 1, updated_at: new Date().toISOString() })
+        .eq('ip', ip);
+    } else {
+      await supabase
+        .from('ip_usage')
+        .insert({ ip, analyses_count: 1 });
+    }
 
     return res.status(200).json(parsed);
   } catch (err) {
