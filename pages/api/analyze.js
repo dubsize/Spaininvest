@@ -132,7 +132,11 @@ Expected JSON structure:
   "points_negatifs": ["list", "of", "weaknesses"],
   "verdict": "short summary in ${langName} on the rental investment interest — must mention the IRAV rate and what it means for this investment",
   "score_quartier": number (1-10),
-  "note_globale": number (1-10)
+  "note_globale": number (1-10),
+  "renta_district_persona": number or null (net annual income per person in €, from ADRH data above),
+  "renta_district_hogar": number or null (net annual household income in €, from ADRH data above),
+  "paro_region": number or null (unemployment % for the region from EPA data above),
+  "district_profile": string or null (1-sentence tenant profile summary in ${langName}, e.g. "Quartier ouvrier avec forte demande locative jeune, revenu médian 28.500€/foyer")
 }
 
 === SPAIN RENTAL MARKET REFERENCE DATA 2025-2026 (unfurnished long-term) ===
