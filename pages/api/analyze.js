@@ -53,9 +53,10 @@ function buildINEBlock(ine) {
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { content, lang, email } = req.body;
-  if (!content || content.length < 50) return res.status(400).json({ error: 'Content too short' });
+  const { content, imageData, lang, email } = req.body;
   if (!email) return res.status(401).json({ error: 'email_required' });
+  if (!content && !imageData) return res.status(400).json({ error: 'No content or image provided' });
+  if (content && content.length < 50 && !imageData) return res.status(400).json({ error: 'Content too short' });
 
   const normalizedEmail = email.toLowerCase().trim();
   const ip = getIP(req);
@@ -197,7 +198,10 @@ ${ineBlock}`;
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1400,
         system: systemPrompt,
-        messages: [{ role: 'user', content }],
+        messages: [{ role: 'user', content: imageData ? [
+          { type: 'image', source: { type: 'base64', media_type: imageData.mediaType, data: imageData.base64 } },
+          { type: 'text', text: 'Analyze this Spanish real estate listing screenshot and return the JSON analysis.' }
+        ] : content }],
       }),
     });
 
