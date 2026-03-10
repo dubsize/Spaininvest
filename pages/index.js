@@ -2,6 +2,29 @@ import { useState } from 'react';
 import Head from 'next/head';
 import T from '../components/translations';
 
+// ─── Colors ───────────────────────────────────────────────
+const C = {
+  bg:       '#f5f0e8',
+  card:     '#fffdf8',
+  border:   '#e8e0d0',
+  border2:  '#d6cfc4',
+  text:     '#1c1917',
+  muted:    '#78716c',
+  accent:   '#b45309',
+  accentBg: '#fef3c7',
+  green:    '#15803d',
+  red:      '#b91c1c',
+  tag:      '#92400e',
+};
+
+const CITY_COLORS = {
+  'Madrid':    '#d97706',
+  'Barcelona': '#db2777',
+  'Valencia':  '#059669',
+  'Málaga':    '#2563eb',
+};
+
+// ─── Utilities ────────────────────────────────────────────
 function stripHtml(html) {
   if (typeof document === 'undefined') return html;
   const tmp = document.createElement('div');
@@ -27,39 +50,33 @@ async function fetchViaProxy(url) {
   throw new Error('proxy_failed');
 }
 
-const CITY_COLORS = {
-  'Madrid': '#f59e0b',
-  'Barcelona': '#ec4899',
-  'Valencia': '#10b981',
-  'Málaga': '#3b82f6',
-};
-
-function ScoreGauge({ score, t, size = 100 }) {
+// ─── Sub-components ───────────────────────────────────────
+function ScoreGauge({ score, t, size = 110 }) {
   const r = size * 0.38, circ = 2 * Math.PI * r, fill = (score / 10) * circ;
-  const color = score >= 7 ? '#4ade80' : score >= 5 ? '#facc15' : score >= 3 ? '#fb923c' : '#f87171';
+  const color = score >= 7 ? C.green : score >= 5 ? '#d97706' : score >= 3 ? '#ea580c' : C.red;
   const label = score >= 7 ? t.score.good : score >= 5 ? t.score.avg : score >= 3 ? t.score.weak : t.score.avoid;
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="#1e1b2e" strokeWidth={size*0.08}/>
+      <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={C.border} strokeWidth={size*0.08}/>
       <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={color} strokeWidth={size*0.08}
         strokeDasharray={`${fill} ${circ}`} strokeLinecap="round"
         transform={`rotate(-90 ${size/2} ${size/2})`} style={{transition:'stroke-dasharray 1s ease'}}/>
       <text x={size/2} y={size/2+5} textAnchor="middle" fontSize={size*0.22} fontWeight="800" fill={color}>{score.toFixed(1)}</text>
-      <text x={size/2} y={size/2+size*0.19} textAnchor="middle" fontSize={size*0.1} fill="#6b7280" letterSpacing="1">{label}</text>
+      <text x={size/2} y={size/2+size*0.19} textAnchor="middle" fontSize={size*0.1} fill={C.muted} letterSpacing="1">{label}</text>
     </svg>
   );
 }
 
 function RentaBar({ brute, nette, t }) {
   return (
-    <div style={{display:'flex',flexDirection:'column',gap:10}}>
-      {[{label:t.yieldBrute,val:brute,color:'#c084fc'},{label:t.yieldNet,val:nette,color:'#818cf8'}].map(b=>(
+    <div style={{display:'flex',flexDirection:'column',gap:12}}>
+      {[{label:t.yieldBrute,val:brute,color:C.accent},{label:t.yieldNet,val:nette,color:C.green}].map(b=>(
         <div key={b.label}>
-          <div style={{display:'flex',justifyContent:'space-between',fontSize:11,color:'#9ca3af',marginBottom:4}}>
+          <div style={{display:'flex',justifyContent:'space-between',fontSize:12,color:C.muted,marginBottom:5}}>
             <span>{b.label}</span><span style={{fontWeight:700,color:b.color}}>{b.val.toFixed(2)}%</span>
           </div>
-          <div style={{height:6,background:'#1e1b2e',borderRadius:3,overflow:'hidden'}}>
-            <div style={{height:'100%',width:`${Math.min(100,(b.val/8)*100)}%`,background:`linear-gradient(90deg,${b.color}66,${b.color})`,borderRadius:3,transition:'width 1s ease'}}/>
+          <div style={{height:7,background:C.border,borderRadius:4,overflow:'hidden'}}>
+            <div style={{height:'100%',width:`${Math.min(100,(b.val/8)*100)}%`,background:b.color,borderRadius:4,transition:'width 1s ease'}}/>
           </div>
         </div>
       ))}
@@ -67,11 +84,20 @@ function RentaBar({ brute, nette, t }) {
   );
 }
 
-function Chip({ children, color='#374151' }) {
+function Chip({ children, color }) {
   return (
-    <span style={{background:color+'22',color,border:`1px solid ${color}44`,borderRadius:20,padding:'3px 10px',fontSize:11,fontWeight:600,display:'inline-flex',alignItems:'center'}}>
+    <span style={{background:color+'18',color,border:`1px solid ${color}33`,borderRadius:20,padding:'4px 12px',fontSize:12,fontWeight:600,display:'inline-flex',alignItems:'center'}}>
       {children}
     </span>
+  );
+}
+
+function Section({ title, color, children }) {
+  return (
+    <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:18,padding:24}}>
+      <div style={{fontSize:11,letterSpacing:2,color:color||C.accent,textTransform:'uppercase',fontWeight:700,marginBottom:16}}>{title}</div>
+      {children}
+    </div>
   );
 }
 
@@ -82,99 +108,94 @@ function ResultCard({ data, url, t }) {
   const impot=base>0?base*0.19:0, revenusNets=base-impot;
   const rentaBrute=prix>0?(loyer*12/prix)*100:0, rentaNette=prix>0?(revenusNets/prix)*100:0;
   const prixM2=prix/surface;
-  const dpeColor=['A','B','C'].includes(data.classe_energetique)?'#4ade80':['E','F','G'].includes(data.classe_energetique)?'#f87171':'#facc15';
-  const cityColor = CITY_COLORS[data.ville] || '#9333ea';
+  const dpeColor=['A','B','C'].includes(data.classe_energetique)?C.green:['E','F','G'].includes(data.classe_energetique)?C.red:'#d97706';
+  const cityColor = CITY_COLORS[data.ville] || C.accent;
 
   return (
     <div style={{animation:'fadeUp 0.5s ease both'}}>
-      <div style={{background:'linear-gradient(135deg,#13111c,#1a1625)',border:`1px solid ${cityColor}44`,borderRadius:20,padding:24,marginBottom:14}}>
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:16,flexWrap:'wrap'}}>
+      <div style={{background:C.card,border:`2px solid ${cityColor}55`,borderRadius:24,padding:32,marginBottom:16,boxShadow:'0 4px 32px rgba(0,0,0,0.06)'}}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:20,flexWrap:'wrap'}}>
           <div style={{flex:1}}>
-            <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:8,flexWrap:'wrap'}}>
-              <div style={{fontSize:10,letterSpacing:3,color:cityColor,fontWeight:700,textTransform:'uppercase'}}>{t.aiTag}</div>
-              {data.ville && (
-                <span style={{background:cityColor+'22',color:cityColor,border:`1px solid ${cityColor}44`,borderRadius:20,padding:'2px 10px',fontSize:11,fontWeight:700}}>
-                  📍 {data.ville}
-                </span>
-              )}
+            <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:10,flexWrap:'wrap'}}>
+              <span style={{fontSize:11,letterSpacing:2,color:cityColor,fontWeight:700,textTransform:'uppercase'}}>{t.aiTag}</span>
+              {data.ville&&<span style={{background:cityColor+'18',color:cityColor,border:`1px solid ${cityColor}44`,borderRadius:20,padding:'3px 12px',fontSize:12,fontWeight:700}}>📍 {data.ville}</span>}
             </div>
-            <div style={{fontSize:19,fontWeight:800,marginBottom:10,lineHeight:1.3}}>{data.titre}</div>
-            <div style={{display:'flex',gap:6,flexWrap:'wrap',marginBottom:14}}>
-              {data.adresse&&<Chip color="#9ca3af">{data.adresse}</Chip>}
-              {data.annee_construction&&<Chip color="#6b7280">🏗 {data.annee_construction}</Chip>}
+            <div style={{fontSize:22,fontWeight:800,marginBottom:12,lineHeight:1.3,color:C.text}}>{data.titre}</div>
+            <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:16}}>
+              {data.adresse&&<Chip color={C.muted}>{data.adresse}</Chip>}
+              {data.annee_construction&&<Chip color={C.muted}>🏗 {data.annee_construction}</Chip>}
               {data.classe_energetique&&<Chip color={dpeColor}>DPE {data.classe_energetique}</Chip>}
-              {data.garage&&<Chip color="#60a5fa">🚗 Garage</Chip>}
-              {data.piscine&&<Chip color="#38bdf8">🏊 Pool</Chip>}
-              {data.trastero&&<Chip color="#a78bfa">📦 Storage</Chip>}
-              {data.neuf&&<Chip color="#4ade80">✨ New build</Chip>}
+              {data.garage&&<Chip color={CITY_COLORS.Madrid}>🚗 Garage</Chip>}
+              {data.piscine&&<Chip color={CITY_COLORS.Barcelona}>🏊 Pool</Chip>}
+              {data.trastero&&<Chip color={C.accent}>📦 Storage</Chip>}
+              {data.neuf&&<Chip color={C.green}>✨ New</Chip>}
             </div>
-            <div style={{fontSize:26,fontWeight:800}}>{prix.toLocaleString('fr')} €
-              <span style={{fontSize:13,color:'#6b7280',fontWeight:400,marginLeft:8}}>{Math.round(prixM2).toLocaleString('fr')} €/m²</span>
+            <div style={{fontSize:32,fontWeight:800,color:C.text}}>{prix.toLocaleString('fr')} €
+              <span style={{fontSize:14,color:C.muted,fontWeight:400,marginLeft:10}}>{Math.round(prixM2).toLocaleString('fr')} €/m²</span>
             </div>
           </div>
-          <ScoreGauge score={data.note_globale||5} t={t} size={100}/>
+          <ScoreGauge score={data.note_globale||5} t={t} size={110}/>
         </div>
 
-        {/* Rent block */}
-        <div style={{background:'linear-gradient(135deg,#2d1b69,#1e1b4b)',border:'1px solid #4c1d95',borderRadius:14,padding:16,marginTop:16}}>
-          <div style={{fontSize:10,letterSpacing:2,color:'#a78bfa',textTransform:'uppercase',fontWeight:600,marginBottom:12}}>{t.estimatedRent}</div>
-          <div style={{display:'flex',gap:12,marginBottom:12}}>
+        <div style={{background:C.accentBg,border:`1px solid #fde68a`,borderRadius:16,padding:20,marginTop:20}}>
+          <div style={{fontSize:11,letterSpacing:2,color:C.tag,textTransform:'uppercase',fontWeight:700,marginBottom:14}}>{t.estimatedRent}</div>
+          <div style={{display:'flex',gap:14,marginBottom:12}}>
             {[{l:t.rentMin,v:data.loyer_estime_min,h:false},{l:t.rentMedian,v:data.loyer_estime_median,h:true},{l:t.rentMax,v:data.loyer_estime_max,h:false}].map(x=>(
-              <div key={x.l} style={{flex:1,textAlign:'center'}}>
-                <div style={{fontSize:10,color:'#6b7280',textTransform:'uppercase',letterSpacing:1,marginBottom:2}}>{x.l}</div>
-                <div style={{fontSize:x.h?24:16,fontWeight:800,color:x.h?'#c084fc':'#6b7280'}}>{x.v?.toLocaleString('fr')} €</div>
+              <div key={x.l} style={{flex:1,textAlign:'center',background:'#fff',borderRadius:12,padding:'12px 8px',border:`1px solid ${x.h?C.accent+'55':C.border}`}}>
+                <div style={{fontSize:11,color:C.muted,textTransform:'uppercase',letterSpacing:1,marginBottom:4}}>{x.l}</div>
+                <div style={{fontSize:x.h?28:18,fontWeight:800,color:x.h?C.accent:C.muted}}>{x.v?.toLocaleString('fr')} €</div>
               </div>
             ))}
           </div>
-          <div style={{fontSize:12,color:'#7c3aed',background:'#1e1b2e',borderRadius:8,padding:'8px 12px',lineHeight:1.6}}>💡 {data.justification_loyer}</div>
+          <div style={{fontSize:13,color:C.tag,background:'rgba(255,255,255,0.5)',borderRadius:10,padding:'10px 14px',lineHeight:1.6}}>💡 {data.justification_loyer}</div>
         </div>
       </div>
 
-      {/* Metrics */}
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:14}}>
-        <div style={{background:'#13111c',border:'1px solid #2d2640',borderRadius:16,padding:18}}>
-          <div style={{fontSize:10,letterSpacing:2,color:'#9333ea',textTransform:'uppercase',fontWeight:600,marginBottom:14}}>{t.yield}</div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14,marginBottom:14}}>
+        <Section title={t.yield} color={C.accent}>
           <RentaBar brute={rentaBrute} nette={rentaNette} t={t}/>
-          <div style={{marginTop:12,paddingTop:10,borderTop:'1px solid #1e1b2e',fontSize:12,color:'#6b7280'}}>
-            {t.netPerYear} : <span style={{color:revenusNets>0?'#4ade80':'#f87171',fontWeight:700}}>{Math.round(revenusNets).toLocaleString('fr')} €</span>
+          <div style={{marginTop:14,paddingTop:12,borderTop:`1px solid ${C.border}`,fontSize:13,color:C.muted}}>
+            {t.netPerYear} : <span style={{color:revenusNets>0?C.green:C.red,fontWeight:700}}>{Math.round(revenusNets).toLocaleString('fr')} €</span>
           </div>
-        </div>
-        <div style={{background:'#13111c',border:'1px solid #2d2640',borderRadius:16,padding:18}}>
-          <div style={{fontSize:10,letterSpacing:2,color:'#9333ea',textTransform:'uppercase',fontWeight:600,marginBottom:14}}>{t.exploitation}</div>
+        </Section>
+        <Section title={t.exploitation} color={C.accent}>
           {[
-            {l:t.rents,v:`+${Math.round(loyerAnnuel).toLocaleString('fr')} €`,c:'#4ade80'},
-            {l:t.charges,v:`−${Math.round(chargesAn).toLocaleString('fr')} €`,c:'#f87171'},
-            {l:t.ibi,v:`−${Math.round(ibi).toLocaleString('fr')} €`,c:'#f87171'},
-            {l:t.tax,v:`−${Math.round(impot).toLocaleString('fr')} €`,c:'#f87171'},
+            {l:t.rents,v:`+${Math.round(loyerAnnuel).toLocaleString('fr')} €`,c:C.green},
+            {l:t.charges,v:`−${Math.round(chargesAn).toLocaleString('fr')} €`,c:C.red},
+            {l:t.ibi,v:`−${Math.round(ibi).toLocaleString('fr')} €`,c:C.red},
+            {l:t.tax,v:`−${Math.round(impot).toLocaleString('fr')} €`,c:C.red},
           ].map(r=>(
-            <div key={r.l} style={{display:'flex',justifyContent:'space-between',fontSize:11,padding:'4px 0',borderBottom:'1px solid #1e1b2e'}}>
-              <span style={{color:'#6b7280'}}>{r.l}</span><span style={{color:r.c,fontWeight:600}}>{r.v}</span>
+            <div key={r.l} style={{display:'flex',justifyContent:'space-between',fontSize:12,padding:'6px 0',borderBottom:`1px solid ${C.border}`}}>
+              <span style={{color:C.muted}}>{r.l}</span><span style={{color:r.c,fontWeight:700}}>{r.v}</span>
             </div>
+          ))}
+        </Section>
+      </div>
+
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14,marginBottom:14}}>
+        <div style={{background:'#f0fdf4',border:`1px solid #bbf7d0`,borderRadius:18,padding:20}}>
+          <div style={{fontSize:11,letterSpacing:2,color:C.green,textTransform:'uppercase',fontWeight:700,marginBottom:12}}>{t.strengths}</div>
+          {(data.points_positifs||[]).map((p,i)=>(
+            <div key={i} style={{fontSize:13,color:'#166534',padding:'5px 0',borderBottom:'1px solid #dcfce7',display:'flex',gap:8}}><span style={{color:C.green,fontWeight:700}}>+</span>{p}</div>
+          ))}
+        </div>
+        <div style={{background:'#fff5f5',border:`1px solid #fecaca`,borderRadius:18,padding:20}}>
+          <div style={{fontSize:11,letterSpacing:2,color:C.red,textTransform:'uppercase',fontWeight:700,marginBottom:12}}>{t.weaknesses}</div>
+          {(data.points_negatifs||[]).map((p,i)=>(
+            <div key={i} style={{fontSize:13,color:'#991b1b',padding:'5px 0',borderBottom:'1px solid #fee2e2',display:'flex',gap:8}}><span style={{color:C.red,fontWeight:700}}>−</span>{p}</div>
           ))}
         </div>
       </div>
 
-      {/* Strengths / Weaknesses */}
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:14}}>
-        <div style={{background:'#0d1f13',border:'1px solid #14532d',borderRadius:16,padding:16}}>
-          <div style={{fontSize:10,letterSpacing:2,color:'#4ade80',textTransform:'uppercase',fontWeight:600,marginBottom:10}}>{t.strengths}</div>
-          {(data.points_positifs||[]).map((p,i)=><div key={i} style={{fontSize:12,color:'#86efac',padding:'4px 0',borderBottom:'1px solid #14532d22',display:'flex',gap:6}}><span style={{color:'#4ade80'}}>+</span>{p}</div>)}
-        </div>
-        <div style={{background:'#1f0d0d',border:'1px solid #7f1d1d',borderRadius:16,padding:16}}>
-          <div style={{fontSize:10,letterSpacing:2,color:'#f87171',textTransform:'uppercase',fontWeight:600,marginBottom:10}}>{t.weaknesses}</div>
-          {(data.points_negatifs||[]).map((p,i)=><div key={i} style={{fontSize:12,color:'#fca5a5',padding:'4px 0',borderBottom:'1px solid #7f1d1d22',display:'flex',gap:6}}><span style={{color:'#f87171'}}>−</span>{p}</div>)}
-        </div>
-      </div>
-
-      {/* Verdict */}
-      <div style={{background:'linear-gradient(135deg,#1e1b2e,#13111c)',border:'1px solid #4c1d95',borderRadius:16,padding:18,fontSize:14,color:'#e2e8f0',lineHeight:1.6}}>
-        <span style={{fontWeight:700,color:'#c084fc'}}>{t.verdict} : </span>{data.verdict}
-        {url&&<div style={{marginTop:8}}><a href={url} target="_blank" rel="noopener noreferrer" style={{fontSize:11,color:'#7c3aed',textDecoration:'none'}}>{t.sourceLink}</a></div>}
+      <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:18,padding:24,fontSize:14,color:C.text,lineHeight:1.7}}>
+        <span style={{fontWeight:800,color:C.accent}}>{t.verdict} : </span>{data.verdict}
+        {url&&<div style={{marginTop:10}}><a href={url} target="_blank" rel="noopener noreferrer" style={{fontSize:12,color:C.accent,textDecoration:'none',fontWeight:600}}>{t.sourceLink} ↗</a></div>}
       </div>
     </div>
   );
 }
 
+// ─── Main ─────────────────────────────────────────────────
 export default function Home() {
   const [lang, setLang] = useState('fr');
   const [url, setUrl] = useState('');
@@ -232,43 +253,44 @@ export default function Home() {
         <meta name="description" content="Analyze any Spanish property listing and get instant rental yield, market rent estimate and investment score. Madrid, Barcelona, Valencia, Málaga."/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="icon" href="/favicon.ico"/>
-        {/* OG tags for sharing */}
         <meta property="og:title" content="buy2rent.io — Rental Investment Analysis Spain"/>
         <meta property="og:description" content="Paste any Idealista listing. Get rental yield, estimated rent and investment score instantly."/>
         <meta property="og:type" content="website"/>
       </Head>
 
-      <div style={{position:'fixed',inset:0,pointerEvents:'none',zIndex:0}}>
-        <div style={{position:'absolute',top:-150,right:-150,width:500,height:500,background:'radial-gradient(circle,#7c3aed0d 0%,transparent 70%)',borderRadius:'50%'}}/>
-        <div style={{position:'absolute',bottom:-100,left:-100,width:350,height:350,background:'radial-gradient(circle,#4f46e50a 0%,transparent 70%)',borderRadius:'50%'}}/>
-      </div>
+      <div style={{position:'fixed',inset:0,pointerEvents:'none',zIndex:0,
+        background:'radial-gradient(ellipse at 80% 0%,#fde68a22 0%,transparent 60%),radial-gradient(ellipse at 20% 100%,#fed7aa18 0%,transparent 60%)'}}/>
 
-      <div style={{position:'relative',zIndex:1,maxWidth:860,margin:'0 auto',padding:'48px 32px'}}>
+      <div style={{position:'relative',zIndex:1,maxWidth:980,margin:'0 auto',padding:'56px 40px'}}>
 
         {/* Header */}
-        <div style={{textAlign:'center',marginBottom:32,animation:'fadeUp 0.4s ease both'}}>
-          <div style={{display:'flex',justifyContent:'center',marginBottom:16}}>
-            <div style={{display:'flex',gap:4,background:'#0c0a14',border:'1px solid #1e1b2e',borderRadius:10,padding:3}}>
+        <div style={{textAlign:'center',marginBottom:56,animation:'fadeUp 0.4s ease both'}}>
+          <div style={{display:'flex',justifyContent:'center',marginBottom:24}}>
+            <div style={{display:'flex',gap:2,background:C.card,border:`1px solid ${C.border}`,borderRadius:12,padding:4,boxShadow:'0 2px 8px rgba(0,0,0,0.06)'}}>
               {['en','fr','es'].map(l=>(
                 <button key={l} onClick={()=>{setLang(l);setResult(null);setStatus(null);}} style={{
-                  padding:'5px 12px',borderRadius:7,border:'none',cursor:'pointer',
-                  background:lang===l?'linear-gradient(135deg,#7c3aed,#4f46e5)':'transparent',
-                  color:lang===l?'#fff':'#6b7280',fontSize:12,fontWeight:700,
+                  padding:'8px 22px',borderRadius:9,border:'none',cursor:'pointer',
+                  background:lang===l?C.accent:'transparent',
+                  color:lang===l?'#fff':C.muted,fontSize:13,fontWeight:700,
                   transition:'all 0.2s',textTransform:'uppercase',letterSpacing:1
                 }}>{l}</button>
               ))}
             </div>
           </div>
-          <div style={{display:'inline-flex',alignItems:'center',gap:8,background:'#1a1625',border:'1px solid #2d2640',borderRadius:20,padding:'5px 14px',marginBottom:14}}>
-            <div style={{width:7,height:7,borderRadius:'50%',background:'#9333ea',animation:'blink 2s infinite'}}/>
-            <span style={{fontSize:10,letterSpacing:3,color:'#9333ea',fontWeight:700,textTransform:'uppercase'}}>{t.badge}</span>
+
+          <div style={{display:'inline-flex',alignItems:'center',gap:8,background:C.accentBg,border:`1px solid #fde68a`,borderRadius:20,padding:'7px 20px',marginBottom:22}}>
+            <div style={{width:8,height:8,borderRadius:'50%',background:C.accent,animation:'blink 2s infinite'}}/>
+            <span style={{fontSize:11,letterSpacing:3,color:C.tag,fontWeight:700,textTransform:'uppercase'}}>{t.badge}</span>
           </div>
-          <h1 style={{fontSize:52,fontWeight:800,background:'linear-gradient(135deg,#fff 40%,#c084fc)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',marginBottom:12}}>{t.title}</h1>
-          <p style={{fontSize:16,color:'#6b7280',maxWidth:500,margin:'0 auto 16px'}}>{t.subtitle}</p>
-          {/* City pills */}
-          <div style={{display:'flex',justifyContent:'center',gap:6,flexWrap:'wrap'}}>
+
+          <h1 style={{fontSize:72,fontWeight:800,color:C.text,marginBottom:18,lineHeight:1,letterSpacing:'-3px'}}>
+            buy2rent<span style={{color:C.accent}}>.io</span>
+          </h1>
+          <p style={{fontSize:19,color:C.muted,maxWidth:580,margin:'0 auto 28px',lineHeight:1.6}}>{t.subtitle}</p>
+
+          <div style={{display:'flex',justifyContent:'center',gap:10,flexWrap:'wrap'}}>
             {Object.entries(CITY_COLORS).map(([city,color])=>(
-              <span key={city} style={{background:color+'18',color,border:`1px solid ${color}33`,borderRadius:20,padding:'3px 12px',fontSize:11,fontWeight:600}}>{city}</span>
+              <span key={city} style={{background:color+'14',color,border:`1px solid ${color}33`,borderRadius:20,padding:'7px 20px',fontSize:13,fontWeight:600}}>{city}</span>
             ))}
           </div>
         </div>
@@ -276,53 +298,56 @@ export default function Home() {
         {/* Form */}
         {!result && (
           <div style={{animation:'fadeUp 0.5s ease 0.1s both'}}>
-            <div style={{background:'#13111c',border:'1px solid #2d2640',borderRadius:24,padding:36,boxShadow:'0 0 80px #7c3aed11',marginBottom:16}}>
-              <div style={{display:'flex',background:'#0c0a14',borderRadius:12,padding:4,marginBottom:20,border:'1px solid #1e1b2e'}}>
+            <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:28,padding:48,boxShadow:'0 8px 48px rgba(0,0,0,0.08)',marginBottom:18}}>
+              <div style={{display:'flex',background:C.bg,borderRadius:14,padding:4,marginBottom:30,border:`1px solid ${C.border}`}}>
                 {[{k:'url',label:t.modeUrl},{k:'manual',label:t.modeManual}].map(m=>(
                   <button key={m.k} onClick={()=>setMode(m.k)} style={{
-                    flex:1,padding:'9px 12px',borderRadius:9,border:'none',cursor:'pointer',
-                    background:mode===m.k?'linear-gradient(135deg,#7c3aed,#4f46e5)':'transparent',
-                    color:mode===m.k?'#fff':'#6b7280',fontSize:13,fontWeight:600,transition:'all 0.2s'
+                    flex:1,padding:'13px 16px',borderRadius:11,border:'none',cursor:'pointer',
+                    background:mode===m.k?C.accent:'transparent',
+                    color:mode===m.k?'#fff':C.muted,fontSize:15,fontWeight:600,transition:'all 0.2s'
                   }}>{m.label}</button>
                 ))}
               </div>
 
               {mode==='url'?(
                 <div>
-                  <label style={{fontSize:10,letterSpacing:2,color:'#7c3aed',textTransform:'uppercase',fontWeight:600,display:'block',marginBottom:8}}>{t.urlLabel}</label>
+                  <label style={{fontSize:11,letterSpacing:2,color:C.accent,textTransform:'uppercase',fontWeight:700,display:'block',marginBottom:10}}>{t.urlLabel}</label>
                   <input value={url} onChange={e=>setUrl(e.target.value)} onKeyDown={e=>e.key==='Enter'&&run()} placeholder={t.urlPlaceholder}
-                    style={{width:'100%',background:'#0c0a14',border:'1px solid #2d2640',borderRadius:11,padding:'12px 14px',color:'#e2e8f0',fontSize:14}}
-                    onFocus={e=>e.target.style.borderColor='#7c3aed'} onBlur={e=>e.target.style.borderColor='#2d2640'}/>
-                  <div style={{marginTop:8,fontSize:11,color:'#4b5563',lineHeight:1.6}}>{t.urlNote}</div>
+                    style={{width:'100%',background:C.bg,border:`1px solid ${C.border2}`,borderRadius:14,padding:'18px 20px',color:C.text,fontSize:16,transition:'border-color 0.2s'}}
+                    onFocus={e=>e.target.style.borderColor=C.accent} onBlur={e=>e.target.style.borderColor=C.border2}/>
+                  <div style={{marginTop:10,fontSize:12,color:C.muted,lineHeight:1.6}}>{t.urlNote}</div>
                 </div>
               ):(
                 <div>
-                  <label style={{fontSize:10,letterSpacing:2,color:'#7c3aed',textTransform:'uppercase',fontWeight:600,display:'block',marginBottom:8}}>{t.textLabel}</label>
+                  <label style={{fontSize:11,letterSpacing:2,color:C.accent,textTransform:'uppercase',fontWeight:700,display:'block',marginBottom:10}}>{t.textLabel}</label>
                   <textarea value={manualText} onChange={e=>setManualText(e.target.value)} placeholder={t.textPlaceholder}
-                    style={{width:'100%',height:220,background:'#0c0a14',border:'1px solid #2d2640',borderRadius:11,padding:'14px 16px',color:'#e2e8f0',fontSize:14,resize:'vertical',lineHeight:1.6}}
-                    onFocus={e=>e.target.style.borderColor='#7c3aed'} onBlur={e=>e.target.style.borderColor='#2d2640'}/>
+                    style={{width:'100%',height:260,background:C.bg,border:`1px solid ${C.border2}`,borderRadius:14,padding:'18px 20px',color:C.text,fontSize:15,resize:'vertical',lineHeight:1.7,transition:'border-color 0.2s'}}
+                    onFocus={e=>e.target.style.borderColor=C.accent} onBlur={e=>e.target.style.borderColor=C.border2}/>
                 </div>
               )}
 
               <button onClick={run} disabled={isLoading||!canRun} style={{
-                width:'100%',marginTop:20,padding:'18px',borderRadius:14,border:'none',
-                background:isLoading||!canRun?'#1e1b2e':'linear-gradient(135deg,#7c3aed,#4f46e5)',
-                color:isLoading||!canRun?'#4b5563':'#fff',fontSize:14,fontWeight:700,
-                cursor:isLoading||!canRun?'not-allowed':'pointer',
-                display:'flex',alignItems:'center',justifyContent:'center',gap:10,transition:'opacity 0.2s'
+                width:'100%',marginTop:24,padding:'22px',borderRadius:16,border:'none',
+                background:isLoading||!canRun?C.border:C.accent,
+                color:isLoading||!canRun?C.muted:'#fff',fontSize:17,fontWeight:800,
+                cursor:isLoading||!canRun?'not-allowed':'pointer',letterSpacing:'0.5px',
+                display:'flex',alignItems:'center',justifyContent:'center',gap:12,transition:'all 0.2s',
+                boxShadow:isLoading||!canRun?'none':'0 6px 20px rgba(180,83,9,0.3)'
               }}>
-                {isLoading?(<><div style={{width:16,height:16,border:'2px solid #7c3aed',borderTopColor:'transparent',borderRadius:'50%',animation:'spin 0.7s linear infinite'}}/>{statusMsg}</>):(canRun?t.cta:t.ctaDisabled)}
+                {isLoading?(
+                  <><div style={{width:20,height:20,border:`2px solid #fff`,borderTopColor:'transparent',borderRadius:'50%',animation:'spin 0.7s linear infinite'}}/>{statusMsg}</>
+                ):(canRun?t.cta:t.ctaDisabled)}
               </button>
 
               {status==='error'&&(
-                <div style={{marginTop:12,padding:12,background:'#1f0d0d',border:'1px solid #7f1d1d',borderRadius:10,fontSize:13,color:'#f87171'}}>⚠️ {statusMsg}</div>
+                <div style={{marginTop:16,padding:16,background:'#fff5f5',border:`1px solid #fecaca`,borderRadius:12,fontSize:13,color:C.red}}>⚠️ {statusMsg}</div>
               )}
             </div>
 
             <button onClick={()=>{setMode('manual');setManualText('Calle de Isabel Clara Eugenia, 37\nSanchinarro, Madrid\n560,000 euros\n\n2 dormitorios y 2 baños, urbanización privada con piscina, jardines, gimnasio, coworking, zona infantil, conserjería y ascensor. 1 plaza de garaje y trastero.\n\n84 m² construidos, planta 3ª exterior, construido en 2005, calefacción gas natural, aire acondicionado.\n\nCertificado energético: 167 kWh/m² año, 25 kg CO2/m² año');}}
-              style={{width:'100%',padding:'10px',borderRadius:10,background:'transparent',border:'1px dashed #2d2640',color:'#4b5563',fontSize:12,cursor:'pointer',transition:'all 0.2s'}}
-              onMouseEnter={e=>{e.target.style.borderColor='#7c3aed';e.target.style.color='#9333ea'}}
-              onMouseLeave={e=>{e.target.style.borderColor='#2d2640';e.target.style.color='#4b5563'}}>
+              style={{width:'100%',padding:'15px',borderRadius:14,background:'transparent',border:`1px dashed ${C.border2}`,color:C.muted,fontSize:14,cursor:'pointer',transition:'all 0.2s',fontWeight:500}}
+              onMouseEnter={e=>{e.target.style.borderColor=C.accent;e.target.style.color=C.accent}}
+              onMouseLeave={e=>{e.target.style.borderColor=C.border2;e.target.style.color=C.muted}}>
               {t.example}
             </button>
           </div>
@@ -332,9 +357,9 @@ export default function Home() {
         {result&&(
           <div>
             <ResultCard data={result} url={url} t={t}/>
-            <button onClick={reset} style={{width:'100%',marginTop:14,padding:'13px',borderRadius:12,background:'transparent',border:'1px solid #2d2640',color:'#6b7280',fontSize:13,cursor:'pointer',fontWeight:600,transition:'all 0.2s'}}
-              onMouseEnter={e=>{e.target.style.borderColor='#7c3aed';e.target.style.color='#c084fc'}}
-              onMouseLeave={e=>{e.target.style.borderColor='#2d2640';e.target.style.color='#6b7280'}}>
+            <button onClick={reset} style={{width:'100%',marginTop:18,padding:'18px',borderRadius:14,background:'transparent',border:`1px solid ${C.border2}`,color:C.muted,fontSize:14,cursor:'pointer',fontWeight:600,transition:'all 0.2s'}}
+              onMouseEnter={e=>{e.target.style.borderColor=C.accent;e.target.style.color=C.accent}}
+              onMouseLeave={e=>{e.target.style.borderColor=C.border2;e.target.style.color=C.muted}}>
               {t.newAnalysis}
             </button>
           </div>
@@ -342,25 +367,25 @@ export default function Home() {
 
         {/* History */}
         {history.length>1&&!result&&(
-          <div style={{marginTop:28}}>
-            <div style={{fontSize:10,letterSpacing:3,color:'#4b5563',textTransform:'uppercase',marginBottom:10}}>{t.recentTitle}</div>
+          <div style={{marginTop:40}}>
+            <div style={{fontSize:11,letterSpacing:3,color:C.muted,textTransform:'uppercase',marginBottom:14,fontWeight:600}}>{t.recentTitle}</div>
             {history.slice(1).map((h,i)=>{
-              const cityColor = CITY_COLORS[h.result.ville] || '#9333ea';
+              const cityColor = CITY_COLORS[h.result.ville] || C.accent;
               return (
                 <div key={i} onClick={()=>{setResult(h.result);setUrl(h.url);}}
-                  style={{background:'#13111c',border:'1px solid #1e1b2e',borderRadius:12,padding:'12px 16px',cursor:'pointer',display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:8,transition:'border-color 0.2s'}}
-                  onMouseEnter={e=>e.currentTarget.style.borderColor='#2d2640'}
-                  onMouseLeave={e=>e.currentTarget.style.borderColor='#1e1b2e'}>
+                  style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:14,padding:'16px 22px',cursor:'pointer',display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:10,transition:'all 0.2s',boxShadow:'0 2px 8px rgba(0,0,0,0.04)'}}
+                  onMouseEnter={e=>{e.currentTarget.style.borderColor=C.accent;e.currentTarget.style.boxShadow='0 4px 16px rgba(180,83,9,0.1)'}}
+                  onMouseLeave={e=>{e.currentTarget.style.borderColor=C.border;e.currentTarget.style.boxShadow='0 2px 8px rgba(0,0,0,0.04)'}}>
                   <div>
-                    <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:2}}>
-                      {h.result.ville&&<span style={{fontSize:10,color:cityColor,fontWeight:700}}>● {h.result.ville}</span>}
-                      <span style={{fontSize:13,fontWeight:600,color:'#e2e8f0'}}>{h.result.titre}</span>
+                    <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:3}}>
+                      {h.result.ville&&<span style={{fontSize:11,color:cityColor,fontWeight:700}}>● {h.result.ville}</span>}
+                      <span style={{fontSize:14,fontWeight:700,color:C.text}}>{h.result.titre}</span>
                     </div>
-                    <div style={{fontSize:11,color:'#4b5563'}}>{h.result.prix?.toLocaleString('fr')} € · {h.result.loyer_estime_median?.toLocaleString('fr')} €/mo</div>
+                    <div style={{fontSize:12,color:C.muted}}>{h.result.prix?.toLocaleString('fr')} € · {h.result.loyer_estime_median?.toLocaleString('fr')} €/mois</div>
                   </div>
-                  <div style={{width:36,height:36,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',
-                    border:`2px solid ${h.result.note_globale>=7?'#4ade80':h.result.note_globale>=5?'#facc15':'#f87171'}`,
-                    fontSize:12,fontWeight:700,color:h.result.note_globale>=7?'#4ade80':h.result.note_globale>=5?'#facc15':'#f87171'}}>
+                  <div style={{width:42,height:42,borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,
+                    border:`2px solid ${h.result.note_globale>=7?C.green:h.result.note_globale>=5?'#d97706':C.red}`,
+                    fontSize:13,fontWeight:800,color:h.result.note_globale>=7?C.green:h.result.note_globale>=5?'#d97706':C.red}}>
                     {h.result.note_globale?.toFixed(1)}
                   </div>
                 </div>
@@ -369,7 +394,7 @@ export default function Home() {
           </div>
         )}
 
-        <div style={{textAlign:'center',marginTop:40,fontSize:11,color:'#374151'}}>
+        <div style={{textAlign:'center',marginTop:64,fontSize:12,color:C.muted}}>
           buy2rent.io · {new Date().getFullYear()}
         </div>
       </div>
