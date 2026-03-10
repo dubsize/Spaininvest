@@ -51,6 +51,8 @@ const T = {
     iravNote: "Legal cap for contracts signed after May 2023",
     ipvaLabel: "Rental price evolution —",
     ipvaNote: "Annual change (official INE figures)",
+    marketTitle: "Live Market Data — Spain",
+    marketSource: "Sources: Banco de España + INE",
   },
   fr: {
     badge: "Analyse Investissement Locatif · Espagne",
