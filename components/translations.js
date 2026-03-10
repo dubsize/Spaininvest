@@ -1,6 +1,6 @@
 const T = {
   en: {
-    badge: "AI · Rental Investment Analysis",
+    badge: "Rental Investment Analysis · Spain",
     title: "Spain Invest",
     subtitle: "Paste any Spanish property listing — get a full rental investment analysis in seconds.",
     modeUrl: "🔗 Auto URL", modeManual: "📋 Copy & Paste",
@@ -16,7 +16,7 @@ const T = {
     analyzeError: "Analysis error. Please check the content and try again.",
     example: "Load example listing", newAnalysis: "+ Analyze another property",
     recentTitle: "Recent analyses", verdict: "Verdict", sourceLink: "🔗 Original listing",
-    aiTag: "AI · Rental Investment Analysis",
+    aiTag: "Rental Investment Analysis",
     estimatedRent: "Estimated rent — Spain market 2025-2026",
     rentMin: "Min", rentMedian: "Median", rentMax: "Max",
     yield: "Yield", yieldBrute: "Gross", yieldNet: "Net est.", netPerYear: "Net/year",
@@ -27,7 +27,7 @@ const T = {
     cities: "Madrid · Barcelona · Valencia · Málaga",
   },
   fr: {
-    badge: "IA · Analyse Investissement Locatif",
+    badge: "Analyse Investissement Locatif · Espagne",
     title: "Spain Invest",
     subtitle: "Collez une annonce immobilière espagnole — obtenez une analyse complète en quelques secondes.",
     modeUrl: "🔗 URL automatique", modeManual: "📋 Copier-coller",
@@ -43,7 +43,7 @@ const T = {
     analyzeError: "Erreur d'analyse. Vérifiez le contenu et réessayez.",
     example: "Charger un exemple", newAnalysis: "+ Analyser une autre annonce",
     recentTitle: "Analyses récentes", verdict: "Verdict", sourceLink: "🔗 Annonce originale",
-    aiTag: "IA · Analyse Investissement Locatif",
+    aiTag: "Analyse Investissement Locatif",
     estimatedRent: "Loyer estimé — marché espagnol 2025-2026",
     rentMin: "Min", rentMedian: "Médian", rentMax: "Max",
     yield: "Rendement", yieldBrute: "Brut", yieldNet: "Net est.", netPerYear: "Net/an",
@@ -54,7 +54,7 @@ const T = {
     cities: "Madrid · Barcelone · Valence · Málaga",
   },
   es: {
-    badge: "IA · Análisis de Inversión en Alquiler",
+    badge: "Análisis de Inversión en Alquiler · España",
     title: "Spain Invest",
     subtitle: "Pega cualquier anuncio inmobiliario español — obtén un análisis completo de inversión en segundos.",
     modeUrl: "🔗 URL automática", modeManual: "📋 Copiar y pegar",
@@ -70,7 +70,7 @@ const T = {
     analyzeError: "Error de análisis. Verifica el contenido e inténtalo de nuevo.",
     example: "Cargar ejemplo", newAnalysis: "+ Analizar otro inmueble",
     recentTitle: "Análisis recientes", verdict: "Veredicto", sourceLink: "🔗 Anuncio original",
-    aiTag: "IA · Análisis Inversión en Alquiler",
+    aiTag: "Análisis Inversión en Alquiler",
     estimatedRent: "Alquiler estimado — mercado español 2025-2026",
     rentMin: "Mínimo", rentMedian: "Mediana", rentMax: "Máximo",
     yield: "Rentabilidad", yieldBrute: "Bruta", yieldNet: "Neta est.", netPerYear: "Neto/año",
