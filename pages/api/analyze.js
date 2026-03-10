@@ -184,6 +184,86 @@ SCORING GUIDANCE:
 - note_globale 6-7: Gross yield 4.5-6%, decent location, manageable risks
 - note_globale 4-5: Gross yield 3.5-4.5%, some concerns
 - note_globale 1-3: Gross yield < 3.5% or major structural risk (regulation, renovation)
+
+=== SOCIO-DEMOGRAPHIC DATA BY DISTRICT — INE ADRH 2023 + EPA T4 2025 ===
+Use this data to enrich your analysis based on the property location. Match the neighborhood/district from the listing to the closest entry below.
+Format: Renta neta media/persona (€/yr) | Renta neta media/hogar (€/yr) | % pop >65 | % pop <18 | Profile
+
+UNEMPLOYMENT CONTEXT (EPA T4 2025):
+- Comunidad de Madrid: 9.2% — well below national avg → lower tenant default risk
+- Cataluña: 9.8% — below national avg
+- Comunitat Valenciana: 11.4% — near national avg
+- Andalucía: 15.2% — above national avg → factor into default risk for Málaga investments
+- Spain national avg: 10.6%
+
+MADRID (city avg: 18,142€/persona/yr):
+- Salamanca: 30,200€ | 68,000€/hogar | 24%>65 | 12%<18 → Premium upper class, low yield zone
+- Chamartín: 29,800€ | 64,000€/hogar | 25%>65 | 11%<18 → Affluent, embassies, professionals
+- Chamberí: 25,400€ | 53,000€/hogar | 26%>65 | 12%<18 → Central premium, aging pop, high demand
+- Moncloa-Aravaca: 24,100€ | 52,000€/hogar | 20%>65 | 16%<18 → University zone (Complutense), student demand
+- Retiro: 23,800€ | 51,000€/hogar | 25%>65 | 13%<18 → Park premium, mature professional tenants
+- Hortaleza: 19,800€ | 46,000€/hogar | 15%>65 | 19%<18 → Modern residential, Sanchinarro/Las Tablas, families
+- Fuencarral-El Pardo: 19,200€ | 44,000€/hogar | 16%>65 | 18%<18 → Growing north suburbs, family profile
+- Barajas: 18,600€ | 43,000€/hogar | 15%>65 | 19%<18 → Airport zone, logistics/aviation workers
+- Arganzuela: 17,800€ | 40,000€/hogar | 17%>65 | 16%<18 → Gentrifying, Madrid Río effect, mixed profile
+- Ciudad Lineal: 16,800€ | 38,000€/hogar | 20%>65 | 16%<18 → Middle class, solid rental demand, good yield
+- San Blas-Canillejas: 15,900€ | 37,000€/hogar | 18%>65 | 17%<18 → Eastern working class, growing, young pop
+- Moratalaz: 15,800€ | 37,000€/hogar | 24%>65 | 14%<18 → Quiet residential, older pop, lower young tenant demand
+- Tetuán: 15,200€ | 35,000€/hogar | 16%>65 | 18%<18 → Gentrifying, multicultural, rising fast
+- Vicálvaro: 14,800€ | 34,000€/hogar | 14%>65 | 20%<18 → Suburban families, newer housing stock
+- Villa de Vallecas: 14,200€ | 33,000€/hogar | 13%>65 | 22%<18 → Young families, new developments, affordable
+- Latina: 14,100€ | 33,000€/hogar | 20%>65 | 17%<18 → Working class, good yield, immigrant community
+- Carabanchel: 13,600€ | 31,000€/hogar | 17%>65 | 19%<18 → High yield, gentrifying south, family demand
+- Usera: 12,400€ | 28,000€/hogar | 15%>65 | 20%<18 → Multicultural (Asian/Latin), highest yield zone Madrid
+- Vallecas/Puente de Vallecas: 11,800-12,100€ | 27,000-28,500€/hogar | 16%>65 | 20-21%<18 → 8%+ gross yield, affordable, working class, young population
+- Villaverde: 11,200€ | 26,000€/hogar | 16%>65 | 21%<18 → Industrial/residential, high yield, lower demand profile
+
+BARCELONA (city avg: 18,500€/persona/yr):
+NOTE: Rent control (Ley de Contenció) applies in most of Barcelona — always flag as risk
+- Sarrià-Sant Gervasi: 28,400€ | 62,000€/hogar | 22%>65 | 15%<18 → Affluent hillside, expats, families, low yield
+- Les Corts: 22,800€ | 51,000€/hogar | 23%>65 | 14%<18 → Affluent, Camp Nou area, professionals
+- Eixample: 21,200€ | 46,000€/hogar | 20%>65 | 13%<18 → Prime central, maximum demand, rent control risk
+- Gràcia: 20,100€ | 43,000€/hogar | 19%>65 | 14%<18 → Trendy, young professionals, rent pressure
+- Sant Martí (Poblenou): 17,600€ | 38,000€/hogar | 17%>65 | 15%<18 → Tech hub, rising fast, good yield window closing
+- Sants-Montjuïc: 16,400€ | 36,000€/hogar | 18%>65 | 16%<18 → Mixed working class + university, solid rental base
+- Horta-Guinardó: 16,200€ | 36,500€/hogar | 21%>65 | 15%<18 → Residential families, decent yield, quieter
+- Sant Andreu: 16,800€ | 37,000€/hogar | 18%>65 | 17%<18 → Gentrifying, good yield, improving transport
+- Nou Barris: 13,200€ | 29,000€/hogar | 19%>65 | 18%<18 → Highest yield in BCN, working class, immigrant community
+- Ciutat Vella: 13,800€ | 28,000€/hogar | 13%>65 | 14%<18 → Airbnb/tourist pressure, rent control, avoid long-term
+
+VALENCIA (city avg: 14,800€/persona/yr):
+- Pla del Real: 22,400€ | 49,000€/hogar | 22%>65 | 14%<18 → Affluent university zone, reliable professional/student demand
+- Eixample Valencia: 20,100€ | 44,000€/hogar | 23%>65 | 12%<18 → Central premium, solid demand, lower yield
+- Extramurs: 17,200€ | 37,000€/hogar | 19%>65 | 15%<18 → Gentrifying central, good profile, rising
+- Russafa: 16,800€ | 35,000€/hogar | 16%>65 | 15%<18 → Trendy, expats, young professionals, high demand
+- Algirós: 16,400€ | 36,000€/hogar | 19%>65 | 16%<18 → University area, reliable student demand, good yield
+- Campanar: 15,800€ | 34,000€/hogar | 18%>65 | 17%<18 → Residential families, good value
+- Poblats Marítims: 14,800€ | 32,000€/hogar | 17%>65 | 17%<18 → Coastal proximity, rising expat demand
+- Benimaclet: 14,600€ | 31,000€/hogar | 17%>65 | 17%<18 → Student/young professional mix, excellent yield
+- El Carmen/Ciutat Vella: 14,200€ | 29,000€/hogar | 15%>65 | 14%<18 → Historic core, tourism pressure
+- Quatre Carreres: 14,100€ | 31,000€/hogar | 16%>65 | 18%<18 → Affordable families, solid value
+- Jesús: 13,400€ | 29,500€/hogar | 19%>65 | 18%<18 → Working class, solid yield, quieter
+- Patraix: 13,800€ | 30,000€/hogar | 18%>65 | 18%<18 → Affordable, family profile, reliable
+- Rascanya: 13,200€ | 29,000€/hogar | 16%>65 | 20%<18 → Affordable, high yield, young families, immigrant community
+
+MÁLAGA (city avg: 12,900€/persona/yr — BELOW national avg 15,036€):
+NOTE: 15.2% unemployment in Andalucía → higher tenant default risk than Madrid/Barcelona
+- Centro/Soho: 14,200€ | 30,000€/hogar | 20%>65 | 14%<18 → Expat & tourist demand, rising fast, Soho gentrification
+- Este: 13,800€ | 29,000€/hogar | 17%>65 | 17%<18 → Residential east, families, solid demand
+- Ciudad Jardín: 13,200€ | 28,000€/hogar | 18%>65 | 17%<18 → Middle class residential, stable profile
+- Teatinos-Universidad: 13,600€ | 28,000€/hogar | 11%>65 | 19%<18 → University + tech park (PTA), student & professional demand, excellent yield potential
+- Puerto de la Torre: 12,400€ | 27,000€/hogar | 15%>65 | 20%<18 → Residential north, families
+- Churriana: 12,200€ | 27,000€/hogar | 14%>65 | 20%<18 → Near airport, good yield, family profile
+- Carretera de Cádiz: 11,800€ | 26,000€/hogar | 17%>65 | 19%<18 → Working class west, high yield, lower income profile
+- Campanillas: 11,600€ | 26,000€/hogar | 13%>65 | 22%<18 → Industrial suburb, logistics workers, high yield
+- Palma-Palmilla: 9,800€ | 22,000€/hogar | 17%>65 | 22%<18 → Lowest income in Málaga, highest yield but elevated social risk
+
+HOW TO USE IN YOUR ANALYSIS:
+1. Match property location to nearest district and include income/demographic context in justification_loyer
+2. In points_positifs/negatifs: flag relevant demographics (young pop = strong rental demand; high >65% = lower mobility)
+3. In verdict: include one line on district socio-economic profile (e.g. "District household income 31,000€/yr, working-class profile with strong young tenant demand")
+4. Adjust score_quartier: districts above city avg income = +1, below = -1; high young pop (>18% <18y) = +1 for rental demand
+5. For Málaga: always factor 15.2% regional unemployment into risk assessment
 ${ineBlock}`;
 
   try {
