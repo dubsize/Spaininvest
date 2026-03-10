@@ -288,7 +288,18 @@ function ResultCard({ data, url, t }) {
 // ─── Main ─────────────────────────────────────────────────
 export default function Home() {
   const [lang, setLang] = useState('fr');
-  const [marketData, setMarketData] = useState(null);
+  const [marketData, setMarketData] = useState({
+    euribor: { value: 2.45, period: 'Fév. 2026' },
+    mortgage_rate: { value: 2.81, period: 'Jan. 2026' },
+    ipv: {
+      nacional: { change: 8.1, period: 'T4 2025' },
+      madrid:   { change: 9.2, period: 'T4 2025' },
+      barcelona:{ change: 7.8, period: 'T4 2025' },
+      valencia: { change: 11.3, period: 'T4 2025' },
+      malaga:   { change: 12.1, period: 'T4 2025' },
+    },
+    live: false,
+  });
   const [url, setUrl] = useState('');
   const [manualText, setManualText] = useState('');
   const [images, setImages] = useState([]); // [{base64, mediaType, preview}]
@@ -309,19 +320,6 @@ export default function Home() {
   const t = T[lang];
 
   useEffect(() => {
-    const fallback = {
-      euribor: { value: 2.45, period: 'Fév. 2026', trend: 'down' },
-      mortgage_rate: { value: 2.81, period: 'Jan. 2026', trend: 'stable' },
-      ipv: {
-        nacional: { change: 8.1, period: 'T4 2025' },
-        madrid:   { change: 9.2, period: 'T4 2025' },
-        barcelona:{ change: 7.8, period: 'T4 2025' },
-        valencia: { change: 11.3, period: 'T4 2025' },
-        malaga:   { change: 12.1, period: 'T4 2025' },
-      },
-      live: false,
-    };
-    setMarketData(fallback); // show immediately with fallback
     fetch('/api/market-data')
       .then(r => r.ok ? r.json() : null)
       .then(d => { if (d) setMarketData(d); })
@@ -668,7 +666,7 @@ export default function Home() {
         )}
 
         <div style={{textAlign:'center',marginTop:64,fontSize:12,color:C.muted}}>
-          buy2rent.io · {new Date().getFullYear()}
+          buy2rent.io · 2026
         </div>
       </div>
     </>
