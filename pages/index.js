@@ -34,20 +34,16 @@ function stripHtml(html) {
 }
 
 async function fetchViaProxy(url) {
-  const proxies = [
-    `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
-    `https://corsproxy.io/?${encodeURIComponent(url)}`,
-  ];
-  for (const proxy of proxies) {
-    try {
-      const res = await fetch(proxy, { signal: AbortSignal.timeout(10000) });
-      if (!res.ok) continue;
-      const data = await res.json().catch(() => null);
-      const html = data?.contents || await res.text();
-      if (html && html.length > 500) return stripHtml(html);
-    } catch { continue; }
-  }
-  throw new Error('proxy_failed');
+  const res = await fetch('/api/fetch-listing', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url }),
+    signal: AbortSignal.timeout(28000),
+  });
+  if (!res.ok) throw new Error('proxy_failed');
+  const data = await res.json();
+  if (data.error) throw new Error(data.error);
+  return data.content;
 }
 
 // ─── Email Gate Modal ─────────────────────────────────────
