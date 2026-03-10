@@ -11,6 +11,45 @@ function getIP(req) {
   return req.socket?.remoteAddress || 'unknown';
 }
 
+// Fetch live INE data (IRAV + IPVA)
+async function fetchINEData(baseUrl) {
+  try {
+    const res = await fetch(`${baseUrl}/api/ine`, {
+      signal: AbortSignal.timeout(6000),
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+// Build INE data block for the prompt
+function buildINEBlock(ine) {
+  if (!ine) return '';
+
+  let block = `\n=== LIVE INE DATA (fetched ${new Date().toLocaleDateString('es-ES')}) ===\n`;
+
+  // IRAV
+  block += `\nIRAV (Índice de Referencia de Arrendamientos de Vivienda):`;
+  block += `\n• Current rate: ${ine.irav.value}% (${ine.irav.period})`;
+  block += `\n• This is the LEGAL MAXIMUM annual rent increase for contracts signed after May 25, 2023.`;
+  block += `\n• Always mention this rate in the verdict when relevant to the investment.`;
+
+  // IPVA
+  if (ine.ipva && Object.keys(ine.ipva).length > 0) {
+    block += `\n\nIPVA (Índice de Precios de Vivienda en Alquiler) — Annual rental price evolution:`;
+    for (const [city, data] of Object.entries(ine.ipva)) {
+      block += `\n• ${city}: ${data.change > 0 ? '+' : ''}${data.change}% (${data.period})`;
+    }
+    block += `\n• Use these official figures to contextualize rent evolution in your analysis.`;
+  }
+
+  block += `\n• Source: INE (Instituto Nacional de Estadística) — ${ine.live ? 'live data' : 'fallback values'}`;
+
+  return block;
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -21,7 +60,7 @@ export default async function handler(req, res) {
   const normalizedEmail = email.toLowerCase().trim();
   const ip = getIP(req);
 
-  // ── Check email quota ─────────────────────────────────────
+  // ── Check email quota ─────────────────────────────────
   const { data: user, error: userError } = await supabase
     .from('users')
     .select('analyses_count, is_subscribed')
@@ -31,24 +70,26 @@ export default async function handler(req, res) {
   if (userError || !user) return res.status(401).json({ error: 'email_required' });
 
   if (!user.is_subscribed) {
-    // Check email count
-    if (user.analyses_count >= 2) {
-      return res.status(403).json({ error: 'quota_exceeded' });
-    }
+    if (user.analyses_count >= 2) return res.status(403).json({ error: 'quota_exceeded' });
 
-    // Check IP count
+    // Check IP quota
     const { data: ipData } = await supabase
       .from('ip_usage')
       .select('analyses_count')
       .eq('ip', ip)
       .single();
 
-    if (ipData && ipData.analyses_count >= 2) {
-      return res.status(403).json({ error: 'quota_exceeded' });
-    }
+    if (ipData && ipData.analyses_count >= 2) return res.status(403).json({ error: 'quota_exceeded' });
   }
 
-  // ── Claude analysis ───────────────────────────────────────
+  // ── Fetch live INE data ───────────────────────────────
+  const host = req.headers.host;
+  const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
+  const baseUrl = `${protocol}://${host}`;
+  const ineData = await fetchINEData(baseUrl);
+  const ineBlock = buildINEBlock(ineData);
+
+  // ── Build prompt ──────────────────────────────────────
   const langNames = { en: 'English', fr: 'French', es: 'Spanish' };
   const langName = langNames[lang] || 'French';
 
@@ -83,9 +124,12 @@ Expected JSON structure:
   "justification_loyer": "short explanation in ${langName} of the rent estimate with specific market references for this city and neighborhood",
   "charges_copro_estimees": number,
   "ibi_annuel_estime": number,
+  "irav": number,
+  "irav_period": "string",
+  "ipva_city_change": number or null,
   "points_positifs": ["list", "of", "strengths"],
   "points_negatifs": ["list", "of", "weaknesses"],
-  "verdict": "short summary in ${langName} on the rental investment interest",
+  "verdict": "short summary in ${langName} on the rental investment interest — must mention the IRAV rate and what it means for this investment",
   "score_quartier": number (1-10),
   "note_globale": number (1-10)
 }
@@ -138,7 +182,8 @@ SCORING GUIDANCE:
 - note_globale 8-10: Gross yield > 6%, good neighborhood, no major risks
 - note_globale 6-7: Gross yield 4.5-6%, decent location, manageable risks
 - note_globale 4-5: Gross yield 3.5-4.5%, some concerns
-- note_globale 1-3: Gross yield < 3.5% or major structural risk (regulation, renovation)`;
+- note_globale 1-3: Gross yield < 3.5% or major structural risk (regulation, renovation)
+${ineBlock}`;
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -150,7 +195,7 @@ SCORING GUIDANCE:
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 1200,
+        max_tokens: 1400,
         system: systemPrompt,
         messages: [{ role: 'user', content }],
       }),
@@ -162,13 +207,22 @@ SCORING GUIDANCE:
     const raw = data.content?.[0]?.text || '';
     const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
 
-    // ── Increment email count ─────────────────────────────────
+    // Inject INE data if Claude didn't fill it
+    if (ineData?.irav && !parsed.irav) {
+      parsed.irav = ineData.irav.value;
+      parsed.irav_period = ineData.irav.period;
+    }
+    if (ineData?.ipva && parsed.ville && !parsed.ipva_city_change) {
+      parsed.ipva_city_change = ineData.ipva[parsed.ville]?.change || null;
+    }
+
+    // ── Increment email count ──────────────────────────
     await supabase
       .from('users')
       .update({ analyses_count: user.analyses_count + 1 })
       .eq('email', normalizedEmail);
 
-    // ── Increment IP count ────────────────────────────────────
+    // ── Increment IP count ─────────────────────────────
     const { data: ipData } = await supabase
       .from('ip_usage')
       .select('analyses_count')
@@ -181,9 +235,7 @@ SCORING GUIDANCE:
         .update({ analyses_count: ipData.analyses_count + 1, updated_at: new Date().toISOString() })
         .eq('ip', ip);
     } else {
-      await supabase
-        .from('ip_usage')
-        .insert({ ip, analyses_count: 1 });
+      await supabase.from('ip_usage').insert({ ip, analyses_count: 1 });
     }
 
     return res.status(200).json(parsed);
