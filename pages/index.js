@@ -288,6 +288,7 @@ function ResultCard({ data, url, t }) {
 // ─── Main ─────────────────────────────────────────────────
 export default function Home() {
   const [lang, setLang] = useState('fr');
+  const [marketData, setMarketData] = useState(null);
   const [url, setUrl] = useState('');
   const [manualText, setManualText] = useState('');
   const [images, setImages] = useState([]); // [{base64, mediaType, preview}]
@@ -306,6 +307,13 @@ export default function Home() {
   const [pendingRun, setPendingRun] = useState(false);
 
   const t = T[lang];
+
+  useEffect(() => {
+    fetch('/api/market-data')
+      .then(r => r.json())
+      .then(d => setMarketData(d))
+      .catch(() => {});
+  }, []);
 
   async function handleEmailConfirm(email) {
     setEmailLoading(true);
@@ -448,7 +456,42 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Email status bar */}
+
+        {/* Market Data Widget */}
+        {marketData && (
+          <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:20,padding:'20px 24px',marginBottom:24,boxShadow:'0 4px 24px rgba(0,0,0,0.06)'}}>
+            <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:16}}>
+              <div style={{width:7,height:7,borderRadius:'50%',background:'#22c55e',animation:'blink 2s infinite'}}/>
+              <span style={{fontSize:10,letterSpacing:2,color:C.muted,textTransform:'uppercase',fontWeight:700}}>{t.marketTitle}</span>
+            </div>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(130px,1fr))',gap:12}}>
+              {/* Euribor */}
+              <div style={{background:C.bg,borderRadius:14,padding:'14px 16px'}}>
+                <div style={{fontSize:10,color:C.muted,marginBottom:4,fontWeight:600}}>Euribor 12M</div>
+                <div style={{fontSize:22,fontWeight:800,color:C.text}}>{marketData.euribor.value}%</div>
+                <div style={{fontSize:10,color:C.muted,marginTop:2}}>{marketData.euribor.period}</div>
+              </div>
+              {/* Taux hypothécaire */}
+              <div style={{background:C.bg,borderRadius:14,padding:'14px 16px'}}>
+                <div style={{fontSize:10,color:C.muted,marginBottom:4,fontWeight:600}}>{t.mortgageRate}</div>
+                <div style={{fontSize:22,fontWeight:800,color:C.text}}>{marketData.mortgage_rate.value}%</div>
+                <div style={{fontSize:10,color:C.muted,marginTop:2}}>{marketData.mortgage_rate.period}</div>
+              </div>
+              {/* IPV par ville */}
+              {Object.entries(marketData.ipv).map(([city, d]) => (
+                <div key={city} style={{background:C.bg,borderRadius:14,padding:'14px 16px'}}>
+                  <div style={{fontSize:10,color:C.muted,marginBottom:4,fontWeight:600,textTransform:'capitalize'}}>{t.ipvLabel} {city === 'nacional' ? t.ipvNacional : city.charAt(0).toUpperCase()+city.slice(1)}</div>
+                  <div style={{fontSize:22,fontWeight:800,color:parseFloat(d.change)>0?'#22c55e':C.red}}>{parseFloat(d.change)>0?'+':''}{d.change}%</div>
+                  <div style={{fontSize:10,color:C.muted,marginTop:2}}>{d.period}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{marginTop:12,fontSize:10,color:C.muted,borderTop:`1px solid ${C.border}`,paddingTop:10}}>
+              📊 {t.marketSource} {marketData.live ? '· Live' : '· Données de référence'}
+            </div>
+          </div>
+        )}
+        {/* Email status bar */
         {userEmail && (
           <div style={{background:C.accentBg,border:`1px solid #fde68a`,borderRadius:14,padding:'12px 20px',marginBottom:20,display:'flex',alignItems:'center',justifyContent:'space-between',fontSize:13}}>
             <span style={{color:C.tag}}>✅ {userEmail}</span>
