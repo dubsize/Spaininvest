@@ -446,6 +446,10 @@ export default function Landing() {
           </div>
           <div style={{fontSize:13,color:C.muted}}>{t.footer}</div>
           <div style={{fontSize:12,color:C.muted,marginTop:5}}>© 2026 buy2rent.io</div>
+          <div style={{display:'flex',justifyContent:'center',gap:20,marginTop:10}}>
+            <a href="/terms" style={{fontSize:12,color:C.muted,textDecoration:'none',borderBottom:`1px solid ${C.border}`}}>Terms of Service</a>
+            <a href="/privacy" style={{fontSize:12,color:C.muted,textDecoration:'none',borderBottom:`1px solid ${C.border}`}}>Privacy Policy</a>
+          </div>
         </footer>
 
       </div>
