@@ -416,11 +416,118 @@ function ResultCard({ data, url, t }) {
           <div style={{width:'100%',fontSize:18,color:C.muted,borderTop:`1px solid ${C.border}`,paddingTop:8,marginTop:4}}>Source : INE — Instituto Nacional de Estadística</div>
         </div>
       )}
+
+      {/* Simulateur interactif */}
+      {data.prix > 0 && data.loyer_estime_median > 0 && (
+        <SimulateurSliders data={data} t={t} />
+      )}
     </div>
   );
 }
 
-// ─── Main ─────────────────────────────────────────────────
+function SimulateurSliders({ data, t }) {
+  const prix = data.prix || 0;
+  const loyerBase = data.loyer_estime_median || 0;
+  const charges = data.charges_copro_estimees || prix * 0.003 / 12;
+  const ibi = data.ibi_annuel_estime || prix * 0.004;
+
+  const [apport, setApport] = useState(20);
+  const [taux, setTaux] = useState(3.5);
+  const [loyerPct, setLoyerPct] = useState(0); // % de variation autour du median
+
+  const loyer = Math.round(loyerBase * (1 + loyerPct / 100));
+  const emprunt = prix * (1 - apport / 100);
+  const duree = 25;
+  const tauxM = taux / 100 / 12;
+  const mensualite = emprunt > 0 && tauxM > 0
+    ? Math.round(emprunt * tauxM / (1 - Math.pow(1 + tauxM, -duree * 12)))
+    : 0;
+
+  const loyerAnnuel = loyer * 11.5;
+  const chargesAn = charges * 12;
+  const base = loyerAnnuel - chargesAn - ibi;
+  const impot = base > 0 ? base * 0.19 : 0;
+  const revenusNets = base - impot;
+  const cashflow = Math.round(revenusNets / 12 - mensualite);
+  const rentaNette = prix > 0 ? (revenusNets / prix) * 100 : 0;
+  const cashflowColor = cashflow >= 0 ? C.green : C.red;
+
+  function Slider({ label, value, min, max, step, unit, onChange, format }) {
+    const pct = ((value - min) / (max - min)) * 100;
+    return (
+      <div style={{ marginBottom: 20 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+          <span style={{ fontSize: 14, color: C.muted, fontWeight: 600 }}>{label}</span>
+          <span style={{ fontSize: 16, fontWeight: 800, color: C.accent }}>
+            {format ? format(value) : `${value}${unit}`}
+          </span>
+        </div>
+        <div style={{ position: 'relative', height: 6, background: C.border, borderRadius: 3 }}>
+          <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${pct}%`, background: C.accent, borderRadius: 3, transition: 'width 0.1s' }} />
+          <input type="range" min={min} max={max} step={step} value={value}
+            onChange={e => onChange(parseFloat(e.target.value))}
+            style={{ position: 'absolute', top: -6, left: 0, width: '100%', height: 18, opacity: 0, cursor: 'pointer', margin: 0 }} />
+          <div style={{ position: 'absolute', top: '50%', left: `${pct}%`, transform: 'translate(-50%,-50%)', width: 16, height: 16, background: C.accent, borderRadius: '50%', boxShadow: '0 2px 6px rgba(180,83,9,0.4)', pointerEvents: 'none', transition: 'left 0.1s' }} />
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4, fontSize: 12, color: C.muted }}>
+          <span>{min}{unit}</span><span>{max}{unit}</span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ background: C.card, border: `2px solid ${cashflow >= 0 ? '#bbf7d0' : '#fecaca'}`, borderRadius: 18, padding: 24, marginTop: 14 }}>
+      <div style={{ fontSize: 13, letterSpacing: 2, color: C.accent, textTransform: 'uppercase', fontWeight: 700, marginBottom: 20 }}>
+        🎛 Simulateur de scénarios
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+        {/* Sliders */}
+        <div>
+          <Slider label="Apport personnel" value={apport} min={5} max={50} step={5} unit="%" onChange={setApport} />
+          <Slider label="Taux d'intérêt" value={taux} min={2} max={6} step={0.1} unit="%" onChange={setTaux} />
+          <Slider
+            label="Loyer mensuel"
+            value={loyerPct}
+            min={-20} max={20} step={5} unit="%"
+            format={v => `${loyer.toLocaleString('fr')} € (${v >= 0 ? '+' : ''}${v}%)`}
+            onChange={setLoyerPct}
+          />
+        </div>
+
+        {/* Results */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {[
+            { l: 'Apport', v: `${Math.round(prix * apport / 100).toLocaleString('fr')} €`, c: C.text },
+            { l: 'Emprunt', v: `${Math.round(emprunt).toLocaleString('fr')} €`, c: C.muted },
+            { l: 'Mensualité crédit', v: `${mensualite.toLocaleString('fr')} €/mois`, c: C.red },
+            { l: 'Revenus locatifs nets', v: `${Math.round(revenusNets / 12).toLocaleString('fr')} €/mois`, c: C.green },
+            { l: 'Rendement net', v: `${rentaNette.toFixed(2)}%`, c: rentaNette >= 4 ? C.green : rentaNette >= 2 ? '#d97706' : C.red },
+          ].map(r => (
+            <div key={r.l} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, padding: '7px 0', borderBottom: `1px solid ${C.border}` }}>
+              <span style={{ color: C.muted }}>{r.l}</span>
+              <span style={{ color: r.c, fontWeight: 700 }}>{r.v}</span>
+            </div>
+          ))}
+
+          {/* Cash-flow highlight */}
+          <div style={{ marginTop: 6, background: cashflow >= 0 ? '#f0fdf4' : '#fff5f5', border: `1px solid ${cashflow >= 0 ? '#bbf7d0' : '#fecaca'}`, borderRadius: 12, padding: '14px 16px', textAlign: 'center' }}>
+            <div style={{ fontSize: 12, color: C.muted, fontWeight: 600, marginBottom: 4 }}>CASH-FLOW NET MENSUEL</div>
+            <div style={{ fontSize: 32, fontWeight: 900, color: cashflowColor, fontFamily: 'Georgia, serif' }}>
+              {cashflow >= 0 ? '+' : ''}{cashflow.toLocaleString('fr')} €
+            </div>
+            <div style={{ fontSize: 12, color: C.muted, marginTop: 3 }}>loyer − mensualité − charges − impôts</div>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ fontSize: 12, color: C.muted, marginTop: 16, paddingTop: 12, borderTop: `1px solid ${C.border}` }}>
+        Hypothèses : crédit sur 25 ans, 11.5 mois de loyer/an, impôt locatif 19% (non-résident), charges + IBI estimés.
+      </div>
+    </div>
+  );
+}
 export default function Home() {
   const [lang, setLang] = useState('fr');
   const [marketData, setMarketData] = useState({
@@ -752,7 +859,7 @@ export default function Home() {
               </div>
               {Object.entries(marketData.ipv).map(([city, d]) => (
                 <div key={city} style={{background:C.bg,borderRadius:12,padding:'12px 14px',display:'flex',flexDirection:'column'}}>
-                  <div style={{fontSize:12,color:C.muted,fontWeight:600,height:34,lineHeight:1.3,display:'flex',alignItems:'center',textTransform:'capitalize'}}>{t.ipvLabel} {city === 'nacional' ? t.ipvNacional : city.charAt(0).toUpperCase()+city.slice(1)}</div>
+                  <div style={{fontSize:12,color:C.muted,fontWeight:600,height:34,lineHeight:1.3,display:'flex',alignItems:'center',textTransform:'capitalize'}}>{t.ipvLabel} {city === 'nacional' ? 'Nacional' : city.charAt(0).toUpperCase()+city.slice(1)}</div>
                   <div style={{fontSize:24,fontWeight:800,color:parseFloat(d.change)>0?'#22c55e':C.red}}>{parseFloat(d.change)>0?'+':''}{d.change}%</div>
                   <div style={{fontSize:12,color:C.muted,marginTop:2}}>{d.period}</div>
                 </div>
