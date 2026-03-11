@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { getRentData, RENT_MODIFIERS } from '../../lib/rentPrices';
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -50,6 +51,18 @@ function buildINEBlock(ine) {
   return block;
 }
 
+// Build dynamic rent block for the prompt
+function buildRentBlock(city, neighbourhood) {
+  const rent = getRentData(city, neighbourhood);
+  if (!rent) {
+    return `\n=== RENT REFERENCE DATA ===\nCity/neighbourhood not in database. Use your general knowledge of Spanish rental market and apply conservative estimates.\n${RENT_MODIFIERS}`;
+  }
+  if (rent.found) {
+    return `\n=== RENT REFERENCE DATA (${rent.district}) ===\nBase range: ${rent.min}–${rent.max} €/m²/month (unfurnished long-term)\nDistrict profile: ${rent.profile}\nCity context: ${rent.cityNote}\n${RENT_MODIFIERS}`;
+  }
+  return `\n=== RENT REFERENCE DATA (city average — district not found) ===\nCity average: ${rent.min}–${rent.max} €/m²/month\nCity context: ${rent.cityNote}\nNote: Exact district not found in database — use city average as base.\n${RENT_MODIFIERS}`;
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
@@ -89,6 +102,29 @@ export default async function handler(req, res) {
   const baseUrl = `${protocol}://${host}`;
   const ineData = await fetchINEData(baseUrl);
   const ineBlock = buildINEBlock(ineData);
+
+  // ── Pre-detect city/neighbourhood from content for dynamic rent data ──
+  const contentLower = (content || '').toLowerCase();
+  const detectedCity =
+    contentLower.includes('madrid') ? 'madrid' :
+    contentLower.includes('barcelona') ? 'barcelona' :
+    contentLower.includes('valencia') ? 'valencia' :
+    contentLower.includes('malaga') || contentLower.includes('málaga') ? 'malaga' : null;
+
+  // Try to extract neighbourhood from content (common patterns in Idealista listings)
+  let detectedNeighbourhood = null;
+  if (detectedCity) {
+    const neighPatterns = [
+      /(?:barrio|distrito|zona|neighbourhood|quartier|neighborhood)[:\s]+([a-záéíóúüñ\s-]{3,30})/i,
+      /([a-záéíóúüñ\s-]{3,25}),\s*(?:madrid|barcelona|valencia|málaga|malaga)/i,
+    ];
+    for (const pattern of neighPatterns) {
+      const m = (content || '').match(pattern);
+      if (m) { detectedNeighbourhood = m[1].trim(); break; }
+    }
+  }
+
+  const rentBlock = buildRentBlock(detectedCity, detectedNeighbourhood);
 
   // ── Build prompt ──────────────────────────────────────
   const langNames = { en: 'English', fr: 'French', es: 'Spanish' };
@@ -139,55 +175,12 @@ Expected JSON structure:
   "district_profile": string or null (1-sentence tenant profile summary in ${langName}, e.g. "Quartier ouvrier avec forte demande locative jeune, revenu médian 28.500€/foyer")
 }
 
-=== SPAIN RENTAL MARKET REFERENCE DATA 2025-2026 (unfurnished long-term) ===
-
-MADRID:
-- Vallecas / Villaverde: 10-13 €/m²/mo → high yield, working-class, growing demand
-- Carabanchel / Usera / Latina: 12-15 €/m²/mo → strong yield, gentrifying
-- Tetuán / Cuatro Caminos / Hortaleza: 14-17 €/m²/mo → good yield, well connected
-- Sanchinarro / Las Tablas / Valdebebas: 14-18 €/m²/mo → modern residential, families
-- Chamberí / Moncloa / Retiro: 18-24 €/m²/mo → premium central, low yield
-- Salamanca / Jerónimos / Centro: 22-30 €/m²/mo → luxury, very low yield
-
-BARCELONA:
-- Nou Barris / Sant Andreu / Horta: 13-16 €/m²/mo → best yield in BCN
-- Sant Martí / Poblenou / Clot: 16-20 €/m²/mo → good yield, tech hub, growing
-- Sants / Les Corts / Sarrià (outer): 17-21 €/m²/mo → solid residential
-- Gràcia / Eixample Dret: 20-25 €/m²/mo → high demand, compressed yield
-- Eixample Esquerra / Sant Gervasi: 22-27 €/m²/mo → premium, low yield
-- Ciutat Vella / Barceloneta: 20-28 €/m²/mo → tourist pressure, regulation risk
-NOTE Barcelona: Rent control applies in many areas (Ley de Contenció) — flag this as a risk
-
-VALENCIA:
-- Benimaclet / Rascanya / Campanar: 10-13 €/m²/mo → excellent yield, student demand
-- Patraix / Jesús / Quatre Carreres: 10-13 €/m²/mo → affordable, solid yield
-- Extramurs / Poblats Marítims: 12-15 €/m²/mo → rising, sea proximity
-- Russafa / El Carmen / Eixample: 13-17 €/m²/mo → trendy, expat demand
-- Pla del Real / Algirós: 14-17 €/m²/mo → university area, reliable tenants
-NOTE Valencia: One of best yield/price ratios in Spain right now
-
-MÁLAGA / COSTA DEL SOL:
-- Málaga City outskirts (Churriana, Campanillas): 10-13 €/m²/mo → high yield
-- Málaga City (Centro, Soho, Lagunillas): 13-17 €/m²/mo → strong demand, expats
-- Torremolinos / Benalmádena: 12-15 €/m²/mo → tourist/residential mix
-- Marbella (outskirts): 13-16 €/m²/mo → good yield away from Golden Mile
-- Marbella (Golden Mile / Puerto Banús): 16-25 €/m²/mo → luxury, low yield
-- Estepona / Nerja: 12-15 €/m²/mo → growing, good value
-NOTE Málaga: Strong expat demand (UK, French, Dutch). Short-term rental pressure on long-term supply.
-
-UNIVERSAL ADJUSTMENTS:
-- Gated community with pool + gym + concierge: +10-15%
-- Included garage: +100-150€/mo
-- New build (< 5 years): +5-10%
-- Poor energy rating (E/F/G): −3-5% (future renovation risk)
-- Top floor with terrace: +8-12%
-- Ground floor: −5-10%
-
 SCORING GUIDANCE:
 - note_globale 8-10: Gross yield > 6%, good neighborhood, no major risks
 - note_globale 6-7: Gross yield 4.5-6%, decent location, manageable risks
 - note_globale 4-5: Gross yield 3.5-4.5%, some concerns
 - note_globale 1-3: Gross yield < 3.5% or major structural risk (regulation, renovation)
+${rentBlock}
 
 === SOCIO-DEMOGRAPHIC DATA BY DISTRICT — INE ADRH 2023 + EPA T4 2025 ===
 Use this data to enrich your analysis based on the property location. Match the neighborhood/district from the listing to the closest entry below.
@@ -263,11 +256,18 @@ NOTE: 15.2% unemployment in Andalucía → higher tenant default risk than Madri
 - Palma-Palmilla: 9,800€ | 22,000€/hogar | 17%>65 | 22%<18 → Lowest income in Málaga, highest yield but elevated social risk
 
 HOW TO USE IN YOUR ANALYSIS:
-1. Match property location to nearest district and include income/demographic context in justification_loyer
-2. In points_positifs/negatifs: flag relevant demographics (young pop = strong rental demand; high >65% = lower mobility)
-3. In verdict: include one line on district socio-economic profile (e.g. "District household income 31,000€/yr, working-class profile with strong young tenant demand")
-4. Adjust score_quartier: districts above city avg income = +1, below = -1; high young pop (>18% <18y) = +1 for rental demand
-5. For Málaga: always factor 15.2% regional unemployment into risk assessment
+1. Match property location to nearest district using fuzzy logic — ignore accents, case, hyphens (e.g. "tetuan-madrid" = Tetuán, "fuencarral-el-pardo" = Fuencarral-El Pardo, "chamberi" = Chamberí)
+2. Include income/demographic context in justification_loyer
+3. In points_positifs/negatifs: flag relevant demographics (young pop = strong rental demand; high >65% = lower mobility)
+4. In verdict: include one line on district socio-economic profile (e.g. "District household income 31,000€/yr, working-class profile with strong young tenant demand")
+5. Adjust score_quartier: districts above city avg income = +1, below = -1; high young pop (>18% <18y) = +1 for rental demand
+6. For Málaga: always factor 15.2% regional unemployment into risk assessment
+
+CRITICAL — STRICT ANTI-HALLUCINATION RULE FOR SOCIO DATA:
+- ONLY populate renta_district_persona, renta_district_hogar, paro_region if you can confidently match the property location to one of the districts listed above.
+- If the location is ambiguous, unknown, or outside the 53 listed districts (small town, suburb, other city): set renta_district_persona=null, renta_district_hogar=null, and set district_profile to a city-level fallback string like "Données socio-démo précises non disponibles pour ce secteur — moyennes régionales appliquées" (in the response language).
+- NEVER invent or estimate income/unemployment figures. Use ONLY the exact values from the table above, or null.
+- paro_region should always be set when the city is Madrid/Barcelona/Valencia/Málaga (use regional rate), null for other cities.
 ${ineBlock}`;
 
   try {
