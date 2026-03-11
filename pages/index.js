@@ -97,20 +97,66 @@ function EmailModal({ t, onConfirm, onClose, loading, error }) {
 }
 
 // ─── Quota Exceeded Modal ─────────────────────────────────
-function QuotaModal({ t, onClose }) {
+function QuotaModal({ t, onClose, userEmail }) {
+  const [loadingVariant, setLoadingVariant] = useState(null);
+
+  async function handleCheckout(variantId) {
+    setLoadingVariant(variantId);
+    try {
+      const res = await fetch('/api/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ variantId, email: userEmail }),
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } catch {
+      alert('Error creating checkout. Please try again.');
+    } finally {
+      setLoadingVariant(null);
+    }
+  }
+
+  const VARIANT_PASS = '1390809';
+  const VARIANT_PRO  = '1390815';
+
   return (
     <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.4)',zIndex:1000,display:'flex',alignItems:'center',justifyContent:'center',padding:24}}>
-      <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:24,padding:40,maxWidth:460,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.15)',animation:'fadeUp 0.3s ease both',textAlign:'center'}}>
+      <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:24,padding:40,maxWidth:480,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.15)',animation:'fadeUp 0.3s ease both',textAlign:'center'}}>
         <div style={{fontSize:40,marginBottom:16}}>🔒</div>
         <h2 style={{fontSize:24,fontWeight:800,color:C.text,marginBottom:10}}>{t.quotaTitle}</h2>
-        <p style={{fontSize:18,color:C.muted,lineHeight:1.6,marginBottom:24}}>{t.quotaSubtitle}</p>
-        <div style={{background:C.accentBg,border:`1px solid #fde68a`,borderRadius:16,padding:20,marginBottom:24}}>
-          <div style={{fontSize:30,fontWeight:800,color:C.accent,marginBottom:4}}>19€ <span style={{fontSize:18,fontWeight:400,color:C.muted}}>{t.quotaPerMonth}</span></div>
-          <div style={{fontSize:18,color:C.tag}}>{t.quotaUnlimited}</div>
+        <p style={{fontSize:18,color:C.muted,lineHeight:1.6,marginBottom:28}}>{t.quotaSubtitle}</p>
+
+        {/* Pass 24h */}
+        <div style={{background:'#f0f9ff',border:`1px solid #bae6fd`,borderRadius:16,padding:20,marginBottom:14,textAlign:'left'}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:6}}>
+            <div style={{fontSize:18,fontWeight:700,color:'#0369a1'}}>⚡ Pass 24h</div>
+            <div style={{fontSize:24,fontWeight:800,color:C.text}}>9€</div>
+          </div>
+          <div style={{fontSize:18,color:C.muted,marginBottom:14}}>Analyses illimitées pendant 24h. Idéal pour une session de recherche.</div>
+          <button
+            onClick={() => handleCheckout(VARIANT_PASS)}
+            disabled={loadingVariant !== null}
+            style={{width:'100%',padding:'13px',borderRadius:12,border:'none',background:'#0369a1',color:'#fff',fontSize:18,fontWeight:700,cursor:'pointer'}}>
+            {loadingVariant === VARIANT_PASS ? '...' : 'Acheter le Pass 24h'}
+          </button>
         </div>
-        <button style={{width:'100%',padding:'16px',borderRadius:12,border:'none',background:C.accent,color:'#fff',fontSize:18,fontWeight:800,cursor:'pointer',boxShadow:'0 4px 16px rgba(180,83,9,0.3)',marginBottom:12}}>
-          {t.quotaCta}
-        </button>
+
+        {/* Pro Mensuel */}
+        <div style={{background:C.accentBg,border:`1px solid #fde68a`,borderRadius:16,padding:20,marginBottom:20,textAlign:'left'}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:6}}>
+            <div style={{fontSize:18,fontWeight:700,color:C.accent}}>🏆 Pro Mensuel</div>
+            <div style={{fontSize:24,fontWeight:800,color:C.text}}>19€<span style={{fontSize:16,fontWeight:400,color:C.muted}}>/mois</span></div>
+          </div>
+          <div style={{fontSize:18,color:C.muted,marginBottom:14}}>Analyses illimitées chaque mois. Pour le chasseur en recherche active.</div>
+          <button
+            onClick={() => handleCheckout(VARIANT_PRO)}
+            disabled={loadingVariant !== null}
+            style={{width:'100%',padding:'13px',borderRadius:12,border:'none',background:C.accent,color:'#fff',fontSize:18,fontWeight:700,cursor:'pointer',boxShadow:'0 4px 16px rgba(180,83,9,0.3)'}}>
+            {loadingVariant === VARIANT_PRO ? '...' : 'Passer en Pro'}
+          </button>
+        </div>
+
         <button onClick={onClose} style={{width:'100%',padding:'12px',borderRadius:12,border:`1px solid ${C.border2}`,background:'transparent',color:C.muted,fontSize:18,cursor:'pointer'}}>
           {t.quotaClose}
         </button>
@@ -261,7 +307,7 @@ function ResultCard({ data, url, t }) {
       </div>
 
       {/* Socio-demographic block */}
-      {(data.renta_district_persona || data.paro_region) && (
+      {(data.renta_district_persona || data.paro_region || data.district_profile) && (
         <div style={{background:'#f0f9ff',border:`1px solid #bae6fd`,borderRadius:18,padding:20,marginTop:14}}>
           <div style={{fontSize:18,letterSpacing:2,color:'#0369a1',textTransform:'uppercase',fontWeight:700,marginBottom:14}}>🏘 {t.socioTitle}</div>
           <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))',gap:10,marginBottom:12}}>
@@ -466,7 +512,7 @@ export default function Home() {
       <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WSVSC97J" height="0" width="0" style={{display:'none',visibility:'hidden'}}></iframe></noscript>
 
       {showEmailModal && <EmailModal t={t} onConfirm={handleEmailConfirm} onClose={()=>setShowEmailModal(false)} loading={emailLoading} error={emailError}/>}
-      {showQuotaModal && <QuotaModal t={t} onClose={()=>setShowQuotaModal(false)}/>}
+      {showQuotaModal && <QuotaModal t={t} onClose={()=>setShowQuotaModal(false)} userEmail={userEmail}/>}
 
       <div style={{position:'fixed',inset:0,pointerEvents:'none',zIndex:0,
         background:'radial-gradient(ellipse at 80% 0%,#fde68a22 0%,transparent 60%),radial-gradient(ellipse at 20% 100%,#fed7aa18 0%,transparent 60%)'}}/>
