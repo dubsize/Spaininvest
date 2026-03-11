@@ -422,6 +422,7 @@ export default function Home() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
       if (!data.can_analyze) {
+        setUserEmail(email);
         setShowEmailModal(false);
         setShowQuotaModal(true);
         return;
