@@ -43,8 +43,8 @@ async function fetchViaProxy(url) {
   });
   if (!res.ok) throw new Error('proxy_failed');
   const data = await res.json();
-  if (!data.text || data.text.length < 100) throw new Error('proxy_failed');
-  return data.text;
+  if (!data.content || data.content.length < 100) throw new Error('proxy_failed');
+  return data.content;
 }
 
 // ─── Email Gate Modal ─────────────────────────────────────
