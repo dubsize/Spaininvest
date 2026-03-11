@@ -417,6 +417,41 @@ function ResultCard({ data, url, t }) {
         </div>
       )}
 
+      {/* CapEx Alert */}
+      {data.capex_alerte && (
+        <div style={{background:'#fff7ed',border:`2px solid #fed7aa`,borderRadius:18,padding:20,marginTop:14}}>
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:12}}>
+            <span style={{fontSize:24}}>⚠️</span>
+            <div style={{fontSize:13,letterSpacing:2,color:'#c2410c',textTransform:'uppercase',fontWeight:700}}>
+              Détecteur CapEx — Bien à rénover
+            </div>
+          </div>
+          <div style={{fontSize:15,color:'#7c2d12',lineHeight:1.7,marginBottom:14}}>
+            {data.capex_note}
+          </div>
+          {data.capex_estimation_m2_low && data.capex_estimation_m2_high && data.surface && (
+            <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))',gap:10,marginBottom:12}}>
+              {[
+                { l: 'Coût min estimé', v: `${Math.round(data.capex_estimation_m2_low * data.surface).toLocaleString('fr')} €`, sub: `${data.capex_estimation_m2_low} €/m²` },
+                { l: 'Coût max estimé', v: `${Math.round(data.capex_estimation_m2_high * data.surface).toLocaleString('fr')} €`, sub: `${data.capex_estimation_m2_high} €/m²` },
+                { l: 'Impact rendement', v: 'Année 1', sub: 'cash-flow négatif probable' },
+              ].map(m => (
+                <div key={m.l} style={{background:'#fff',borderRadius:12,padding:'12px 14px',border:'1px solid #fed7aa'}}>
+                  <div style={{fontSize:12,color:'#9a3412',marginBottom:3,fontWeight:600}}>{m.l}</div>
+                  <div style={{fontSize:18,fontWeight:800,color:'#c2410c'}}>{m.v}</div>
+                  <div style={{fontSize:11,color:'#a16207',marginTop:2}}>{m.sub}</div>
+                </div>
+              ))}
+            </div>
+          )}
+          {data.capex_keywords && data.capex_keywords.length > 0 && (
+            <div style={{fontSize:12,color:'#9a3412',background:'rgba(255,255,255,0.6)',borderRadius:8,padding:'6px 10px'}}>
+              🔍 Mots-clés détectés : {data.capex_keywords.join(', ')}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Simulateur interactif */}
       {data.prix > 0 && data.loyer_estime_median > 0 && (
         <SimulateurSliders data={data} t={t} />
