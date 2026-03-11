@@ -66,40 +66,59 @@ function buildRentBlock(city, neighbourhood) {
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { content, images, lang, email } = req.body;
-  if (!email) return res.status(401).json({ error: 'email_required' });
+  const { content, images, lang, anonId, userId } = req.body;
   if (!content && (!images || images.length === 0)) return res.status(400).json({ error: 'No content or image provided' });
   if (content && content.length < 50 && (!images || images.length === 0)) return res.status(400).json({ error: 'Content too short' });
 
-  const normalizedEmail = email.toLowerCase().trim();
   const ip = getIP(req);
 
   // ── Whitelisted IPs (unlimited access) ───────────────
   const WHITELISTED_IPS = ['2.138.252.170'];
   const isWhitelisted = WHITELISTED_IPS.includes(ip);
 
-  // ── Check email quota ─────────────────────────────────
-  const { data: user, error: userError } = await supabase
-    .from('users')
-    .select('analyses_count, is_subscribed, pass_expires_at')
-    .eq('email', normalizedEmail)
-    .single();
+  if (!isWhitelisted) {
+    // ── PHASE 3: Authenticated user ───────────────────
+    if (userId) {
+      // Check if subscribed or has active pass
+      const { data: profile } = await supabase
+        .from('users')
+        .select('analyses_count, is_subscribed, pass_expires_at')
+        .eq('supabase_uid', userId)
+        .single();
 
-  if (userError || !user) return res.status(401).json({ error: 'email_required' });
+      const hasActivePass = profile?.pass_expires_at && new Date(profile.pass_expires_at) > new Date();
 
-  const hasActivePass = user.pass_expires_at && new Date(user.pass_expires_at) > new Date();
+      if (!profile?.is_subscribed && !hasActivePass) {
+        // Authenticated users get 1 extra analysis (total 3)
+        if ((profile?.analyses_count || 0) >= 1) {
+          return res.status(403).json({ error: 'quota_exceeded' });
+        }
+      }
+    } else {
+      // ── PHASE 1 & 2: Anonymous user ──────────────────
+      // Track by anonId (localStorage UUID)
+      if (anonId) {
+        const { data: anonData } = await supabase
+          .from('anon_usage')
+          .select('analyses_count')
+          .eq('anon_id', anonId)
+          .single();
 
-  if (!user.is_subscribed && !hasActivePass && !isWhitelisted) {
-    if (user.analyses_count >= 2) return res.status(403).json({ error: 'quota_exceeded' });
+        const count = anonData?.analyses_count || 0;
+        if (count >= 2) return res.status(403).json({ error: 'soft_gate' }); // → show email modal
+      }
 
-    // Check IP quota
-    const { data: ipData } = await supabase
-      .from('ip_usage')
-      .select('analyses_count')
-      .eq('ip', ip)
-      .single();
+      // IP backup check
+      const { data: ipData } = await supabase
+        .from('ip_usage')
+        .select('analyses_count')
+        .eq('ip', ip)
+        .single();
 
-    if (ipData && ipData.analyses_count >= 2) return res.status(403).json({ error: 'quota_exceeded' });
+      if (ipData && ipData.analyses_count >= 4) {
+        return res.status(403).json({ error: 'quota_exceeded' });
+      }
+    }
   }
 
   // ── Fetch live INE data ───────────────────────────────
@@ -310,26 +329,54 @@ ${ineBlock}`;
       parsed.ipva_city_change = ineData.ipva[parsed.ville]?.change || null;
     }
 
-    // ── Increment email count ──────────────────────────
-    await supabase
-      .from('users')
-      .update({ analyses_count: user.analyses_count + 1 })
-      .eq('email', normalizedEmail);
+    // ── Increment counters ─────────────────────────────
+    if (!isWhitelisted) {
+      if (userId) {
+        // Authenticated user — increment their count
+        const { data: profile } = await supabase
+          .from('users')
+          .select('analyses_count')
+          .eq('supabase_uid', userId)
+          .single();
 
-    // ── Increment IP count ─────────────────────────────
-    const { data: ipData } = await supabase
-      .from('ip_usage')
-      .select('analyses_count')
-      .eq('ip', ip)
-      .single();
+        const currentCount = profile?.analyses_count || 0;
+        await supabase
+          .from('users')
+          .update({ analyses_count: currentCount + 1 })
+          .eq('supabase_uid', userId);
+      } else if (anonId) {
+        // Anonymous user — upsert anon_usage
+        const { data: anonData } = await supabase
+          .from('anon_usage')
+          .select('analyses_count')
+          .eq('anon_id', anonId)
+          .single();
 
-    if (ipData) {
-      await supabase
+        if (anonData) {
+          await supabase
+            .from('anon_usage')
+            .update({ analyses_count: anonData.analyses_count + 1, updated_at: new Date().toISOString() })
+            .eq('anon_id', anonId);
+        } else {
+          await supabase.from('anon_usage').insert({ anon_id: anonId, analyses_count: 1 });
+        }
+      }
+
+      // Always increment IP counter
+      const { data: ipData } = await supabase
         .from('ip_usage')
-        .update({ analyses_count: ipData.analyses_count + 1, updated_at: new Date().toISOString() })
-        .eq('ip', ip);
-    } else {
-      await supabase.from('ip_usage').insert({ ip, analyses_count: 1 });
+        .select('analyses_count')
+        .eq('ip', ip)
+        .single();
+
+      if (ipData) {
+        await supabase
+          .from('ip_usage')
+          .update({ analyses_count: ipData.analyses_count + 1, updated_at: new Date().toISOString() })
+          .eq('ip', ip);
+      } else {
+        await supabase.from('ip_usage').insert({ ip, analyses_count: 1 });
+      }
     }
 
     return res.status(200).json(parsed);
