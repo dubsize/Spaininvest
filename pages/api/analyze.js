@@ -102,10 +102,10 @@ export default async function handler(req, res) {
           .from('anon_usage')
           .select('analyses_count')
           .eq('anon_id', anonId)
-          .single();
+          .maybeSingle();
 
         const count = anonData?.analyses_count || 0;
-        if (count >= 2) return res.status(403).json({ error: 'soft_gate' }); // → show email modal
+        if (count >= 2) return res.status(403).json({ error: 'soft_gate' });
       }
 
       // IP backup check
@@ -345,21 +345,8 @@ ${ineBlock}`;
           .update({ analyses_count: currentCount + 1 })
           .eq('supabase_uid', userId);
       } else if (anonId) {
-        // Anonymous user — upsert anon_usage
-        const { data: anonData } = await supabase
-          .from('anon_usage')
-          .select('analyses_count')
-          .eq('anon_id', anonId)
-          .single();
-
-        if (anonData) {
-          await supabase
-            .from('anon_usage')
-            .update({ analyses_count: anonData.analyses_count + 1, updated_at: new Date().toISOString() })
-            .eq('anon_id', anonId);
-        } else {
-          await supabase.from('anon_usage').insert({ anon_id: anonId, analyses_count: 1 });
-        }
+        // Anonymous user — atomic upsert via SQL function
+        await supabase.rpc('increment_anon_usage', { p_anon_id: anonId });
       }
 
       // Always increment IP counter
