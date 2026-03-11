@@ -577,7 +577,6 @@ export default function Home() {
                   <input value={url} onChange={e=>setUrl(e.target.value)} onKeyDown={e=>e.key==='Enter'&&run()} placeholder={t.urlPlaceholder}
                     style={{width:'100%',background:C.bg,border:`1px solid ${C.border2}`,borderRadius:14,padding:'18px 20px',color:C.text,fontSize:18,transition:'border-color 0.2s'}}
                     onFocus={e=>e.target.style.borderColor=C.accent} onBlur={e=>e.target.style.borderColor=C.border2}/>
-                  <div style={{marginTop:10,fontSize:18,color:C.muted,lineHeight:1.6}}>{t.urlNote}</div>
                 </div>
               ):mode==='image'?(
                 <div>
