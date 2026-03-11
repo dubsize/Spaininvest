@@ -35,24 +35,16 @@ function stripHtml(html) {
 }
 
 async function fetchViaProxy(url) {
-  // Call ScraperAPI directly from browser (avoids Vercel timeout limits)
-  const SCRAPER_KEY = 'f5779bfd8d4a12533930560ac6faca10';
-  const scraperUrl = `http://api.scraperapi.com?api_key=${SCRAPER_KEY}&url=${encodeURIComponent(url)}&country_code=es&render=false`;
-  try {
-    const res = await fetch(scraperUrl, { signal: AbortSignal.timeout(40000) });
-    if (!res.ok) throw new Error('proxy_failed');
-    const html = await res.text();
-    if (html.length < 500) throw new Error('proxy_failed');
-    return html
-      .replace(/<script[\s\S]*?<\/script>/gi, '')
-      .replace(/<style[\s\S]*?<\/style>/gi, '')
-      .replace(/<[^>]+>/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim()
-      .slice(0, 8000);
-  } catch(e) {
-    throw new Error('proxy_failed');
-  }
+  const res = await fetch('/api/fetch-listing', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url }),
+    signal: AbortSignal.timeout(45000),
+  });
+  if (!res.ok) throw new Error('proxy_failed');
+  const data = await res.json();
+  if (!data.text || data.text.length < 100) throw new Error('proxy_failed');
+  return data.text;
 }
 
 // ─── Email Gate Modal ─────────────────────────────────────
