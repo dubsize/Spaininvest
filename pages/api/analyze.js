@@ -346,7 +346,9 @@ ${ineBlock}`;
           .eq('supabase_uid', userId);
       } else if (anonId) {
         // Anonymous user — atomic upsert via SQL function
-        await supabase.rpc('increment_anon_usage', { p_anon_id: anonId });
+        const { error: rpcError } = await supabase.rpc('increment_anon_usage', { p_anon_id: anonId });
+        if (rpcError) console.error('RPC error:', JSON.stringify(rpcError));
+        else console.log('RPC ok for anonId:', anonId);
       }
 
       // Always increment IP counter
