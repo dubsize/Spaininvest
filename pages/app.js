@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import T from '../components/translations';
+import { supabase } from '../lib/supabaseClient';
 // This file lives at pages/app.js
 
 // ─── Colors ───────────────────────────────────────────────
@@ -47,43 +48,78 @@ async function fetchViaProxy(url) {
   return data.content;
 }
 
-// ─── Email Gate Modal ─────────────────────────────────────
-function EmailModal({ t, onConfirm, onClose, loading, error }) {
+// ─── Soft Gate Modal (after 2 anon analyses) ─────────────
+function SoftGateModal({ t, onClose }) {
   const [email, setEmail] = useState('');
+  const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const valid = email.includes('@') && email.includes('.');
 
+  async function handleMagicLink() {
+    setLoading(true); setError('');
+    try {
+      const { error: e } = await supabase.auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: `${window.location.origin}/app` },
+      });
+      if (e) throw e;
+      setSent(true);
+    } catch(e) {
+      setError(e.message || 'Error sending link');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleGoogle() {
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/app` },
+    });
+  }
+
   return (
-    <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.4)',zIndex:1000,display:'flex',alignItems:'center',justifyContent:'center',padding:24}}>
-      <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:24,padding:40,maxWidth:460,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.15)',animation:'fadeUp 0.3s ease both'}}>
-        <div style={{textAlign:'center',marginBottom:28}}>
-          <div style={{fontSize:40,marginBottom:12}}>🏠</div>
-          <h2 style={{fontSize:24,fontWeight:800,color:C.text,marginBottom:8}}>{t.emailTitle}</h2>
-          <p style={{fontSize:18,color:C.muted,lineHeight:1.6}}>{t.emailSubtitle}</p>
-        </div>
-        <div style={{background:C.accentBg,border:`1px solid #fde68a`,borderRadius:14,padding:'12px 16px',marginBottom:20,fontSize:18,color:C.tag,textAlign:'center',fontWeight:600}}>
-          ✨ {t.emailFreeOffer}
-        </div>
-        <input
-          type="email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && valid && !loading && onConfirm(email)}
-          placeholder={t.emailPlaceholder}
-          autoFocus
-          style={{width:'100%',background:C.bg,border:`1px solid ${valid?C.accent:C.border2}`,borderRadius:12,padding:'14px 16px',color:C.text,fontSize:18,marginBottom:12,transition:'border-color 0.2s'}}
-        />
-        {error && <div style={{fontSize:18,color:C.red,marginBottom:12,textAlign:'center'}}>⚠️ {error}</div>}
-        <button onClick={() => onConfirm(email)} disabled={!valid||loading} style={{
-          width:'100%',padding:'16px',borderRadius:12,border:'none',
-          background:valid&&!loading?C.accent:C.border,
-          color:valid&&!loading?'#fff':C.muted,fontSize:18,fontWeight:800,
-          cursor:valid&&!loading?'pointer':'not-allowed',transition:'all 0.2s',
-          display:'flex',alignItems:'center',justifyContent:'center',gap:10,
-          boxShadow:valid&&!loading?'0 4px 16px rgba(180,83,9,0.3)':'none'
-        }}>
-          {loading?<><div style={{width:18,height:18,border:'2px solid #fff',borderTopColor:'transparent',borderRadius:'50%',animation:'spin 0.7s linear infinite'}}/>{t.emailLoading}</>:t.emailCta}
-        </button>
-        <p style={{textAlign:'center',fontSize:18,color:C.muted,marginTop:12,lineHeight:1.5}}>{t.emailPrivacy}</p>
+    <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.45)',zIndex:1000,display:'flex',alignItems:'center',justifyContent:'center',padding:24}}>
+      <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:24,padding:40,maxWidth:460,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,0.15)',animation:'fadeUp 0.3s ease both',textAlign:'center'}}>
+        {sent ? (
+          <>
+            <div style={{fontSize:44,marginBottom:16}}>📬</div>
+            <h2 style={{fontSize:22,fontWeight:800,color:C.text,marginBottom:10}}>Check your inbox</h2>
+            <p style={{fontSize:16,color:C.muted,lineHeight:1.6}}>We sent a magic link to <strong>{email}</strong>. Click it to unlock your free analysis.</p>
+          </>
+        ) : (
+          <>
+            <div style={{fontSize:44,marginBottom:16}}>🔓</div>
+            <h2 style={{fontSize:22,fontWeight:800,color:C.text,marginBottom:8}}>Unlock 1 more free analysis</h2>
+            <p style={{fontSize:15,color:C.muted,lineHeight:1.6,marginBottom:28}}>Create a free account to get one more analysis. No credit card required.</p>
+
+            {/* Google button */}
+            <button onClick={handleGoogle} style={{width:'100%',padding:'13px',borderRadius:12,border:`1px solid ${C.border2}`,background:'#fff',color:C.text,fontSize:15,fontWeight:600,cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:10,marginBottom:16,transition:'all 0.2s'}}
+              onMouseEnter={e=>e.currentTarget.style.borderColor=C.accent}
+              onMouseLeave={e=>e.currentTarget.style.borderColor=C.border2}>
+              <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
+              Continue with Google
+            </button>
+
+            <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:16}}>
+              <div style={{flex:1,height:1,background:C.border}}/>
+              <span style={{fontSize:13,color:C.muted}}>or</span>
+              <div style={{flex:1,height:1,background:C.border}}/>
+            </div>
+
+            <input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="your@email.com"
+              style={{width:'100%',padding:'13px 16px',borderRadius:12,border:`1px solid ${C.border2}`,background:C.bg,fontSize:15,color:C.text,marginBottom:10,outline:'none'}}
+              onFocus={e=>e.target.style.borderColor=C.accent} onBlur={e=>e.target.style.borderColor=C.border2}/>
+            {error && <div style={{fontSize:13,color:C.red,marginBottom:8}}>{error}</div>}
+            <button onClick={handleMagicLink} disabled={!valid||loading} style={{width:'100%',padding:'13px',borderRadius:12,border:'none',background:valid?C.accent:C.border,color:valid?'#fff':C.muted,fontSize:15,fontWeight:700,cursor:valid?'pointer':'not-allowed',marginBottom:12,transition:'all 0.2s'}}>
+              {loading ? '...' : 'Send magic link'}
+            </button>
+            <button onClick={onClose} style={{width:'100%',padding:'10px',borderRadius:12,border:`1px solid ${C.border}`,background:'transparent',color:C.muted,fontSize:14,cursor:'pointer'}}>
+              Maybe later
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
@@ -96,10 +132,12 @@ function QuotaModal({ t, onClose, userEmail }) {
   async function handleCheckout(variantId) {
     setLoadingVariant(variantId);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const email = session?.user?.email || userEmail || '';
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ variantId, email: userEmail }),
+        body: JSON.stringify({ variantId, email }),
       });
       const data = await res.json();
       if (data.url) window.location.href = data.url;
@@ -386,15 +424,43 @@ export default function Home() {
   const [result, setResult] = useState(null);
   const [history, setHistory] = useState([]);
 
-  // Email gate
+  // Auth & quota state
+  const [anonId, setAnonId] = useState(null);
+  const [userId, setUserId] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
-  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [showSoftGate, setShowSoftGate] = useState(false);
   const [showQuotaModal, setShowQuotaModal] = useState(false);
-  const [emailLoading, setEmailLoading] = useState(false);
-  const [emailError, setEmailError] = useState('');
   const [pendingRun, setPendingRun] = useState(false);
 
   const t = T[lang];
+
+  // Init: localStorage anonId + Supabase session
+  useEffect(() => {
+    // Anonymous ID
+    let id = localStorage.getItem('b2r_anon_id');
+    if (!id) { id = crypto.randomUUID(); localStorage.setItem('b2r_anon_id', id); }
+    setAnonId(id);
+
+    // Check existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        setUserId(session.user.id);
+        setUserEmail(session.user.email);
+      }
+    });
+
+    // Listen for auth changes (magic link / Google callback)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setUserId(session.user.id);
+        setUserEmail(session.user.email);
+        setShowSoftGate(false);
+        setPendingRun(true);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     fetch('/api/market-data')
@@ -403,38 +469,7 @@ export default function Home() {
       .catch(() => {});
   }, []);
 
-  async function handleEmailConfirm(email) {
-    setEmailLoading(true);
-    setEmailError('');
-    try {
-      const res = await fetch('/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
-      if (!data.can_analyze) {
-        setUserEmail(email);
-        setShowEmailModal(false);
-        setShowQuotaModal(true);
-        return;
-      }
-      setUserEmail(email);
-      setShowEmailModal(false);
-      setPendingRun(true);
-    } catch {
-      setEmailError(t.emailError);
-    } finally {
-      setEmailLoading(false);
-    }
-  }
-
   async function run() {
-    if (!userEmail) {
-      setShowEmailModal(true);
-      return;
-    }
     setResult(null); setStatus(null);
     let content = '';
     if (mode === 'url') {
@@ -455,8 +490,8 @@ export default function Home() {
     setStatus('analyzing'); setStatusMsg(t.analyzing);
     try {
       const body = mode === 'image'
-        ? { images, lang, email: userEmail }
-        : { content: `URL: ${url||'N/A'}\n\n${content}`, lang, email: userEmail };
+        ? { images, lang, anonId, userId }
+        : { content: `URL: ${url||'N/A'}\n\n${content}`, lang, anonId, userId };
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -464,7 +499,13 @@ export default function Home() {
       });
       if (response.status === 403) {
         setStatus(null);
-        setShowQuotaModal(true);
+        const data = await response.json();
+        if (data.error === 'soft_gate') {
+          setShowSoftGate(true);
+          setPendingRun(true);
+        } else {
+          setShowQuotaModal(true);
+        }
         return;
       }
       const parsed = await response.json();
@@ -477,13 +518,13 @@ export default function Home() {
     }
   }
 
-  // Run after email confirmed
-  useState(() => {
-    if (pendingRun && userEmail) {
+  // Run after soft gate auth
+  useEffect(() => {
+    if (pendingRun && userId) {
       setPendingRun(false);
       run();
     }
-  });
+  }, [pendingRun, userId]);
 
   function reset() { setResult(null); setStatus(null); setUrl(''); setManualText(''); setImages([]); }
 
@@ -508,7 +549,7 @@ export default function Home() {
 
       <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WSVSC97J" height="0" width="0" style={{display:'none',visibility:'hidden'}}></iframe></noscript>
 
-      {showEmailModal && <EmailModal t={t} onConfirm={handleEmailConfirm} onClose={()=>setShowEmailModal(false)} loading={emailLoading} error={emailError}/>}
+      {showSoftGate && <SoftGateModal t={t} onClose={()=>setShowSoftGate(false)}/>}
       {showQuotaModal && <QuotaModal t={t} onClose={()=>setShowQuotaModal(false)} userEmail={userEmail}/>}
 
       <div style={{position:'fixed',inset:0,pointerEvents:'none',zIndex:0,
