@@ -81,13 +81,15 @@ export default async function handler(req, res) {
   // ── Check email quota ─────────────────────────────────
   const { data: user, error: userError } = await supabase
     .from('users')
-    .select('analyses_count, is_subscribed')
+    .select('analyses_count, is_subscribed, pass_expires_at')
     .eq('email', normalizedEmail)
     .single();
 
   if (userError || !user) return res.status(401).json({ error: 'email_required' });
 
-  if (!user.is_subscribed && !isWhitelisted) {
+  const hasActivePass = user.pass_expires_at && new Date(user.pass_expires_at) > new Date();
+
+  if (!user.is_subscribed && !hasActivePass && !isWhitelisted) {
     if (user.analyses_count >= 2) return res.status(403).json({ error: 'quota_exceeded' });
 
     // Check IP quota
