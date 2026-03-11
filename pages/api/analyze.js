@@ -197,7 +197,12 @@ Expected JSON structure:
   "renta_district_persona": number or null (net annual income per person in €, from ADRH data above),
   "renta_district_hogar": number or null (net annual household income in €, from ADRH data above),
   "paro_region": number or null (unemployment % for the region from EPA data above),
-  "district_profile": string or null (1-sentence tenant profile summary in ${langName}, e.g. "Quartier ouvrier avec forte demande locative jeune, revenu médian 28.500€/foyer")
+  "district_profile": string or null (1-sentence tenant profile summary in ${langName}, e.g. "Quartier ouvrier avec forte demande locative jeune, revenu médian 28.500€/foyer"),
+  "capex_alerte": boolean (true if listing contains renovation keywords),
+  "capex_keywords": ["list of detected keywords from the listing text"],
+  "capex_estimation_m2_low": number or null (low estimate €/m² for renovation),
+  "capex_estimation_m2_high": number or null (high estimate €/m² for renovation),
+  "capex_note": string or null (1-sentence note in ${langName} explaining the renovation risk)
 }
 
 SCORING GUIDANCE:
@@ -293,6 +298,27 @@ CRITICAL — STRICT ANTI-HALLUCINATION RULE FOR SOCIO DATA:
 - If the location is ambiguous, unknown, or outside the 53 listed districts (small town, suburb, other city): set renta_district_persona=null, renta_district_hogar=null, and set district_profile to a city-level fallback string like "Données socio-démo précises non disponibles pour ce secteur — moyennes régionales appliquées" (in the response language).
 - NEVER invent or estimate income/unemployment figures. Use ONLY the exact values from the table above, or null.
 - paro_region should always be set when the city is Madrid/Barcelona/Valencia/Málaga (use regional rate), null for other cities.
+
+CAPEX DETECTION — RENOVATION RISK:
+Scan the listing text for Spanish renovation keywords. If ANY of these are found, set capex_alerte=true:
+- "para reformar", "a reformar", "para renovar", "a renovar", "reformar", "necesita reforma"
+- "a actualizar", "para actualizar", "necesita actualización"
+- "origen", "en su estado original", "en su estado", "sin reformar"
+- "conserva elementos originales", "piso de época", "suelos originales"
+- "para rehabilitar", "a rehabilitar", "rehabilitación"
+- "obra nueva en proyecto", "con licencia de obra"
+- "segunda mano/para reformar" (from idealista condition field)
+- Any mention of "ITE" (Inspección Técnica de Edificios)
+
+If capex_alerte=true:
+- List detected keywords in capex_keywords
+- Estimate renovation cost based on surface and condition:
+  * Light refresh ("actualizar", "pintura"): 300–500 €/m²
+  * Standard renovation ("reformar", "origen"): 500–800 €/m²  
+  * Full gut renovation ("rehabilitar", multiple systems): 800–1200 €/m²
+- Set capex_note to a 1-sentence warning in ${langName} (e.g. "Bien à rénover : prévoir 500–800 €/m² de travaux, soit X–Y € au total, qui impacteront la rentabilité la première année.")
+
+If no renovation keywords found: capex_alerte=false, capex_keywords=[], capex_estimation_m2_low=null, capex_estimation_m2_high=null, capex_note=null.
 ${ineBlock}`;
 
   try {
@@ -305,7 +331,7 @@ ${ineBlock}`;
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 1400,
+        max_tokens: 1600,
         system: systemPrompt,
         messages: [{ role: 'user', content: (images && images.length > 0) ? [
           ...images.map(img => ({ type: 'image', source: { type: 'base64', media_type: img.mediaType, data: img.base64 } })),
