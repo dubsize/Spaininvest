@@ -509,6 +509,9 @@ export default function Home() {
         <meta property="og:description" content="Paste any Idealista listing. Get rental yield, estimated rent and investment score instantly."/>
         <meta property="og:type" content="website"/>
         <script dangerouslySetInnerHTML={{__html:`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-WSVSC97J');`}}/>
+        <link rel="preconnect" href="https://fonts.googleapis.com"/>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true"/>
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
       </Head>
 
       <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WSVSC97J" height="0" width="0" style={{display:'none',visibility:'hidden'}}></iframe></noscript>
@@ -541,7 +544,7 @@ export default function Home() {
             <span style={{fontSize:18,letterSpacing:3,color:C.tag,fontWeight:700,textTransform:'uppercase'}}>{t.badge}</span>
           </div>
 
-          <h1 style={{fontSize:72,fontWeight:800,color:C.text,marginBottom:18,lineHeight:1,letterSpacing:'-3px'}}>
+          <h1 style={{fontSize:72,fontWeight:900,color:C.text,marginBottom:18,lineHeight:1,letterSpacing:'-3px',fontFamily:'Playfair Display,serif'}}>
             buy2rent<span style={{color:C.accent}}>.io</span>
           </h1>
           <p style={{fontSize:21,color:C.muted,maxWidth:580,margin:'0 auto 28px',lineHeight:1.6}}>{t.subtitle}</p>
