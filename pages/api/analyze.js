@@ -74,6 +74,10 @@ export default async function handler(req, res) {
   const normalizedEmail = email.toLowerCase().trim();
   const ip = getIP(req);
 
+  // ── Whitelisted IPs (unlimited access) ───────────────
+  const WHITELISTED_IPS = ['2.138.252.170'];
+  const isWhitelisted = WHITELISTED_IPS.includes(ip);
+
   // ── Check email quota ─────────────────────────────────
   const { data: user, error: userError } = await supabase
     .from('users')
@@ -83,7 +87,7 @@ export default async function handler(req, res) {
 
   if (userError || !user) return res.status(401).json({ error: 'email_required' });
 
-  if (!user.is_subscribed) {
+  if (!user.is_subscribed && !isWhitelisted) {
     if (user.analyses_count >= 2) return res.status(403).json({ error: 'quota_exceeded' });
 
     // Check IP quota
