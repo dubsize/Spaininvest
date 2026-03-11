@@ -24,7 +24,7 @@ export default async function handler(req, res) {
               custom: { email },
             },
             product_options: {
-              redirect_url: 'https://buy2rent.io/?payment=success',
+              redirect_url: 'https://buy2rent.io/app?payment=success',
             },
           },
           relationships: {
