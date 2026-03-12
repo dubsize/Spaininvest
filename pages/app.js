@@ -316,7 +316,7 @@ function ResultCard({ data, url, t }) {
         </div>
       </div>
 
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14,marginBottom:14}}>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))',gap:14,marginBottom:14}}>
         <Section title={t.yield} color={C.accent}>
           <RentaBar brute={rentaBrute} nette={rentaNette} t={t}/>
           <div style={{marginTop:14,paddingTop:12,borderTop:`1px solid ${C.border}`,fontSize:18,color:C.muted}}>
@@ -330,24 +330,24 @@ function ResultCard({ data, url, t }) {
             {l:t.ibi,v:`−${Math.round(ibi).toLocaleString('fr')} €`,c:C.red},
             {l:t.tax,v:`−${Math.round(impot).toLocaleString('fr')} €`,c:C.red},
           ].map(r=>(
-            <div key={r.l} style={{display:'flex',justifyContent:'space-between',fontSize:18,padding:'6px 0',borderBottom:`1px solid ${C.border}`}}>
-              <span style={{color:C.muted}}>{r.l}</span><span style={{color:r.c,fontWeight:700}}>{r.v}</span>
+            <div key={r.l} style={{display:'flex',justifyContent:'space-between',alignItems:'center',fontSize:15,padding:'8px 0',borderBottom:`1px solid ${C.border}`}}>
+              <span style={{color:C.muted}}>{r.l}</span><span style={{color:r.c,fontWeight:700,whiteSpace:'nowrap',marginLeft:8}}>{r.v}</span>
             </div>
           ))}
         </Section>
       </div>
 
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14,marginBottom:14}}>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))',gap:14,marginBottom:14}}>
         <div style={{background:'#f0fdf4',border:`1px solid #bbf7d0`,borderRadius:18,padding:20}}>
           <div style={{fontSize:18,letterSpacing:2,color:C.green,textTransform:'uppercase',fontWeight:700,marginBottom:12}}>{t.strengths}</div>
           {(data.points_positifs||[]).map((p,i)=>(
-            <div key={i} style={{fontSize:18,color:'#166534',padding:'5px 0',borderBottom:'1px solid #dcfce7',display:'flex',gap:8}}><span style={{color:C.green,fontWeight:700}}>+</span>{p}</div>
+            <div key={i} style={{fontSize:15,color:'#166534',padding:'6px 0',borderBottom:'1px solid #dcfce7',display:'flex',gap:8,lineHeight:1.5}}><span style={{color:C.green,fontWeight:700,flexShrink:0}}>+</span>{p}</div>
           ))}
         </div>
         <div style={{background:'#fff5f5',border:`1px solid #fecaca`,borderRadius:18,padding:20}}>
           <div style={{fontSize:18,letterSpacing:2,color:C.red,textTransform:'uppercase',fontWeight:700,marginBottom:12}}>{t.weaknesses}</div>
           {(data.points_negatifs||[]).map((p,i)=>(
-            <div key={i} style={{fontSize:18,color:'#991b1b',padding:'5px 0',borderBottom:'1px solid #fee2e2',display:'flex',gap:8}}><span style={{color:C.red,fontWeight:700}}>−</span>{p}</div>
+            <div key={i} style={{fontSize:15,color:'#991b1b',padding:'6px 0',borderBottom:'1px solid #fee2e2',display:'flex',gap:8,lineHeight:1.5}}><span style={{color:C.red,fontWeight:700,flexShrink:0}}>−</span>{p}</div>
           ))}
         </div>
       </div>
