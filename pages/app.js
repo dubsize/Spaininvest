@@ -478,6 +478,9 @@ function SimulateurSliders({ data, t }) {
   const [ibiCustom, setIbiCustom] = useState(null);
   const [ibiEditing, setIbiEditing] = useState(false);
   const [ibiInput, setIbiInput] = useState('');
+  const [chargesDeduct, setChargesDeduct] = useState(0);
+  const [chargesDeductInput, setChargesDeductInput] = useState('0');
+  const [chargesDeductEditing, setChargesDeductEditing] = useState(false);
 
   const ibiVal = ibiCustom !== null ? ibiCustom : ibi;
   const loyer = Math.round(loyerBase * (1 + loyerPct / 100));
@@ -509,9 +512,11 @@ function SimulateurSliders({ data, t }) {
   const loyerAnnuel = loyer * 11.5;
   const chargesAn = charges * 12;
   const baseAvantImpot = loyerAnnuel - chargesAn - ibiVal;
+  // Résident : on déduit les charges supplémentaires (amortissement, intérêts...) avant abattement
+  const baseResidentAvantAbattement = baseAvantImpot - (fiscalMode === 'resident_60' ? chargesDeduct : 0);
   const impot = fiscalMode === 'non_resident'
     ? (baseAvantImpot > 0 ? baseAvantImpot * 0.19 : 0)
-    : calcIRPF(baseAvantImpot > 0 ? baseAvantImpot * 0.40 : 0);
+    : calcIRPF(baseResidentAvantAbattement > 0 ? baseResidentAvantAbattement * 0.40 : 0);
   const revenusNets = baseAvantImpot - impot;
   const cashflow = Math.round(revenusNets / 12 - mensualite);
   const rentaNette = prix > 0 ? (revenusNets / prix) * 100 : 0;
@@ -657,6 +662,34 @@ function SimulateurSliders({ data, t }) {
           </div>
         )}
       </div>
+
+      {/* Charges déductibles supplémentaires — résident uniquement */}
+      {fiscalMode === 'resident_60' && (
+        <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 10, padding: '10px 14px', marginBottom: 18, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <span style={{ fontSize: 13, color: '#166534', fontWeight: 600 }}>Charges déductibles/an</span>
+            <div style={{ fontSize: 11, color: '#4ade80', marginTop: 2 }}>amortissement · intérêts · frais de gestion</div>
+          </div>
+          {chargesDeductEditing ? (
+            <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+              <input type="number" value={chargesDeductInput} onChange={e => setChargesDeductInput(e.target.value)} autoFocus
+                style={{ width: 80, padding: '4px 8px', borderRadius: 8, border: '1px solid #16a34a', fontSize: 14, fontWeight: 700, color: '#16a34a', textAlign: 'right', outline: 'none' }} />
+              <span style={{ fontSize: 12, color: C.muted }}>€</span>
+              <button onClick={() => { const v = parseFloat(chargesDeductInput); setChargesDeduct(!isNaN(v) && v >= 0 ? v : 0); setChargesDeductEditing(false); }}
+                style={{ padding: '4px 10px', borderRadius: 8, border: 'none', background: '#16a34a', color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>✓</button>
+              <button onClick={() => setChargesDeductEditing(false)}
+                style={{ padding: '4px 8px', borderRadius: 8, border: `1px solid ${C.border}`, background: 'transparent', color: C.muted, fontSize: 12, cursor: 'pointer' }}>✕</button>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <span style={{ fontSize: 15, fontWeight: 800, color: '#16a34a' }}>{chargesDeduct > 0 ? `−${chargesDeduct.toLocaleString('fr')} €` : 'Non renseigné'}</span>
+              <button onClick={() => { setChargesDeductEditing(true); setChargesDeductInput(String(chargesDeduct)); }}
+                style={{ background: 'transparent', border: '1px solid #bbf7d0', borderRadius: 8, padding: '3px 8px', cursor: 'pointer', fontSize: 13 }}>✏️</button>
+              {chargesDeduct > 0 && <button onClick={() => setChargesDeduct(0)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: 11, color: C.muted, textDecoration: 'underline' }}>reset</button>}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Sliders */}
       <SliderRow label="Apport personnel" value={apport} min={10} max={90} step={5} unit="%" onChange={v => setApport(v)} inputVal={apportInput} setInputVal={setApportInput} />
