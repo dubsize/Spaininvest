@@ -468,7 +468,12 @@ function SimulateurSliders({ data, t }) {
 
   const [apport, setApport] = useState(20);
   const [taux, setTaux] = useState(3.5);
-  const [loyerPct, setLoyerPct] = useState(0); // % de variation autour du median
+  const [loyerPct, setLoyerPct] = useState(0);
+
+  // Input field states for manual entry
+  const [apportInput, setApportInput] = useState('20');
+  const [tauxInput, setTauxInput] = useState('3.5');
+  const [loyerInput, setLoyerInput] = useState('0');
 
   const loyer = Math.round(loyerBase * (1 + loyerPct / 100));
   const emprunt = prix * (1 - apport / 100);
@@ -487,78 +492,99 @@ function SimulateurSliders({ data, t }) {
   const rentaNette = prix > 0 ? (revenusNets / prix) * 100 : 0;
   const cashflowColor = cashflow >= 0 ? C.green : C.red;
 
-  function Slider({ label, value, min, max, step, unit, onChange, format }) {
+  function clamp(val, min, max) { return Math.min(max, Math.max(min, val)); }
+
+  function SliderRow({ label, value, min, max, step, unit, onChange, inputVal, setInputVal, format, displayVal }) {
     const pct = ((value - min) / (max - min)) * 100;
+    function handleInputBlur() {
+      const v = parseFloat(inputVal);
+      if (!isNaN(v)) {
+        const clamped = clamp(v, min, max);
+        onChange(clamped);
+        setInputVal(String(clamped));
+      } else {
+        setInputVal(String(value));
+      }
+    }
     return (
-      <div style={{ marginBottom: 20 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+      <div style={{ marginBottom: 24 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
           <span style={{ fontSize: 14, color: C.muted, fontWeight: 600 }}>{label}</span>
-          <span style={{ fontSize: 16, fontWeight: 800, color: C.accent }}>
-            {format ? format(value) : `${value}${unit}`}
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <input
+              type="number" value={inputVal} min={min} max={max} step={step}
+              onChange={e => setInputVal(e.target.value)}
+              onBlur={handleInputBlur}
+              style={{ width: 64, padding: '4px 8px', borderRadius: 8, border: `1px solid ${C.border2}`, background: C.bg, fontSize: 15, fontWeight: 800, color: C.accent, textAlign: 'right', outline: 'none' }}
+            />
+            <span style={{ fontSize: 13, color: C.muted, fontWeight: 600 }}>{unit}</span>
+          </div>
         </div>
-        <div style={{ position: 'relative', height: 6, background: C.border, borderRadius: 3 }}>
-          <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${pct}%`, background: C.accent, borderRadius: 3, transition: 'width 0.1s' }} />
+        {/* Full-width track */}
+        <div style={{ position: 'relative', height: 6, background: C.border, borderRadius: 3, width: '100%' }}>
+          <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${pct}%`, background: C.accent, borderRadius: 3 }} />
           <input type="range" min={min} max={max} step={step} value={value}
-            onChange={e => onChange(parseFloat(e.target.value))}
-            style={{ position: 'absolute', top: -6, left: 0, width: '100%', height: 18, opacity: 0, cursor: 'pointer', margin: 0 }} />
-          <div style={{ position: 'absolute', top: '50%', left: `${pct}%`, transform: 'translate(-50%,-50%)', width: 16, height: 16, background: C.accent, borderRadius: '50%', boxShadow: '0 2px 6px rgba(180,83,9,0.4)', pointerEvents: 'none', transition: 'left 0.1s' }} />
+            onChange={e => { const v = parseFloat(e.target.value); onChange(v); setInputVal(String(v)); }}
+            style={{ position: 'absolute', top: -8, left: 0, width: '100%', height: 22, opacity: 0, cursor: 'pointer', margin: 0 }} />
+          <div style={{ position: 'absolute', top: '50%', left: `${pct}%`, transform: 'translate(-50%,-50%)', width: 20, height: 20, background: C.accent, borderRadius: '50%', boxShadow: '0 2px 8px rgba(180,83,9,0.4)', pointerEvents: 'none' }} />
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4, fontSize: 12, color: C.muted }}>
-          <span>{min}{unit}</span><span>{max}{unit}</span>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 5, fontSize: 11, color: C.muted }}>
+          <span>{min}{unit}</span>
+          {displayVal && <span style={{ color: C.accent, fontWeight: 700 }}>{displayVal}</span>}
+          <span>{max}{unit}</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div style={{ background: C.card, border: `2px solid ${cashflow >= 0 ? '#bbf7d0' : '#fecaca'}`, borderRadius: 18, padding: 24, marginTop: 14 }}>
+    <div style={{ background: C.card, border: `2px solid ${cashflow >= 0 ? '#bbf7d0' : '#fecaca'}`, borderRadius: 18, padding: '20px 16px', marginTop: 14 }}>
       <div style={{ fontSize: 13, letterSpacing: 2, color: C.accent, textTransform: 'uppercase', fontWeight: 700, marginBottom: 20 }}>
         🎛 Simulateur de scénarios
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-        {/* Sliders */}
-        <div>
-          <Slider label="Apport personnel" value={apport} min={5} max={50} step={5} unit="%" onChange={setApport} />
-          <Slider label="Taux d'intérêt" value={taux} min={2} max={6} step={0.1} unit="%" onChange={setTaux} />
-          <Slider
-            label="Loyer mensuel"
-            value={loyerPct}
-            min={-20} max={20} step={5} unit="%"
-            format={v => `${loyer.toLocaleString('fr')} € (${v >= 0 ? '+' : ''}${v}%)`}
-            onChange={setLoyerPct}
-          />
-        </div>
+      {/* Sliders — full width */}
+      <SliderRow
+        label="Apport personnel" value={apport} min={10} max={90} step={5} unit="%"
+        onChange={v => setApport(v)} inputVal={apportInput} setInputVal={setApportInput}
+      />
+      <SliderRow
+        label="Taux d'intérêt" value={taux} min={1} max={6} step={0.1} unit="%"
+        onChange={v => setTaux(v)} inputVal={tauxInput} setInputVal={setTauxInput}
+      />
+      <SliderRow
+        label="Loyer mensuel" value={loyerPct} min={-50} max={50} step={5} unit="%"
+        onChange={v => setLoyerPct(v)} inputVal={loyerInput} setInputVal={setLoyerInput}
+        displayVal={`${loyer.toLocaleString('fr')} €/mois`}
+      />
 
-        {/* Results */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {[
-            { l: 'Apport', v: `${Math.round(prix * apport / 100).toLocaleString('fr')} €`, c: C.text },
-            { l: 'Emprunt', v: `${Math.round(emprunt).toLocaleString('fr')} €`, c: C.muted },
-            { l: 'Mensualité crédit', v: `${mensualite.toLocaleString('fr')} €/mois`, c: C.red },
-            { l: 'Revenus locatifs nets', v: `${Math.round(revenusNets / 12).toLocaleString('fr')} €/mois`, c: C.green },
-            { l: 'Rendement net', v: `${rentaNette.toFixed(2)}%`, c: rentaNette >= 4 ? C.green : rentaNette >= 2 ? '#d97706' : C.red },
-          ].map(r => (
-            <div key={r.l} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, padding: '7px 0', borderBottom: `1px solid ${C.border}` }}>
-              <span style={{ color: C.muted }}>{r.l}</span>
-              <span style={{ color: r.c, fontWeight: 700 }}>{r.v}</span>
-            </div>
-          ))}
-
-          {/* Cash-flow highlight */}
-          <div style={{ marginTop: 6, background: cashflow >= 0 ? '#f0fdf4' : '#fff5f5', border: `1px solid ${cashflow >= 0 ? '#bbf7d0' : '#fecaca'}`, borderRadius: 12, padding: '14px 16px', textAlign: 'center' }}>
-            <div style={{ fontSize: 12, color: C.muted, fontWeight: 600, marginBottom: 4 }}>CASH-FLOW NET MENSUEL</div>
-            <div style={{ fontSize: 32, fontWeight: 900, color: cashflowColor, fontFamily: 'Georgia, serif' }}>
-              {cashflow >= 0 ? '+' : ''}{cashflow.toLocaleString('fr')} €
-            </div>
-            <div style={{ fontSize: 12, color: C.muted, marginTop: 3 }}>loyer − mensualité − charges − impôts</div>
+      {/* Results grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(140px,1fr))', gap: 10, marginTop: 8, marginBottom: 14 }}>
+        {[
+          { l: 'Apport', v: `${Math.round(prix * apport / 100).toLocaleString('fr')} €`, c: C.text },
+          { l: 'Emprunt', v: `${Math.round(emprunt).toLocaleString('fr')} €`, c: C.muted },
+          { l: 'Mensualité', v: `${mensualite.toLocaleString('fr')} €/mois`, c: C.red },
+          { l: 'Revenus nets/mois', v: `${Math.round(revenusNets / 12).toLocaleString('fr')} €`, c: C.green },
+          { l: 'Rendement net', v: `${rentaNette.toFixed(2)}%`, c: rentaNette >= 4 ? C.green : rentaNette >= 2 ? '#d97706' : C.red },
+        ].map(r => (
+          <div key={r.l} style={{ background: C.bg, borderRadius: 10, padding: '10px 12px' }}>
+            <div style={{ fontSize: 11, color: C.muted, fontWeight: 600, marginBottom: 3 }}>{r.l}</div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: r.c }}>{r.v}</div>
           </div>
-        </div>
+        ))}
       </div>
 
-      <div style={{ fontSize: 12, color: C.muted, marginTop: 16, paddingTop: 12, borderTop: `1px solid ${C.border}` }}>
-        Hypothèses : crédit sur 25 ans, 11.5 mois de loyer/an, impôt locatif 19% (non-résident), charges + IBI estimés.
+      {/* Cash-flow highlight */}
+      <div style={{ background: cashflow >= 0 ? '#f0fdf4' : '#fff5f5', border: `1px solid ${cashflow >= 0 ? '#bbf7d0' : '#fecaca'}`, borderRadius: 14, padding: '16px', textAlign: 'center' }}>
+        <div style={{ fontSize: 12, color: C.muted, fontWeight: 600, marginBottom: 4 }}>CASH-FLOW NET MENSUEL</div>
+        <div style={{ fontSize: 36, fontWeight: 900, color: cashflowColor, fontFamily: 'Georgia, serif' }}>
+          {cashflow >= 0 ? '+' : ''}{cashflow.toLocaleString('fr')} €
+        </div>
+        <div style={{ fontSize: 12, color: C.muted, marginTop: 3 }}>loyer − mensualité − charges − impôts</div>
+      </div>
+
+      <div style={{ fontSize: 11, color: C.muted, marginTop: 12, paddingTop: 10, borderTop: `1px solid ${C.border}` }}>
+        Hypothèses : crédit sur 25 ans · 11.5 mois de loyer/an · impôt locatif 19% (non-résident) · charges + IBI estimés
       </div>
     </div>
   );
