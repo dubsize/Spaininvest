@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import T from '../components/translations';
 import { supabase } from '../lib/supabaseClient';
@@ -496,6 +496,38 @@ function SimulateurSliders({ data, t }) {
 
   function SliderRow({ label, value, min, max, step, unit, onChange, inputVal, setInputVal, format, displayVal }) {
     const pct = ((value - min) / (max - min)) * 100;
+    const trackRef = useRef(null);
+
+    function valueFromPosition(clientX) {
+      const rect = trackRef.current.getBoundingClientRect();
+      const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+      const raw = min + ratio * (max - min);
+      const stepped = Math.round(raw / step) * step;
+      return Math.min(max, Math.max(min, parseFloat(stepped.toFixed(2))));
+    }
+
+    function handleTrackClick(e) {
+      const v = valueFromPosition(e.clientX);
+      onChange(v);
+      setInputVal(String(v));
+    }
+
+    function handleTouchStart(e) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const v = valueFromPosition(touch.clientX);
+      onChange(v);
+      setInputVal(String(v));
+    }
+
+    function handleTouchMove(e) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const v = valueFromPosition(touch.clientX);
+      onChange(v);
+      setInputVal(String(v));
+    }
+
     function handleInputBlur() {
       const v = parseFloat(inputVal);
       if (!isNaN(v)) {
@@ -506,9 +538,10 @@ function SimulateurSliders({ data, t }) {
         setInputVal(String(value));
       }
     }
+
     return (
       <div style={{ marginBottom: 24 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
           <span style={{ fontSize: 14, color: C.muted, fontWeight: 600 }}>{label}</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <input
@@ -520,15 +553,34 @@ function SimulateurSliders({ data, t }) {
             <span style={{ fontSize: 13, color: C.muted, fontWeight: 600 }}>{unit}</span>
           </div>
         </div>
-        {/* Full-width track */}
-        <div style={{ position: 'relative', height: 6, background: C.border, borderRadius: 3, width: '100%' }}>
-          <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${pct}%`, background: C.accent, borderRadius: 3 }} />
-          <input type="range" min={min} max={max} step={step} value={value}
-            onChange={e => { const v = parseFloat(e.target.value); onChange(v); setInputVal(String(v)); }}
-            style={{ position: 'absolute', top: -8, left: 0, width: '100%', height: 22, opacity: 0, cursor: 'pointer', margin: 0 }} />
-          <div style={{ position: 'absolute', top: '50%', left: `${pct}%`, transform: 'translate(-50%,-50%)', width: 20, height: 20, background: C.accent, borderRadius: '50%', boxShadow: '0 2px 8px rgba(180,83,9,0.4)', pointerEvents: 'none' }} />
+
+        {/* Custom touch-native track */}
+        <div
+          ref={trackRef}
+          onClick={handleTrackClick}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          style={{ position: 'relative', height: 28, display: 'flex', alignItems: 'center', cursor: 'pointer', touchAction: 'none', userSelect: 'none' }}
+        >
+          {/* Background track */}
+          <div style={{ position: 'absolute', left: 0, right: 0, height: 6, background: C.border, borderRadius: 3 }} />
+          {/* Filled track */}
+          <div style={{ position: 'absolute', left: 0, height: 6, width: `${pct}%`, background: C.accent, borderRadius: 3 }} />
+          {/* Thumb */}
+          <div style={{
+            position: 'absolute',
+            left: `${pct}%`,
+            transform: 'translateX(-50%)',
+            width: 26, height: 26,
+            background: '#fff',
+            border: `3px solid ${C.accent}`,
+            borderRadius: '50%',
+            boxShadow: '0 2px 8px rgba(180,83,9,0.35)',
+            pointerEvents: 'none',
+          }} />
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 5, fontSize: 11, color: C.muted }}>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 2, fontSize: 11, color: C.muted }}>
           <span>{min}{unit}</span>
           {displayVal && <span style={{ color: C.accent, fontWeight: 700 }}>{displayVal}</span>}
           <span>{max}{unit}</span>
