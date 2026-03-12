@@ -474,7 +474,12 @@ function SimulateurSliders({ data, t }) {
   const [apportInput, setApportInput] = useState('20');
   const [tauxInput, setTauxInput] = useState('3.5');
   const [loyerInput, setLoyerInput] = useState('0');
+  const [fiscalMode, setFiscalMode] = useState('non_resident');
+  const [ibiCustom, setIbiCustom] = useState(null);
+  const [ibiEditing, setIbiEditing] = useState(false);
+  const [ibiInput, setIbiInput] = useState('');
 
+  const ibiVal = ibiCustom !== null ? ibiCustom : ibi;
   const loyer = Math.round(loyerBase * (1 + loyerPct / 100));
   const emprunt = prix * (1 - apport / 100);
   const duree = 25;
@@ -483,11 +488,31 @@ function SimulateurSliders({ data, t }) {
     ? Math.round(emprunt * tauxM / (1 - Math.pow(1 + tauxM, -duree * 12)))
     : 0;
 
+  function calcIRPF(base) {
+    if (base <= 0) return 0;
+    const tranches = [
+      { max: 12450, rate: 0.19 },
+      { max: 20200, rate: 0.24 },
+      { max: 35200, rate: 0.30 },
+      { max: 60000, rate: 0.37 },
+      { max: Infinity, rate: 0.45 },
+    ];
+    let impot = 0, prev = 0;
+    for (const t of tranches) {
+      if (base <= prev) break;
+      impot += (Math.min(base, t.max) - prev) * t.rate;
+      prev = t.max;
+    }
+    return impot;
+  }
+
   const loyerAnnuel = loyer * 11.5;
   const chargesAn = charges * 12;
-  const base = loyerAnnuel - chargesAn - ibi;
-  const impot = base > 0 ? base * 0.19 : 0;
-  const revenusNets = base - impot;
+  const baseAvantImpot = loyerAnnuel - chargesAn - ibiVal;
+  const impot = fiscalMode === 'non_resident'
+    ? (baseAvantImpot > 0 ? baseAvantImpot * 0.19 : 0)
+    : calcIRPF(baseAvantImpot > 0 ? baseAvantImpot * 0.40 : 0);
+  const revenusNets = baseAvantImpot - impot;
   const cashflow = Math.round(revenusNets / 12 - mensualite);
   const rentaNette = prix > 0 ? (revenusNets / prix) * 100 : 0;
   const cashflowColor = cashflow >= 0 ? C.green : C.red;
@@ -591,32 +616,60 @@ function SimulateurSliders({ data, t }) {
 
   return (
     <div style={{ background: C.card, border: `2px solid ${cashflow >= 0 ? '#bbf7d0' : '#fecaca'}`, borderRadius: 18, padding: '20px 16px', marginTop: 14 }}>
-      <div style={{ fontSize: 13, letterSpacing: 2, color: C.accent, textTransform: 'uppercase', fontWeight: 700, marginBottom: 20 }}>
-        🎛 Simulateur de scénarios
+
+      {/* Header + fiscal toggle */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18, flexWrap: 'wrap', gap: 10 }}>
+        <div style={{ fontSize: 13, letterSpacing: 2, color: C.accent, textTransform: 'uppercase', fontWeight: 700 }}>🎛 Simulateur</div>
+        <div style={{ display: 'flex', background: C.bg, border: `1px solid ${C.border}`, borderRadius: 10, padding: 3, gap: 2 }}>
+          {[
+            { key: 'non_resident', label: '🌍 Non-résident · 19%' },
+            { key: 'resident_60', label: '🇪🇸 Résident · IRPF −60%' },
+          ].map(opt => (
+            <button key={opt.key} onClick={() => setFiscalMode(opt.key)} style={{
+              padding: '6px 10px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 11, fontWeight: 700,
+              background: fiscalMode === opt.key ? C.accent : 'transparent',
+              color: fiscalMode === opt.key ? '#fff' : C.muted,
+            }}>{opt.label}</button>
+          ))}
+        </div>
       </div>
 
-      {/* Sliders — full width */}
-      <SliderRow
-        label="Apport personnel" value={apport} min={10} max={90} step={5} unit="%"
-        onChange={v => setApport(v)} inputVal={apportInput} setInputVal={setApportInput}
-      />
-      <SliderRow
-        label="Taux d'intérêt" value={taux} min={1} max={6} step={0.1} unit="%"
-        onChange={v => setTaux(v)} inputVal={tauxInput} setInputVal={setTauxInput}
-      />
-      <SliderRow
-        label="Loyer mensuel" value={loyerPct} min={-50} max={50} step={5} unit="%"
-        onChange={v => setLoyerPct(v)} inputVal={loyerInput} setInputVal={setLoyerInput}
-        displayVal={`${loyer.toLocaleString('fr')} €/mois`}
-      />
+      {/* IBI éditable */}
+      <div style={{ background: C.bg, borderRadius: 10, padding: '10px 14px', marginBottom: 18, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span style={{ fontSize: 13, color: C.muted, fontWeight: 600 }}>IBI annuel {ibiCustom !== null ? <span style={{color:'#16a34a'}}>✓ exact</span> : '(estimé)'}</span>
+        {ibiEditing ? (
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+            <input type="number" value={ibiInput} onChange={e => setIbiInput(e.target.value)} autoFocus
+              style={{ width: 80, padding: '4px 8px', borderRadius: 8, border: `1px solid ${C.accent}`, fontSize: 14, fontWeight: 700, color: C.accent, textAlign: 'right', outline: 'none' }} />
+            <span style={{ fontSize: 12, color: C.muted }}>€</span>
+            <button onClick={() => { const v = parseFloat(ibiInput); if (!isNaN(v) && v >= 0) setIbiCustom(v); setIbiEditing(false); }}
+              style={{ padding: '4px 10px', borderRadius: 8, border: 'none', background: C.accent, color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>✓</button>
+            <button onClick={() => setIbiEditing(false)}
+              style={{ padding: '4px 8px', borderRadius: 8, border: `1px solid ${C.border}`, background: 'transparent', color: C.muted, fontSize: 12, cursor: 'pointer' }}>✕</button>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <span style={{ fontSize: 15, fontWeight: 800, color: C.text }}>{Math.round(ibiVal).toLocaleString('fr')} €</span>
+            <button onClick={() => { setIbiEditing(true); setIbiInput(String(Math.round(ibiVal))); }}
+              style={{ background: 'transparent', border: `1px solid ${C.border}`, borderRadius: 8, padding: '3px 8px', cursor: 'pointer', fontSize: 13 }}>✏️</button>
+            {ibiCustom !== null && <button onClick={() => setIbiCustom(null)}
+              style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontSize: 11, color: C.muted, textDecoration: 'underline' }}>reset</button>}
+          </div>
+        )}
+      </div>
+
+      {/* Sliders */}
+      <SliderRow label="Apport personnel" value={apport} min={10} max={90} step={5} unit="%" onChange={v => setApport(v)} inputVal={apportInput} setInputVal={setApportInput} />
+      <SliderRow label="Taux d'intérêt" value={taux} min={1} max={6} step={0.1} unit="%" onChange={v => setTaux(v)} inputVal={tauxInput} setInputVal={setTauxInput} />
+      <SliderRow label="Loyer mensuel" value={loyerPct} min={-50} max={50} step={5} unit="%" onChange={v => setLoyerPct(v)} inputVal={loyerInput} setInputVal={setLoyerInput} displayVal={`${loyer.toLocaleString('fr')} €/mois`} />
 
       {/* Results grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(140px,1fr))', gap: 10, marginTop: 8, marginBottom: 14 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(130px,1fr))', gap: 10, marginTop: 8, marginBottom: 14 }}>
         {[
           { l: 'Apport', v: `${Math.round(prix * apport / 100).toLocaleString('fr')} €`, c: C.text },
-          { l: 'Emprunt', v: `${Math.round(emprunt).toLocaleString('fr')} €`, c: C.muted },
           { l: 'Mensualité', v: `${mensualite.toLocaleString('fr')} €/mois`, c: C.red },
           { l: 'Revenus nets/mois', v: `${Math.round(revenusNets / 12).toLocaleString('fr')} €`, c: C.green },
+          { l: 'Impôts/an', v: `−${Math.round(impot).toLocaleString('fr')} €`, c: '#d97706' },
           { l: 'Rendement net', v: `${rentaNette.toFixed(2)}%`, c: rentaNette >= 4 ? C.green : rentaNette >= 2 ? '#d97706' : C.red },
         ].map(r => (
           <div key={r.l} style={{ background: C.bg, borderRadius: 10, padding: '10px 12px' }}>
@@ -626,17 +679,19 @@ function SimulateurSliders({ data, t }) {
         ))}
       </div>
 
-      {/* Cash-flow highlight */}
-      <div style={{ background: cashflow >= 0 ? '#f0fdf4' : '#fff5f5', border: `1px solid ${cashflow >= 0 ? '#bbf7d0' : '#fecaca'}`, borderRadius: 14, padding: '16px', textAlign: 'center' }}>
+      {/* Cash-flow */}
+      <div style={{ background: cashflow >= 0 ? '#f0fdf4' : '#fff5f5', border: `1px solid ${cashflow >= 0 ? '#bbf7d0' : '#fecaca'}`, borderRadius: 14, padding: 16, textAlign: 'center' }}>
         <div style={{ fontSize: 12, color: C.muted, fontWeight: 600, marginBottom: 4 }}>CASH-FLOW NET MENSUEL</div>
         <div style={{ fontSize: 36, fontWeight: 900, color: cashflowColor, fontFamily: 'Georgia, serif' }}>
           {cashflow >= 0 ? '+' : ''}{cashflow.toLocaleString('fr')} €
         </div>
-        <div style={{ fontSize: 12, color: C.muted, marginTop: 3 }}>loyer − mensualité − charges − impôts</div>
+        <div style={{ fontSize: 12, color: C.muted, marginTop: 3 }}>loyer − mensualité − charges − IBI − impôts</div>
       </div>
 
       <div style={{ fontSize: 11, color: C.muted, marginTop: 12, paddingTop: 10, borderTop: `1px solid ${C.border}` }}>
-        Hypothèses : crédit sur 25 ans · 11.5 mois de loyer/an · impôt locatif 19% (non-résident) · charges + IBI estimés
+        {fiscalMode === 'non_resident'
+          ? 'Non-résident : 19% flat sur revenus nets · crédit 25 ans · 11.5 mois/an'
+          : 'Résident : IRPF progressif par tranches avec abattement 60% (Ley de Vivienda) · crédit 25 ans'}
       </div>
     </div>
   );
