@@ -299,26 +299,31 @@ CRITICAL — STRICT ANTI-HALLUCINATION RULE FOR SOCIO DATA:
 - NEVER invent or estimate income/unemployment figures. Use ONLY the exact values from the table above, or null.
 - paro_region should always be set when the city is Madrid/Barcelona/Valencia/Málaga (use regional rate), null for other cities.
 
-CAPEX DETECTION — RENOVATION RISK:
-Scan the listing text for Spanish renovation keywords. If ANY of these are found, set capex_alerte=true:
-- "para reformar", "a reformar", "para renovar", "a renovar", "reformar", "necesita reforma"
-- "a actualizar", "para actualizar", "necesita actualización"
-- "origen", "en su estado original", "en su estado", "sin reformar"
-- "conserva elementos originales", "piso de época", "suelos originales"
-- "para rehabilitar", "a rehabilitar", "rehabilitación"
-- "obra nueva en proyecto", "con licencia de obra"
-- "segunda mano/para reformar" (from idealista condition field)
-- Any mention of "ITE" (Inspección Técnica de Edificios)
+CAPEX DETECTION — RENOVATION RISK (STRICT DOUBLE CHECK):
+⚠️ IMPORTANT: "Segunda mano" alone is NOT sufficient to trigger capex_alerte. Many second-hand properties are in perfect condition.
+
+Set capex_alerte=true ONLY if BOTH conditions are met:
+1. The Idealista "condition" field (Características básicas) explicitly states renovation needed, e.g.: "Segunda mano/para reformar", "para rehabilitar", "a reformar"
+   (NOT just "Segunda mano/buen estado" or "Segunda mano" alone)
+2. AND the listing description text also contains renovation keywords such as:
+   "para reformar", "a reformar", "para renovar", "a renovar", "necesita reforma",
+   "a actualizar", "para actualizar", "en su estado original", "sin reformar",
+   "origen", "conserva elementos originales", "piso de época", "suelos originales",
+   "para rehabilitar", "a rehabilitar", "rehabilitación", "ITE", "obra"
+
+If ONLY the condition field says "para reformar" but the description sounds fine → capex_alerte=false
+If ONLY the description has renovation words but condition field says "buen estado" → capex_alerte=false
+If BOTH match → capex_alerte=true
 
 If capex_alerte=true:
-- List detected keywords in capex_keywords
+- List detected keywords in capex_keywords (from BOTH sources)
 - Estimate renovation cost based on surface and condition:
   * Light refresh ("actualizar", "pintura"): 300–500 €/m²
-  * Standard renovation ("reformar", "origen"): 500–800 €/m²  
+  * Standard renovation ("reformar", "origen"): 500–800 €/m²
   * Full gut renovation ("rehabilitar", multiple systems): 800–1200 €/m²
-- Set capex_note to a 1-sentence warning in ${langName} (e.g. "Bien à rénover : prévoir 500–800 €/m² de travaux, soit X–Y € au total, qui impacteront la rentabilité la première année.")
+- Set capex_note to a 1-sentence warning in ${langName}
 
-If no renovation keywords found: capex_alerte=false, capex_keywords=[], capex_estimation_m2_low=null, capex_estimation_m2_high=null, capex_note=null.
+If conditions not both met: capex_alerte=false, capex_keywords=[], capex_estimation_m2_low=null, capex_estimation_m2_high=null, capex_note=null.
 ${ineBlock}`;
 
   try {
