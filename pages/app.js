@@ -132,15 +132,15 @@ function QuotaModal({ t, onClose, userEmail }) {
   const [emailStep, setEmailStep] = useState(!userEmail);
   const validEmail = email.includes('@') && email.includes('.');
 
-  async function handleCheckout(variantId) {
+  async function handleCheckout(priceId) {
     const finalEmail = email.trim();
     if (!finalEmail) { setEmailStep(true); return; }
-    setLoadingVariant(variantId);
+    setLoadingVariant(priceId);
     try {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ variantId, email: finalEmail }),
+        body: JSON.stringify({ priceId, email: finalEmail }),
       });
       const data = await res.json();
       if (data.url) window.location.href = data.url;
@@ -152,8 +152,8 @@ function QuotaModal({ t, onClose, userEmail }) {
     }
   }
 
-  const VARIANT_PASS = '1390809';
-  const VARIANT_PRO  = '1390815';
+  const PRICE_PASS = 'pass_24h';
+  const PRICE_PRO  = 'pro';
 
   return (
     <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.4)',zIndex:1000,display:'flex',alignItems:'center',justifyContent:'center',padding:24}}>
@@ -186,10 +186,10 @@ function QuotaModal({ t, onClose, userEmail }) {
           </div>
           <div style={{fontSize:15,color:C.muted,marginBottom:14}}>Analyses illimitées pendant 24h. Idéal pour une session de recherche.</div>
           <button
-            onClick={() => handleCheckout(VARIANT_PASS)}
+            onClick={() => handleCheckout(PRICE_PASS)}
             disabled={loadingVariant !== null || emailStep}
             style={{width:'100%',padding:'13px',borderRadius:12,border:'none',background:'#0369a1',color:'#fff',fontSize:16,fontWeight:700,cursor:emailStep?'not-allowed':'pointer'}}>
-            {loadingVariant === VARIANT_PASS ? '...' : 'Acheter le Pass 24h'}
+            {loadingVariant === PRICE_PASS ? '...' : 'Acheter le Pass 24h'}
           </button>
         </div>
 
@@ -201,10 +201,10 @@ function QuotaModal({ t, onClose, userEmail }) {
           </div>
           <div style={{fontSize:15,color:C.muted,marginBottom:14}}>Analyses illimitées chaque mois. Pour le chasseur en recherche active.</div>
           <button
-            onClick={() => handleCheckout(VARIANT_PRO)}
+            onClick={() => handleCheckout(PRICE_PRO)}
             disabled={loadingVariant !== null || emailStep}
             style={{width:'100%',padding:'13px',borderRadius:12,border:'none',background:C.accent,color:'#fff',fontSize:16,fontWeight:700,cursor:emailStep?'not-allowed':'pointer',boxShadow:emailStep?'none':'0 4px 16px rgba(180,83,9,0.3)'}}>
-            {loadingVariant === VARIANT_PRO ? '...' : 'Passer en Pro'}
+            {loadingVariant === PRICE_PRO ? '...' : 'Passer en Pro'}
           </button>
         </div>
 
