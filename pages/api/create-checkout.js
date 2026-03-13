@@ -1,4 +1,4 @@
-// pages/api/create-checkout.js — Paddle integration
+// pages/api/create-checkout.js — Paddle hosted checkout
 
 const PADDLE_API_KEY = process.env.PADDLE_API_KEY;
 
@@ -25,22 +25,26 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         items: [{ price_id: paddlePriceId, quantity: 1 }],
         customer: { email },
+        custom_data: { email },
         checkout: {
           success_url: 'https://buy2rent.io/app?payment=success',
         },
-        custom_data: { email },
       }),
     });
 
     const data = await response.json();
-    console.log('Paddle response status:', response.status);
-    console.log('Paddle response body:', JSON.stringify(data));
-    if (!response.ok) return res.status(500).json({ error: 'Paddle checkout error', detail: data });
+    console.log('Paddle status:', response.status);
+    console.log('Paddle body:', JSON.stringify(data));
 
-    const checkoutUrl = data?.data?.checkout?.url;
-    if (!checkoutUrl) return res.status(500).json({ error: 'No checkout URL returned', detail: data });
+    if (!response.ok) return res.status(500).json({ error: 'Paddle error', detail: data });
 
+    const txnId = data?.data?.id;
+    if (!txnId) return res.status(500).json({ error: 'No transaction ID', detail: data });
+
+    // Paddle hosted checkout URL — standard format
+    const checkoutUrl = `https://checkout.paddle.com/checkout/custom/${txnId}`;
     return res.status(200).json({ url: checkoutUrl });
+
   } catch (err) {
     return res.status(500).json({ error: 'Checkout failed', detail: err.message });
   }
