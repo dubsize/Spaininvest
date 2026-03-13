@@ -66,7 +66,7 @@ function buildRentBlock(city, neighbourhood) {
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { content, images, lang, anonId, userId } = req.body;
+  const { content, images, lang } = req.body;
   if (!content && (!images || images.length === 0)) return res.status(400).json({ error: 'No content or image provided' });
   if (content && content.length < 50 && (!images || images.length === 0)) return res.status(400).json({ error: 'Content too short' });
 
@@ -77,55 +77,47 @@ export default async function handler(req, res) {
   const isWhitelisted = WHITELISTED_IPS.includes(ip);
 
   if (!isWhitelisted) {
-    // ── PHASE 3: Authenticated user ───────────────────
-    if (userId) {
+    // Check paid access via email (pass 24h or pro subscription)
+    const emailFromHeader = req.headers['x-user-email'];
+    if (emailFromHeader) {
       const { data: profile } = await supabase
         .from('users')
-        .select('analyses_count, is_subscribed, pass_expires_at')
-        .eq('supabase_uid', userId)
+        .select('is_subscribed, pass_expires_at')
+        .eq('email', emailFromHeader.toLowerCase().trim())
         .maybeSingle();
 
       const hasActivePass = profile?.pass_expires_at && new Date(profile.pass_expires_at) > new Date();
-
       if (!profile?.is_subscribed && !hasActivePass) {
-        // Authenticated users get 1 extra analysis
-        // If profile doesn't exist yet, treat as 0 but create it
-        const count = profile?.analyses_count ?? 0;
-        if (count >= 1) {
-          return res.status(403).json({ error: 'quota_exceeded' });
-        }
-        // If profile missing, create it now so increment works later
-        if (!profile) {
-          await supabase.from('users').upsert({
-            supabase_uid: userId,
-            analyses_count: 0,
-          }, { onConflict: 'supabase_uid' });
-        }
+        // Has email but no paid plan — check IP
+      } else {
+        // Has paid access — allow through
       }
-    } else {
-      // ── PHASE 1 & 2: Anonymous user ──────────────────
-      // Track by anonId (localStorage UUID)
-      if (anonId) {
-        const { data: anonData } = await supabase
-          .from('anon_usage')
-          .select('analyses_count')
-          .eq('anon_id', anonId)
-          .maybeSingle();
+    }
 
-        const count = anonData?.analyses_count || 0;
-        if (count >= 2) return res.status(403).json({ error: 'soft_gate' });
-      }
+    // ── IP quota: 2 free analyses then hard paywall ───
+    const { data: ipData } = await supabase
+      .from('ip_usage')
+      .select('analyses_count, email')
+      .eq('ip', ip)
+      .maybeSingle();
 
-      // IP backup check
-      const { data: ipData } = await supabase
-        .from('ip_usage')
-        .select('analyses_count')
-        .eq('ip', ip)
-        .single();
+    const ipCount = ipData?.analyses_count || 0;
 
-      if (ipData && ipData.analyses_count >= 4) {
+    // If they have paid access via stored email on this IP
+    if (ipData?.email) {
+      const { data: profile } = await supabase
+        .from('users')
+        .select('is_subscribed, pass_expires_at')
+        .eq('email', ipData.email)
+        .maybeSingle();
+      const hasActivePass = profile?.pass_expires_at && new Date(profile.pass_expires_at) > new Date();
+      if (profile?.is_subscribed || hasActivePass) {
+        // Paid — allow through
+      } else if (ipCount >= 2) {
         return res.status(403).json({ error: 'quota_exceeded' });
       }
+    } else if (ipCount >= 2) {
+      return res.status(403).json({ error: 'quota_exceeded' });
     }
   }
 
@@ -368,33 +360,9 @@ ${ineBlock}`;
       parsed.ipva_city_change = ineData.ipva[parsed.ville]?.change || null;
     }
 
-    // ── Increment counters ─────────────────────────────
+    // ── Increment IP counter ───────────────────────────
     if (!isWhitelisted) {
-      if (userId) {
-        // Atomic upsert — works even if profile was just created
-        await supabase.rpc('increment_user_analyses', { p_supabase_uid: userId });
-      } else if (anonId) {
-        // Anonymous user — atomic upsert via SQL function
-        const { error: rpcError } = await supabase.rpc('increment_anon_usage', { p_anon_id: anonId });
-        if (rpcError) console.error('RPC error:', JSON.stringify(rpcError));
-        else console.log('RPC ok for anonId:', anonId);
-      }
-
-      // Always increment IP counter
-      const { data: ipData } = await supabase
-        .from('ip_usage')
-        .select('analyses_count')
-        .eq('ip', ip)
-        .single();
-
-      if (ipData) {
-        await supabase
-          .from('ip_usage')
-          .update({ analyses_count: ipData.analyses_count + 1, updated_at: new Date().toISOString() })
-          .eq('ip', ip);
-      } else {
-        await supabase.from('ip_usage').insert({ ip, analyses_count: 1 });
-      }
+      await supabase.rpc('increment_ip_usage', { p_ip: ip });
     }
 
     return res.status(200).json(parsed);
