@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import T from '../components/translations';
+import { supabase } from '../lib/supabaseClient';
 // This file lives at pages/app.js
 
 // ─── Colors ───────────────────────────────────────────────
@@ -686,6 +687,18 @@ export default function Home() {
 
   // Quota state
   const [showQuotaModal, setShowQuotaModal] = useState(false);
+  const [accessToken, setAccessToken] = useState(null);
+
+  // Listen for magic link session (after payment email click)
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.access_token) setAccessToken(session.access_token);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
+      setAccessToken(session?.access_token || null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   const t = T[lang];
 
@@ -719,9 +732,11 @@ export default function Home() {
       const body = mode === 'image'
         ? { images, lang }
         : { content: `URL: ${url||'N/A'}\n\n${content}`, lang };
+      const headers = { 'Content-Type': 'application/json' };
+      if (accessToken) headers['Authorization'] = `Bearer ${accessToken}`;
       const response = await fetch('/api/analyze', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify(body),
       });
       if (response.status === 403) {
