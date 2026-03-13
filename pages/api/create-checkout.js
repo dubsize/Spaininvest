@@ -1,4 +1,4 @@
-// pages/api/create-checkout.js — Paddle hosted checkout
+// pages/api/create-checkout.js — Paddle, returns txnId for client-side overlay
 
 const PADDLE_API_KEY = process.env.PADDLE_API_KEY;
 
@@ -26,24 +26,16 @@ export default async function handler(req, res) {
         items: [{ price_id: paddlePriceId, quantity: 1 }],
         customer: { email },
         custom_data: { email },
-        checkout: {
-          success_url: 'https://buy2rent.io/app?payment=success',
-        },
       }),
     });
 
     const data = await response.json();
-    console.log('Paddle status:', response.status);
-    console.log('Paddle body:', JSON.stringify(data));
-
     if (!response.ok) return res.status(500).json({ error: 'Paddle error', detail: data });
 
     const txnId = data?.data?.id;
     if (!txnId) return res.status(500).json({ error: 'No transaction ID', detail: data });
 
-    // Paddle hosted checkout URL — standard format
-    const checkoutUrl = `https://checkout.paddle.com/checkout/custom/${txnId}`;
-    return res.status(200).json({ url: checkoutUrl });
+    return res.status(200).json({ txnId });
 
   } catch (err) {
     return res.status(500).json({ error: 'Checkout failed', detail: err.message });
