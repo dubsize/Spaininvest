@@ -55,7 +55,7 @@ function buildINEBlock(ine) {
 function buildRentBlock(city, neighbourhood) {
   const rent = getRentData(city, neighbourhood);
   if (!rent) {
-    return `\n=== RENT REFERENCE DATA ===\nCity/neighbourhood not in database. Use your general knowledge of Spanish rental market and apply conservative estimates.\n${RENT_MODIFIERS}`;
+    return `\n=== RENT REFERENCE DATA ===\nCity/neighbourhood not in database. Use conservative city average: 8–12 €/m²/month. Do NOT improvise — use the middle of this range as your median.\n${RENT_MODIFIERS}`;
   }
   if (rent.found) {
     return `\n=== RENT REFERENCE DATA (${rent.district}) ===\nBase range: ${rent.min}–${rent.max} €/m²/month (unfurnished long-term)\nDistrict profile: ${rent.profile}\nCity context: ${rent.cityNote}\n${RENT_MODIFIERS}`;
@@ -112,6 +112,39 @@ export default async function handler(req, res) {
 
       if (ipCount >= 2) {
         return res.status(403).json({ error: 'quota_exceeded' });
+      }
+    }
+  }
+
+  // ── Cache check (URL-based analyses only) ────────────────
+  const crypto = await import('crypto');
+  let urlHash = null;
+  let cacheUrl = null;
+
+  if (content && content.startsWith('URL:')) {
+    // Extract URL from content string "URL: https://... \n\n..."
+    const urlMatch = content.match(/^URL:\s*(https?:\/\/[^\s\n]+)/);
+    if (urlMatch) {
+      cacheUrl = urlMatch[1].trim();
+      // Normalize: remove query params that don't change the listing
+      try {
+        const u = new URL(cacheUrl);
+        // Keep only pathname for hash (ignore UTM params etc.)
+        urlHash = crypto.createHash('sha256').update(u.origin + u.pathname).digest('hex');
+      } catch {
+        urlHash = crypto.createHash('sha256').update(cacheUrl).digest('hex');
+      }
+
+      // Check cache
+      const { data: cached } = await supabase
+        .from('analyses_cache')
+        .select('result')
+        .eq('url_hash', urlHash)
+        .maybeSingle();
+
+      if (cached?.result) {
+        console.log('Cache hit for:', cacheUrl);
+        return res.status(200).json({ ...cached.result, _cached: true });
       }
     }
   }
@@ -178,7 +211,7 @@ Expected JSON structure:
   "loyer_estime_min": number,
   "loyer_estime_max": number,
   "loyer_estime_median": number,
-  "justification_loyer": "short explanation in ${langName} of the rent estimate with specific market references for this city and neighborhood",
+  "justification_loyer": "short explanation in ${langName} of the rent estimate — MUST reference the exact €/m² range from RENT REFERENCE DATA provided above",
   "charges_copro_estimees": number,
   "ibi_annuel_estime": number,
   "irav": number,
@@ -288,7 +321,14 @@ HOW TO USE IN YOUR ANALYSIS:
 5. Adjust score_quartier: districts above city avg income = +1, below = -1; high young pop (>18% <18y) = +1 for rental demand
 6. For Málaga: always factor 15.2% regional unemployment into risk assessment
 
-CRITICAL — STRICT ANTI-HALLUCINATION RULE FOR SOCIO DATA:
+CRITICAL — RENT ESTIMATION RULE (STRICT):
+- loyer_estime_min/max/median MUST be calculated as: surface × €/m² range from RENT REFERENCE DATA above
+- Apply modifiers from RENT MODIFIERS only (furnished +15%, top floor +5%, etc.)
+- NEVER invent rent figures from general knowledge — use ONLY the provided reference data
+- Formula: loyer_estime_median = surface × mid_point_of_range × applicable_modifiers
+- Round to nearest 50€
+
+
 - ONLY populate renta_district_persona, renta_district_hogar, paro_region if you can confidently match the property location to one of the districts listed above.
 - If the location is ambiguous, unknown, or outside the 53 listed districts (small town, suburb, other city): set renta_district_persona=null, renta_district_hogar=null, and set district_profile to a city-level fallback string like "Données socio-démo précises non disponibles pour ce secteur — moyennes régionales appliquées" (in the response language).
 - NEVER invent or estimate income/unemployment figures. Use ONLY the exact values from the table above, or null.
@@ -332,6 +372,7 @@ ${ineBlock}`;
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1600,
+        temperature: 0,
         system: systemPrompt,
         messages: [{ role: 'user', content: (images && images.length > 0) ? [
           ...images.map(img => ({ type: 'image', source: { type: 'base64', media_type: img.mediaType, data: img.base64 } })),
@@ -353,6 +394,15 @@ ${ineBlock}`;
     }
     if (ineData?.ipva && parsed.ville && !parsed.ipva_city_change) {
       parsed.ipva_city_change = ineData.ipva[parsed.ville]?.change || null;
+    }
+
+    // ── Save to cache (URL analyses only) ─────────────────
+    if (urlHash) {
+      await supabase.from('analyses_cache').upsert(
+        { url_hash: urlHash, url: cacheUrl, result: parsed },
+        { onConflict: 'url_hash' }
+      );
+      console.log('Cached analysis for:', cacheUrl);
     }
 
     // ── Increment IP counter (anonymous only) ─────────────
