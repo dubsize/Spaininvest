@@ -77,18 +77,42 @@ export default async function handler(req, res) {
   const isWhitelisted = WHITELISTED_IPS.includes(ip);
 
   if (!isWhitelisted) {
-    // ── Simple IP quota: 2 free → hard paywall ────────
-    const { data: ipData } = await supabase
-      .from('ip_usage')
-      .select('analyses_count')
-      .eq('ip', ip)
-      .maybeSingle();
+    // ── Check authenticated session (paid users) ──────────
+    const authHeader = req.headers['authorization'];
+    if (authHeader?.startsWith('Bearer ')) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user }, error } = await supabase.auth.getUser(token);
+      if (!error && user?.email) {
+        const { data: profile } = await supabase
+          .from('users')
+          .select('is_subscribed, pass_expires_at')
+          .eq('email', user.email.toLowerCase())
+          .maybeSingle();
 
-    const ipCount = ipData?.analyses_count || 0;
-    console.log(`IP ${ip} count: ${ipCount}`);
+        const hasActivePass = profile?.pass_expires_at && new Date(profile.pass_expires_at) > new Date();
+        if (profile?.is_subscribed || hasActivePass) {
+          // Paid user — allow through, skip IP check
+          req._authenticatedEmail = user.email;
+          req._skipIPIncrement = true;
+        }
+        // else fall through to IP check
+      }
+    }
 
-    if (ipCount >= 2) {
-      return res.status(403).json({ error: 'quota_exceeded' });
+    // ── IP quota: 2 free → hard paywall ──────────────────
+    if (!req._skipIPIncrement) {
+      const { data: ipData } = await supabase
+        .from('ip_usage')
+        .select('analyses_count')
+        .eq('ip', ip)
+        .maybeSingle();
+
+      const ipCount = ipData?.analyses_count || 0;
+      console.log(`IP ${ip} count: ${ipCount}`);
+
+      if (ipCount >= 2) {
+        return res.status(403).json({ error: 'quota_exceeded' });
+      }
     }
   }
 
@@ -331,8 +355,8 @@ ${ineBlock}`;
       parsed.ipva_city_change = ineData.ipva[parsed.ville]?.change || null;
     }
 
-    // ── Increment IP counter ───────────────────────────
-    if (!isWhitelisted) {
+    // ── Increment IP counter (anonymous only) ─────────────
+    if (!isWhitelisted && !req._skipIPIncrement) {
       await supabase.rpc('increment_ip_usage', { p_ip: ip });
     }
 
