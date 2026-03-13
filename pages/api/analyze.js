@@ -79,19 +79,27 @@ export default async function handler(req, res) {
   if (!isWhitelisted) {
     // ── PHASE 3: Authenticated user ───────────────────
     if (userId) {
-      // Check if subscribed or has active pass
       const { data: profile } = await supabase
         .from('users')
         .select('analyses_count, is_subscribed, pass_expires_at')
         .eq('supabase_uid', userId)
-        .single();
+        .maybeSingle();
 
       const hasActivePass = profile?.pass_expires_at && new Date(profile.pass_expires_at) > new Date();
 
       if (!profile?.is_subscribed && !hasActivePass) {
-        // Authenticated users get 1 extra analysis (total 3)
-        if ((profile?.analyses_count || 0) >= 1) {
+        // Authenticated users get 1 extra analysis
+        // If profile doesn't exist yet, treat as 0 but create it
+        const count = profile?.analyses_count ?? 0;
+        if (count >= 1) {
           return res.status(403).json({ error: 'quota_exceeded' });
+        }
+        // If profile missing, create it now so increment works later
+        if (!profile) {
+          await supabase.from('users').upsert({
+            supabase_uid: userId,
+            analyses_count: 0,
+          }, { onConflict: 'supabase_uid' });
         }
       }
     } else {
@@ -363,18 +371,8 @@ ${ineBlock}`;
     // ── Increment counters ─────────────────────────────
     if (!isWhitelisted) {
       if (userId) {
-        // Authenticated user — increment their count
-        const { data: profile } = await supabase
-          .from('users')
-          .select('analyses_count')
-          .eq('supabase_uid', userId)
-          .single();
-
-        const currentCount = profile?.analyses_count || 0;
-        await supabase
-          .from('users')
-          .update({ analyses_count: currentCount + 1 })
-          .eq('supabase_uid', userId);
+        // Atomic upsert — works even if profile was just created
+        await supabase.rpc('increment_user_analyses', { p_supabase_uid: userId });
       } else if (anonId) {
         // Anonymous user — atomic upsert via SQL function
         const { error: rpcError } = await supabase.rpc('increment_anon_usage', { p_anon_id: anonId });
