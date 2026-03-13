@@ -77,46 +77,17 @@ export default async function handler(req, res) {
   const isWhitelisted = WHITELISTED_IPS.includes(ip);
 
   if (!isWhitelisted) {
-    // Check paid access via email (pass 24h or pro subscription)
-    const emailFromHeader = req.headers['x-user-email'];
-    if (emailFromHeader) {
-      const { data: profile } = await supabase
-        .from('users')
-        .select('is_subscribed, pass_expires_at')
-        .eq('email', emailFromHeader.toLowerCase().trim())
-        .maybeSingle();
-
-      const hasActivePass = profile?.pass_expires_at && new Date(profile.pass_expires_at) > new Date();
-      if (!profile?.is_subscribed && !hasActivePass) {
-        // Has email but no paid plan — check IP
-      } else {
-        // Has paid access — allow through
-      }
-    }
-
-    // ── IP quota: 2 free analyses then hard paywall ───
+    // ── Simple IP quota: 2 free → hard paywall ────────
     const { data: ipData } = await supabase
       .from('ip_usage')
-      .select('analyses_count, email')
+      .select('analyses_count')
       .eq('ip', ip)
       .maybeSingle();
 
     const ipCount = ipData?.analyses_count || 0;
+    console.log(`IP ${ip} count: ${ipCount}`);
 
-    // If they have paid access via stored email on this IP
-    if (ipData?.email) {
-      const { data: profile } = await supabase
-        .from('users')
-        .select('is_subscribed, pass_expires_at')
-        .eq('email', ipData.email)
-        .maybeSingle();
-      const hasActivePass = profile?.pass_expires_at && new Date(profile.pass_expires_at) > new Date();
-      if (profile?.is_subscribed || hasActivePass) {
-        // Paid — allow through
-      } else if (ipCount >= 2) {
-        return res.status(403).json({ error: 'quota_exceeded' });
-      }
-    } else if (ipCount >= 2) {
+    if (ipCount >= 2) {
       return res.status(403).json({ error: 'quota_exceeded' });
     }
   }
