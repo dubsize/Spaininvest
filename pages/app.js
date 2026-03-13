@@ -753,7 +753,7 @@ export default function Home() {
 
       <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WSVSC97J" height="0" width="0" style={{display:'none',visibility:'hidden'}}></iframe></noscript>
 
-      {showQuotaModal && <QuotaModal t={t} onClose={()=>setShowQuotaModal(false)} userEmail={userEmail}/>}
+      {showQuotaModal && <QuotaModal t={t} onClose={()=>setShowQuotaModal(false)} userEmail={null}/>}
 
       <div style={{position:'fixed',inset:0,pointerEvents:'none',zIndex:0,
         background:'radial-gradient(ellipse at 80% 0%,#fde68a22 0%,transparent 60%),radial-gradient(ellipse at 20% 100%,#fed7aa18 0%,transparent 60%)'}}/>
@@ -792,14 +792,6 @@ export default function Home() {
           </div>
         </div>
 
-
-        {/* Email status bar */}
-        {userEmail && (
-          <div style={{background:C.accentBg,border:`1px solid #fde68a`,borderRadius:14,padding:'12px 20px',marginBottom:20,display:'flex',alignItems:'center',justifyContent:'space-between',fontSize:18}}>
-            <span style={{color:C.tag}}>✅ {userEmail}</span>
-            <span style={{color:C.muted,fontSize:16}}>{t.analysesLeft}</span>
-          </div>
-        )}
 
         {/* Form */}
         {!result && (
