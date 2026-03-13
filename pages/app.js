@@ -66,8 +66,17 @@ function QuotaModal({ t, onClose, userEmail }) {
         body: JSON.stringify({ priceId, email: finalEmail }),
       });
       const data = await res.json();
-      if (data.url) window.location.href = data.url;
-      else alert('Error creating checkout. Please try again.');
+      if (data.txnId && window.Paddle) {
+        onClose();
+        window.Paddle.Checkout.open({
+          transactionId: data.txnId,
+          settings: {
+            successUrl: 'https://buy2rent.io/app?payment=success',
+          },
+        });
+      } else {
+        alert('Error creating checkout. Please try again.');
+      }
     } catch {
       alert('Error creating checkout. Please try again.');
     } finally {
@@ -749,6 +758,21 @@ export default function Home() {
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true"/>
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+        <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+        <script dangerouslySetInnerHTML={{__html:`
+          window.addEventListener('load', function() {
+            if (window.Paddle) {
+              Paddle.Initialize({
+                token: 'live_16dcef4a88233b40de3c5292c98',
+                eventCallback: function(event) {
+                  if (event.name === 'checkout.completed') {
+                    window.location.href = '/app?payment=success';
+                  }
+                }
+              });
+            }
+          });
+        `}}/>
       </Head>
 
       <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WSVSC97J" height="0" width="0" style={{display:'none',visibility:'hidden'}}></iframe></noscript>
