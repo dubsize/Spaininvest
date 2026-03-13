@@ -1,7 +1,9 @@
-// pages/api/webhooks/paddle.js — Paddle webhook + Resend magic link
+// pages/api/webhooks/paddle.js
 
-import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
+import { Paddle, EventName } from '@paddle/paddle-node-sdk';
+
+const paddle = new Paddle(process.env.PADDLE_API_KEY);
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -11,12 +13,11 @@ const supabase = createClient(
 export const config = { api: { bodyParser: false } };
 
 async function getRawBody(req) {
-  return new Promise((resolve, reject) => {
-    const chunks = [];
-    req.on('data', chunk => chunks.push(chunk));
-    req.on('end', () => resolve(Buffer.concat(chunks)));
-    req.on('error', reject);
-  });
+  const chunks = [];
+  for await (const chunk of req) {
+    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+  }
+  return Buffer.concat(chunks).toString('utf8');
 }
 
 const PRICE_PASS_24H = 'pri_01kkkae7wf33f486mpm01afz2w';
@@ -31,10 +32,10 @@ async function sendMagicLinkEmail(email, actionLink, isPro) {
     <!DOCTYPE html>
     <html>
     <head><meta charset="utf-8"/></head>
-    <body style="margin:0;padding:0;background:#f5f0e8;font-family:'DM Sans',Arial,sans-serif;">
+    <body style="margin:0;padding:0;background:#f5f0e8;font-family:Arial,sans-serif;">
       <div style="max-width:560px;margin:40px auto;background:#fffdf8;border-radius:24px;overflow:hidden;border:1px solid #e8e0d0;">
         <div style="background:#b45309;padding:32px 40px;text-align:center;">
-          <div style="color:#fff;font-size:28px;font-weight:900;letter-spacing:-0.5px;">buy2rent.io</div>
+          <div style="color:#fff;font-size:28px;font-weight:900;">buy2rent.io</div>
           <div style="color:#fde68a;font-size:14px;margin-top:4px;">Analyse immobilière Espagne</div>
         </div>
         <div style="padding:40px;">
@@ -43,8 +44,8 @@ async function sendMagicLinkEmail(email, actionLink, isPro) {
           </h1>
           <p style="margin:0 0 24px;font-size:16px;color:#6b6b6b;line-height:1.6;">
             ${isPro
-              ? 'Ton abonnement Pro est activé. Tu as maintenant accès à des analyses illimitées sur tous tes appareils.'
-              : 'Ton Pass 24h est activé. Clique sur le bouton ci-dessous pour accéder immédiatement à tes analyses illimitées.'}
+              ? 'Ton abonnement Pro est activé. Accès illimité sur tous tes appareils.'
+              : 'Ton Pass 24h est activé. Clique ci-dessous pour lancer tes analyses.'}
           </p>
           <div style="text-align:center;margin:32px 0;">
             <a href="${actionLink}" style="display:inline-block;background:#b45309;color:#fff;font-size:16px;font-weight:700;padding:16px 40px;border-radius:12px;text-decoration:none;">
@@ -52,8 +53,8 @@ async function sendMagicLinkEmail(email, actionLink, isPro) {
             </a>
           </div>
           <p style="margin:24px 0 0;font-size:13px;color:#9ca3af;text-align:center;line-height:1.6;">
-            Ce lien est valable 24h et te connecte automatiquement.<br/>
-            Si tu n'es pas à l'origine de cet achat, contacte-nous : <a href="mailto:support@buy2rent.io" style="color:#b45309;">support@buy2rent.io</a>
+            Ce lien te connecte automatiquement — valable 24h.<br/>
+            Questions ? <a href="mailto:support@buy2rent.io" style="color:#b45309;">support@buy2rent.io</a>
           </p>
         </div>
       </div>
@@ -76,75 +77,56 @@ async function sendMagicLinkEmail(email, actionLink, isPro) {
   });
 
   const result = await response.json();
-  if (!response.ok) console.error('Resend error:', result);
-  else console.log('Email sent to:', email);
-  return result;
+  if (!response.ok) console.error('Resend error:', JSON.stringify(result));
+  else console.log('Magic link email sent to:', email);
 }
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
   const rawBody = await getRawBody(req);
-
-  // ── Verify Paddle signature ───────────────────────────────
   const signature = req.headers['paddle-signature'];
-  const webhookSecret = process.env.PADDLE_WEBHOOK_SECRET;
 
-  if (signature && webhookSecret) {
-    // Parse ts and h1 safely — h1 may contain = chars
-    const tsMatch = signature.match(/ts=(\d+)/);
-    const h1Match = signature.match(/h1=([a-f0-9]+)/);
-    const ts = tsMatch?.[1];
-    const h1 = h1Match?.[1];
-
-    if (!ts || !h1) {
-      console.error('Could not parse Paddle signature header:', signature);
-      return res.status(401).json({ error: 'Invalid signature format' });
-    }
-
-    const signed = `${ts}:${rawBody.toString()}`;
-    const expected = crypto.createHmac('sha256', webhookSecret).update(signed).digest('hex');
-
-    console.log('Expected:', expected);
-    console.log('Received:', h1);
-
-    if (expected !== h1) {
-      console.error('Invalid Paddle signature');
-      return res.status(401).json({ error: 'Invalid signature' });
-    }
+  // ── Verify signature via Paddle SDK ──────────────────────
+  let event;
+  try {
+    event = paddle.webhooks.unmarshal(rawBody, process.env.PADDLE_WEBHOOK_SECRET, signature);
+  } catch (err) {
+    console.error('Paddle signature verification failed:', err.message);
+    return res.status(401).json({ error: 'Invalid signature' });
   }
 
-  const payload = JSON.parse(rawBody.toString());
-  const eventType = payload.event_type;
-  const data = payload.data;
+  const eventType = event.eventType;
+  const data = event.data;
 
-  const email = data?.customer?.email || data?.custom_data?.email;
-  if (!email) return res.status(400).json({ error: 'No email in payload' });
+  const email = data?.customer?.email || data?.customData?.email;
+  if (!email) {
+    console.error('No email in payload');
+    return res.status(400).json({ error: 'No email' });
+  }
   const normalizedEmail = email.toLowerCase().trim();
+  const priceId = data?.items?.[0]?.price?.id || '';
 
-  const priceId = data?.items?.[0]?.price?.id || data?.items?.[0]?.price_id || '';
+  console.log(`Webhook: ${eventType} | email: ${normalizedEmail} | priceId: ${priceId}`);
 
   // ── transaction.completed → Pass 24h ─────────────────────
-  if (eventType === 'transaction.completed' && priceId === PRICE_PASS_24H) {
+  if (eventType === EventName.TransactionCompleted && priceId === PRICE_PASS_24H) {
     const expires = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
 
-    // Upsert user in Supabase
-    await supabase.from('users').upsert(
+    const { error } = await supabase.from('users').upsert(
       { email: normalizedEmail, pass_expires_at: expires },
       { onConflict: 'email' }
     );
+    if (error) console.error('Supabase upsert error:', error);
 
-    // Create/get Supabase auth user and generate magic link
     try {
       const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
         type: 'magiclink',
         email: normalizedEmail,
         options: { redirectTo: 'https://buy2rent.io/app?payment=success' },
       });
-
-      if (linkError) {
-        console.error('generateLink error:', linkError);
-      } else {
+      if (linkError) console.error('generateLink error:', linkError);
+      else {
         const actionLink = linkData?.properties?.action_link;
         if (actionLink) await sendMagicLinkEmail(normalizedEmail, actionLink, false);
       }
@@ -156,16 +138,14 @@ export default async function handler(req, res) {
   }
 
   // ── subscription.activated / updated → Pro ────────────────
-  if ((eventType === 'subscription.activated' || eventType === 'subscription.updated') && priceId === PRICE_PRO) {
+  if ((eventType === EventName.SubscriptionActivated || eventType === EventName.SubscriptionUpdated) && priceId === PRICE_PRO) {
     const isActive = data?.status === 'active';
-    const paddleSubId = String(data?.id || '');
-    const paddleCustomerId = String(data?.customer_id || '');
 
     await supabase.from('users').upsert({
       email: normalizedEmail,
       is_subscribed: isActive,
-      lemon_subscription_id: paddleSubId,
-      lemon_customer_id: paddleCustomerId,
+      lemon_subscription_id: String(data?.id || ''),
+      lemon_customer_id: String(data?.customerId || ''),
     }, { onConflict: 'email' });
 
     if (isActive) {
@@ -188,7 +168,7 @@ export default async function handler(req, res) {
   }
 
   // ── subscription.canceled ─────────────────────────────────
-  if (eventType === 'subscription.canceled') {
+  if (eventType === EventName.SubscriptionCanceled) {
     await supabase.from('users')
       .update({ is_subscribed: false })
       .eq('email', normalizedEmail);
