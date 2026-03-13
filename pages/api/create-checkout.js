@@ -26,13 +26,15 @@ export default async function handler(req, res) {
         items: [{ price_id: paddlePriceId, quantity: 1 }],
         customer: { email },
         checkout: {
-          url: 'https://buy2rent.io/app?payment=success',
+          success_url: 'https://buy2rent.io/app?payment=success',
         },
         custom_data: { email },
       }),
     });
 
     const data = await response.json();
+    console.log('Paddle response status:', response.status);
+    console.log('Paddle response body:', JSON.stringify(data));
     if (!response.ok) return res.status(500).json({ error: 'Paddle checkout error', detail: data });
 
     const checkoutUrl = data?.data?.checkout?.url;
