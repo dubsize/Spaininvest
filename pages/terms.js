@@ -17,7 +17,7 @@ const CONTENT = {
     sections: [
       {
         h: '1. Acceptance of Terms',
-        p: 'By accessing and using buy2rent.io ("the Service"), you accept and agree to be bound by these Terms of Service. If you do not agree, please do not use the Service. The Service is operated by Nicolas Salmon, an individual entrepreneur based in Spain.'
+        p: 'By accessing and using buy2rent.io ("the Service"), you accept and agree to be bound by these Terms of Service. If you do not agree, please do not use the Service. The Service is operated by buy2rent, an individual entrepreneur based in Spain.'
       },
       {
         h: '2. Description of Service',
@@ -29,11 +29,11 @@ const CONTENT = {
       },
       {
         h: '4. Free and Paid Plans',
-        p: 'The Service offers a free tier limited to 2 analyses. Additional analyses require a Pass 24h (one-time payment of €9 for unlimited analyses for 24 hours) or a Pro subscription (€19/month for unlimited analyses). Payments are processed by Lemon Squeezy. All prices include applicable taxes.'
+        p: 'The Service offers a free tier limited to 2 analyses. Additional analyses require a Pass 24h (one-time payment of €9 for unlimited analyses for 24 hours) or a Pro subscription (€19/month for unlimited analyses). Payments are processed by Paddle.com (Paddle.com Market Limited), our Merchant of Record, who also handles returns and chargebacks. All prices include applicable taxes.'
       },
       {
         h: '5. Refund Policy',
-        p: 'Due to the digital and immediate nature of the service, Pass 24h purchases are non-refundable once the analyses have been used. Pro subscriptions may be cancelled at any time; cancellation takes effect at the end of the current billing period. If you experience a technical issue preventing you from using the service, contact us at support@buy2rent.io within 48 hours for a resolution.'
+        p: 'All purchases made through buy2rent.io are eligible for a full refund within 14 days of the original purchase date, no questions asked. Refund requests must be submitted to support@buy2rent.io. Refunds are processed by Paddle.com, our Merchant of Record.'
       },
       {
         h: '6. Acceptable Use',
@@ -41,7 +41,7 @@ const CONTENT = {
       },
       {
         h: '7. Intellectual Property',
-        p: 'The Service, including its design, algorithms, and content, is the exclusive property of Nicolas Salmon. The buy2rent.io brand and logo are proprietary. You may not reproduce or use them without prior written consent.'
+        p: 'The Service, including its design, algorithms, and content, is the exclusive property of buy2rent. The buy2rent.io brand and logo are proprietary. You may not reproduce or use them without prior written consent.'
       },
       {
         h: '8. Limitation of Liability',
@@ -64,7 +64,7 @@ const CONTENT = {
     sections: [
       {
         h: '1. Aceptación de los Términos',
-        p: 'Al acceder y utilizar buy2rent.io ("el Servicio"), aceptas quedar vinculado por estos Términos de Servicio. Si no estás de acuerdo, por favor no utilices el Servicio. El Servicio es operado por Nicolas Salmon, empresario individual con base en España.'
+        p: 'Al acceder y utilizar buy2rent.io ("el Servicio"), aceptas quedar vinculado por estos Términos de Servicio. Si no estás de acuerdo, por favor no utilices el Servicio. El Servicio es operado por buy2rent, empresario individual con base en España.'
       },
       {
         h: '2. Descripción del Servicio',
@@ -76,11 +76,11 @@ const CONTENT = {
       },
       {
         h: '4. Planes Gratuitos y de Pago',
-        p: 'El Servicio ofrece un nivel gratuito limitado a 2 análisis. Los análisis adicionales requieren un Pass 24h (pago único de 9€ por análisis ilimitados durante 24 horas) o una suscripción Pro (19€/mes por análisis ilimitados). Los pagos son procesados por Lemon Squeezy. Todos los precios incluyen los impuestos aplicables.'
+        p: 'El Servicio ofrece un nivel gratuito limitado a 2 análisis. Los análisis adicionales requieren un Pass 24h (pago único de 9€ por análisis ilimitados durante 24 horas) o una suscripción Pro (19€/mes por análisis ilimitados). Los pagos son procesados por Paddle.com (Paddle.com Market Limited), nuestro Merchant of Record, quien también gestiona devoluciones y contracargos. Todos los precios incluyen los impuestos aplicables.'
       },
       {
         h: '5. Política de Reembolso',
-        p: 'Debido a la naturaleza digital e inmediata del servicio, las compras del Pass 24h no son reembolsables una vez utilizados los análisis. Las suscripciones Pro pueden cancelarse en cualquier momento; la cancelación tiene efecto al final del período de facturación en curso. Si experimentas un problema técnico que te impide usar el servicio, contacta con nosotros en support@buy2rent.io en un plazo de 48 horas.'
+        p: 'Todas las compras realizadas en buy2rent.io son elegibles para un reembolso completo dentro de los 14 días posteriores a la fecha de compra original, sin necesidad de justificación. Las solicitudes de reembolso deben enviarse a support@buy2rent.io. Los reembolsos son gestionados por Paddle.com, nuestro Merchant of Record.'
       },
       {
         h: '6. Uso Aceptable',
@@ -88,7 +88,7 @@ const CONTENT = {
       },
       {
         h: '7. Propiedad Intelectual',
-        p: 'El Servicio, incluyendo su diseño, algoritmos y contenido, es propiedad exclusiva de Nicolas Salmon. La marca buy2rent.io y su logotipo son propietarios. No puedes reproducirlos ni utilizarlos sin consentimiento previo por escrito.'
+        p: 'El Servicio, incluyendo su diseño, algoritmos y contenido, es propiedad exclusiva de buy2rent. La marca buy2rent.io y su logotipo son propietarios. No puedes reproducirlos ni utilizarlos sin consentimiento previo por escrito.'
       },
       {
         h: '8. Limitación de Responsabilidad',
@@ -111,7 +111,7 @@ const CONTENT = {
     sections: [
       {
         h: '1. Acceptation des CGU',
-        p: 'En accédant et en utilisant buy2rent.io (« le Service »), vous acceptez d\'être lié par les présentes Conditions Générales d\'Utilisation. Si vous n\'acceptez pas ces conditions, veuillez ne pas utiliser le Service. Le Service est opéré par Nicolas Salmon, entrepreneur individuel basé en Espagne.'
+        p: 'En accédant et en utilisant buy2rent.io (« le Service »), vous acceptez d\'être lié par les présentes Conditions Générales d\'Utilisation. Si vous n\'acceptez pas ces conditions, veuillez ne pas utiliser le Service. Le Service est opéré par buy2rent, entrepreneur individuel basé en Espagne.'
       },
       {
         h: '2. Description du Service',
@@ -123,11 +123,11 @@ const CONTENT = {
       },
       {
         h: '4. Offres Gratuites et Payantes',
-        p: 'Le Service propose un accès gratuit limité à 2 analyses. Les analyses supplémentaires nécessitent un Pass 24h (paiement unique de 9€ pour des analyses illimitées pendant 24h) ou un abonnement Pro (19€/mois pour des analyses illimitées). Les paiements sont traités par Lemon Squeezy. Tous les prix sont TTC.'
+        p: 'Le Service propose un accès gratuit limité à 2 analyses. Les analyses supplémentaires nécessitent un Pass 24h (paiement unique de 9€ pour des analyses illimitées pendant 24h) ou un abonnement Pro (19€/mois pour des analyses illimitées). Les paiements sont traités par Paddle.com (Paddle.com Market Limited), notre Merchant of Record, qui gère également les remboursements et rétrofacturations. Tous les prix sont TTC.'
       },
       {
         h: '5. Politique de Remboursement',
-        p: 'En raison de la nature numérique et immédiate du service, les achats de Pass 24h ne sont pas remboursables une fois les analyses utilisées. Les abonnements Pro peuvent être résiliés à tout moment ; la résiliation prend effet à la fin de la période de facturation en cours. En cas de problème technique vous empêchant d\'utiliser le service, contactez-nous à support@buy2rent.io dans les 48 heures.'
+        p: 'Tout achat effectué sur buy2rent.io est éligible à un remboursement complet dans les 14 jours suivant la date d\'achat, sans justification requise. Les demandes de remboursement doivent être envoyées à support@buy2rent.io. Les remboursements sont traités par Paddle.com, notre Merchant of Record.'
       },
       {
         h: '6. Utilisation Acceptable',
@@ -135,7 +135,7 @@ const CONTENT = {
       },
       {
         h: '7. Propriété Intellectuelle',
-        p: 'Le Service, notamment son design, ses algorithmes et son contenu, est la propriété exclusive de Nicolas Salmon. La marque buy2rent.io et son logo sont protégés. Vous ne pouvez pas les reproduire ou les utiliser sans consentement écrit préalable.'
+        p: 'Le Service, notamment son design, ses algorithmes et son contenu, est la propriété exclusive de buy2rent. La marque buy2rent.io et son logo sont protégés. Vous ne pouvez pas les reproduire ou les utiliser sans consentement écrit préalable.'
       },
       {
         h: '8. Limitation de Responsabilité',
