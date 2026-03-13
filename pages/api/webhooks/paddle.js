@@ -91,11 +91,23 @@ export default async function handler(req, res) {
   const webhookSecret = process.env.PADDLE_WEBHOOK_SECRET;
 
   if (signature && webhookSecret) {
-    const parts = Object.fromEntries(signature.split(';').map(p => p.split('=')));
-    const ts = parts['ts'];
-    const h1 = parts['h1'];
+    // Parse ts and h1 safely — h1 may contain = chars
+    const tsMatch = signature.match(/ts=(\d+)/);
+    const h1Match = signature.match(/h1=([a-f0-9]+)/);
+    const ts = tsMatch?.[1];
+    const h1 = h1Match?.[1];
+
+    if (!ts || !h1) {
+      console.error('Could not parse Paddle signature header:', signature);
+      return res.status(401).json({ error: 'Invalid signature format' });
+    }
+
     const signed = `${ts}:${rawBody.toString()}`;
     const expected = crypto.createHmac('sha256', webhookSecret).update(signed).digest('hex');
+
+    console.log('Expected:', expected);
+    console.log('Received:', h1);
+
     if (expected !== h1) {
       console.error('Invalid Paddle signature');
       return res.status(401).json({ error: 'Invalid signature' });
