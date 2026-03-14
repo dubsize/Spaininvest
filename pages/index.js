@@ -241,6 +241,11 @@ export default function Landing() {
         <link rel="icon" href="/favicon.ico"/>
         <meta property="og:title" content="buy2rent.io — Know if the rent covers the mortgage."/>
         <meta property="og:description" content="Paste any Idealista listing. Get net yield, estimated rent and investment score instantly."/>
+        <meta property="og:image" content="https://buy2rent.io/og-image.png"/>
+        <meta property="og:url" content="https://buy2rent.io"/>
+        <meta property="og:type" content="website"/>
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:image" content="https://buy2rent.io/og-image.png"/>
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true"/>
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
