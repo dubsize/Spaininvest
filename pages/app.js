@@ -60,6 +60,10 @@ function QuotaModal({ t, onClose, userEmail }) {
     const finalEmail = email.trim();
     if (!finalEmail) { setEmailStep(true); return; }
     setLoadingVariant(priceId);
+    // Track checkout started
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      window.dataLayer.push({ event: 'checkout_started', plan: priceId });
+    }
     try {
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
@@ -711,6 +715,11 @@ export default function Home() {
 
   async function run() {
     setResult(null); setStatus(null);
+
+    // Track analysis started
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      window.dataLayer.push({ event: 'analysis_started', mode });
+    }
     let content = '';
     if (mode === 'url') {
       if (!url.trim()) return;
@@ -742,12 +751,25 @@ export default function Home() {
       if (response.status === 403) {
         setStatus(null);
         setShowQuotaModal(true);
+        // Track paywall shown
+        if (typeof window !== 'undefined' && window.dataLayer) {
+          window.dataLayer.push({ event: 'paywall_shown' });
+        }
         return;
       }
       const parsed = await response.json();
       if (!response.ok) throw new Error(parsed.error);
       setResult(parsed);
       setStatus('done');
+      // Track analysis completed
+      if (typeof window !== 'undefined' && window.dataLayer) {
+        window.dataLayer.push({
+          event: 'analysis_completed',
+          city: parsed.ville || 'unknown',
+          score: parsed.note_globale || null,
+          cached: parsed._cached || false,
+        });
+      }
       setHistory(prev => [{ url, result: parsed }, ...prev.slice(0, 8)]);
     } catch {
       setStatus('error'); setStatusMsg(t.analyzeError);
