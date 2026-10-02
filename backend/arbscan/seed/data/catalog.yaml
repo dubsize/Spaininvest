@@ -1,0 +1,866 @@
+# Seed catalogue: categories + canonical products.
+#
+# All products are editable from the UI after seeding. Patterns are regexes evaluated
+# against *folded* text (lower-case, accents removed). Keywords prefixed with 're:' are
+# regexes too. variant_attributes: attribute -> importance (>=0.8 = a mismatch excludes
+# the comparable from valuation).
+#
+# `demo` blocks are only used by the demo-data generator: they are illustrative
+# second-hand price levels for Spain (EUR), NOT authoritative market data.
+
+categories:
+  - {code: luxury_jewelry, name: "Luxury jewellery", group: luxury, is_luxury: true, authentication_required: true, target_roi: 0.18, min_roi: 0.10, base_holding_days: 30, refurbishment_eur: 60, authentication_eur: 80, shipping_class: insured_small}
+  - {code: luxury_bags, name: "Luxury bags", group: luxury, is_luxury: true, authentication_required: true, target_roi: 0.20, min_roi: 0.12, base_holding_days: 35, refurbishment_eur: 40, authentication_eur: 45, shipping_class: insured_medium}
+  - {code: luxury_watches, name: "Luxury watches", group: luxury, is_luxury: true, authentication_required: true, target_roi: 0.12, min_roi: 0.07, base_holding_days: 28, refurbishment_eur: 0, authentication_eur: 120, shipping_class: insured_small}
+  - {code: kitchen_appliances, name: "Kitchen appliances", group: household, target_roi: 0.25, min_roi: 0.15, base_holding_days: 10, refurbishment_eur: 15, shipping_class: parcel_l}
+  - {code: home_appliances, name: "Home appliances", group: household, target_roi: 0.25, min_roi: 0.15, base_holding_days: 12, refurbishment_eur: 10, shipping_class: parcel_m}
+  - {code: audio, name: "Audio", group: electronics, target_roi: 0.22, min_roi: 0.12, base_holding_days: 14, refurbishment_eur: 5, shipping_class: parcel_l}
+  - {code: computers, name: "Computers", group: electronics, target_roi: 0.18, min_roi: 0.10, base_holding_days: 12, refurbishment_eur: 10, shipping_class: parcel_m}
+  - {code: cameras, name: "Cameras", group: electronics, target_roi: 0.18, min_roi: 0.10, base_holding_days: 14, refurbishment_eur: 5, shipping_class: parcel_m}
+  - {code: lenses, name: "Camera lenses", group: electronics, target_roi: 0.18, min_roi: 0.10, base_holding_days: 18, refurbishment_eur: 5, shipping_class: parcel_m}
+  - {code: gaming, name: "Gaming consoles", group: electronics, target_roi: 0.22, min_roi: 0.12, base_holding_days: 7, refurbishment_eur: 5, shipping_class: parcel_m}
+  - {code: lego, name: "LEGO (retired sets)", group: collectibles, target_roi: 0.30, min_roi: 0.18, base_holding_days: 30, refurbishment_eur: 0, shipping_class: parcel_l}
+  - {code: retro_gaming, name: "Retro gaming", group: collectibles, target_roi: 0.35, min_roi: 0.20, base_holding_days: 21, refurbishment_eur: 10, shipping_class: parcel_m}
+  - {code: collectibles, name: "Collectibles", group: collectibles, target_roi: 0.30, min_roi: 0.18, base_holding_days: 30, refurbishment_eur: 0, shipping_class: parcel_s}
+  - {code: strollers, name: "Strollers", group: baby_mobility, target_roi: 0.30, min_roi: 0.18, base_holding_days: 14, refurbishment_eur: 30, shipping_class: bulky}
+  - {code: bicycles, name: "Premium bicycles", group: baby_mobility, target_roi: 0.22, min_roi: 0.12, base_holding_days: 25, refurbishment_eur: 60, shipping_class: bike}
+  - {code: ebikes, name: "Electric bicycles", group: baby_mobility, target_roi: 0.22, min_roi: 0.12, base_holding_days: 30, refurbishment_eur: 80, shipping_class: bike}
+
+products:
+  # ------------------------------------------------------------------ luxury jewellery
+  - slug: cartier-love-bracelet
+    name: "Cartier Love Bracelet"
+    brand: Cartier
+    model: "Love Bracelet"
+    collection: Love
+    product_type: bracelet
+    category: luxury_jewelry
+    aliases: ["love bracelet", "bracelet love", "pulsera love", "love armband", "bracciale love", "pulseira love"]
+    patterns: ['\blove\b']
+    required_keywords: [cartier]
+    excluded_keywords: [bague, anillo, ring, anello, ringe, collier, necklace, collar, colgante, pendientes, earrings, "boucles d'oreilles", ohrringe, orecchini, "love ring", parfum, perfume, 're:\bstyle\b', 're:\btipo\b']
+    variant_attributes: {material: 1.0, model_size: 0.9, diamonds: 0.9, size: 0.3}
+    attribute_rules:
+      model_size: [{pattern: 'small model|petit modele|modelo pequeno|modello piccolo|kleines modell|\bsm\b|\bpm\b', value: small}]
+      diamonds: [{pattern: 'diamant|diamond|diamante|brillant', value: "yes"}]
+      size: [{pattern: '(?:taille|talla|size|grosse|misura|tamano|\bt)\.?\s*(1[4-9]|2[0-2])\b', value: ""}, {pattern: '\b(1[5-9]|2[01])\b', value: ""}]
+    retail_price_eur: 7350
+    popularity: 0.9
+    typical_holding_days: 25
+    demo:
+      variants:
+        - {attrs: {material: yellow_gold}, price: 5300, weight: 4}
+        - {attrs: {material: rose_gold}, price: 5350, weight: 2}
+        - {attrs: {material: white_gold}, price: 5450, weight: 2}
+      sizes: ["16", "17", "18", "19"]
+      titles:
+        - "Cartier Love {material_es} talla {size}"
+        - "Pulsera Cartier Love T{size} {material_es}"
+        - "Bracelet Cartier Love {material_fr} taille {size}"
+        - "Cartier LOVE Bracelet {material_en} {size}"
+        - "Cartier Love Armband {material_de} Größe {size}"
+
+  - slug: cartier-juste-un-clou-bracelet
+    name: "Cartier Juste un Clou Bracelet"
+    brand: Cartier
+    model: "Juste un Clou Bracelet"
+    collection: "Juste un Clou"
+    product_type: bracelet
+    category: luxury_jewelry
+    patterns: ['juste\s?un\s?clou', '\bjuc\b']
+    required_keywords: [cartier]
+    excluded_keywords: [bague, anillo, ring, anello, collier, necklace, pendientes, earrings, ohrringe]
+    variant_attributes: {material: 1.0, model_size: 0.9, diamonds: 0.9, size: 0.3}
+    attribute_rules:
+      model_size: [{pattern: 'small model|petit modele|modelo pequeno|\bsm\b', value: small}]
+      diamonds: [{pattern: 'diamant|diamond|diamante', value: "yes"}]
+      size: [{pattern: '(?:taille|talla|size|grosse|misura|tamano|\bt)\.?\s*(1[4-9]|2[0-2])\b', value: ""}, {pattern: '\b(1[5-9]|2[01])\b', value: ""}]
+    retail_price_eur: 7700
+    popularity: 0.75
+    typical_holding_days: 30
+    demo:
+      variants:
+        - {attrs: {material: yellow_gold}, price: 5600, weight: 3}
+        - {attrs: {material: rose_gold}, price: 5500, weight: 1}
+        - {attrs: {material: yellow_gold, model_size: small}, price: 3500, weight: 1}
+      sizes: ["16", "17", "18"]
+      titles:
+        - "Cartier Juste un Clou {material_es} talla {size}"
+        - "Bracelet Cartier Juste un Clou {material_fr} {size}"
+        - "Cartier Juste Un Clou bracelet {material_en} size {size}"
+
+  - slug: vca-vintage-alhambra-bracelet-5
+    name: "Van Cleef & Arpels Vintage Alhambra Bracelet 5 motifs"
+    brand: "Van Cleef & Arpels"
+    brand_aliases: ["van cleef", "vca", "van cleef and arpels", "van cleef et arpels", "van cleef y arpels"]
+    model: "Vintage Alhambra Bracelet 5 motifs"
+    collection: Alhambra
+    product_type: bracelet
+    category: luxury_jewelry
+    patterns: ['alhambra.*(bracelet|pulsera|armband|bracciale|pulseira)', '(bracelet|pulsera|armband|bracciale).*alhambra']
+    required_keywords: ["van cleef", vca]
+    excluded_keywords: [collier, necklace, collar, colgante, pendant, pendientes, earrings, "boucles", ohrringe, 're:\b(10|20) motif', sweet, magic, 're:\bstyle\b', 're:\btipo\b']
+    variant_attributes: {material: 1.0}
+    retail_price_eur: 6000
+    popularity: 0.85
+    typical_holding_days: 25
+    demo:
+      variants:
+        - {attrs: {material: onyx}, price: 4700, weight: 3}
+        - {attrs: {material: mother_of_pearl}, price: 4800, weight: 2}
+        - {attrs: {material: malachite}, price: 5200, weight: 1}
+        - {attrs: {material: carnelian}, price: 4600, weight: 1}
+      titles:
+        - "Pulsera Van Cleef Alhambra 5 motivos {material_es}"
+        - "Bracelet Van Cleef & Arpels Vintage Alhambra {material_fr} 5 motifs"
+        - "VCA Vintage Alhambra bracelet {material_en}"
+
+  - slug: vca-vintage-alhambra-pendant
+    name: "Van Cleef & Arpels Vintage Alhambra Pendant"
+    brand: "Van Cleef & Arpels"
+    brand_aliases: ["van cleef", "vca", "van cleef and arpels", "van cleef et arpels"]
+    model: "Vintage Alhambra Pendant"
+    collection: Alhambra
+    product_type: pendant
+    category: luxury_jewelry
+    patterns: ['alhambra.*(pendant|pendentif|colgante|collier|necklace|collar|anhanger|kette|ciondolo)', '(pendentif|colgante|collier|necklace|collar|kette).*alhambra']
+    required_keywords: ["van cleef", vca]
+    excluded_keywords: [bracelet, pulsera, armband, 're:\b(10|20) motif', 're:\bstyle\b']
+    variant_attributes: {material: 1.0}
+    retail_price_eur: 3300
+    popularity: 0.8
+    typical_holding_days: 20
+    demo:
+      variants:
+        - {attrs: {material: onyx}, price: 2750, weight: 2}
+        - {attrs: {material: mother_of_pearl}, price: 2850, weight: 2}
+        - {attrs: {material: carnelian}, price: 2700, weight: 1}
+      titles:
+        - "Colgante Van Cleef Alhambra {material_es}"
+        - "Pendentif Van Cleef & Arpels Vintage Alhambra {material_fr}"
+
+  # ------------------------------------------------------------------ luxury bags
+  - slug: chanel-classic-flap-medium
+    name: "Chanel Classic Flap Bag Medium"
+    brand: Chanel
+    model: "Classic Flap Medium (11.12)"
+    collection: "Classic Flap"
+    product_type: bag
+    category: luxury_bags
+    patterns: ['classic flap', 'timeless', '\b11\.12\b', '\ba01112\b', 'sac (a )?rabat', 'bolso (de )?solapa', 'klassische (tasche|flap)', 'double flap', 'medium flap', '\b2\.55\b']
+    required_keywords: [chanel]
+    excluded_keywords: [mini, jumbo, maxi, small, "petit", wallet, "woc", 're:\bstyle\b', 're:\btipo\b', 're:\bcartera\b']
+    variant_attributes: {leather_type: 0.5, color: 0.3, hardware: 0.2}
+    attribute_rules:
+      leather_type: [{pattern: caviar, value: caviar}, {pattern: 'lambskin|agneau|cordero|lammleder|agnello', value: lambskin}]
+      hardware: [{pattern: '(gold|dore|dorado|oro|gold) ?(hardware|hw|ghw)|\bghw\b|herrajes dorados|quincaillerie doree', value: gold}, {pattern: '\bshw\b|silver ?(hardware|hw)|herrajes plateados|quincaillerie argentee', value: silver}]
+    retail_price_eur: 10900
+    popularity: 0.85
+    typical_holding_days: 30
+    demo:
+      variants:
+        - {attrs: {leather_type: caviar, color: black}, price: 8300, weight: 3}
+        - {attrs: {leather_type: lambskin, color: black}, price: 7700, weight: 2}
+        - {attrs: {leather_type: caviar, color: beige}, price: 8100, weight: 1}
+      titles:
+        - "Bolso Chanel Classic Flap mediano {leather_type} {color_es}"
+        - "Sac Chanel Timeless 11.12 {leather_type} {color_fr}"
+        - "Chanel Classic Double Flap Medium {leather_type} {color_en}"
+        - "Chanel Classic Flap Bag Medium {color_de} {leather_type}"
+
+  - slug: lv-neverfull
+    name: "Louis Vuitton Neverfull"
+    brand: "Louis Vuitton"
+    brand_aliases: ["louis vuitton", "vuitton"]
+    model: Neverfull
+    product_type: bag
+    category: luxury_bags
+    patterns: ['never ?full']
+    required_keywords: [vuitton, 're:\blv\b']
+    excluded_keywords: [pochette, 're:^(pochette|clutch|funda|insert|organizador|organiser|organizer)\b', 're:\bstyle\b', 're:\btipo\b', 're:\bdupe\b']
+    variant_attributes: {bag_size: 0.9, material: 0.5}
+    attribute_rules:
+      bag_size: [{pattern: '\bmm\b', value: MM}, {pattern: '\bgm\b', value: GM}, {pattern: '\bpm\b', value: PM}, {pattern: '\b(mediano|moyen|medium)\b', value: MM}]
+    retail_price_eur: 2050
+    popularity: 0.95
+    typical_holding_days: 18
+    demo:
+      variants:
+        - {attrs: {bag_size: MM, material: monogram_canvas}, price: 1250, weight: 4}
+        - {attrs: {bag_size: MM, material: damier_ebene}, price: 1200, weight: 2}
+        - {attrs: {bag_size: GM, material: monogram_canvas}, price: 1180, weight: 1}
+        - {attrs: {bag_size: PM, material: damier_azur}, price: 1050, weight: 1}
+      titles:
+        - "Bolso Louis Vuitton Neverfull {bag_size} {material_es}"
+        - "Sac Louis Vuitton Neverfull {bag_size} toile {material_fr}"
+        - "LV Neverfull {bag_size} {material_en}"
+        - "Louis Vuitton Neverfull {bag_size} {material_de} Tasche"
+
+  - slug: lv-speedy
+    name: "Louis Vuitton Speedy"
+    brand: "Louis Vuitton"
+    brand_aliases: ["louis vuitton", "vuitton"]
+    model: Speedy
+    product_type: bag
+    category: luxury_bags
+    patterns: ['\bspeedy\b']
+    required_keywords: [vuitton, 're:\blv\b']
+    excluded_keywords: ["nano speedy", 're:\bnano\b', 're:\bstyle\b', 're:\btipo\b', 're:^(candado|cadenas|padlock|llave|key)\b']
+    variant_attributes: {bag_size: 0.9, bandouliere: 0.6, material: 0.5}
+    attribute_rules:
+      bag_size: [{pattern: 'speedy\s*(25|30|35|40)', value: ""}, {pattern: '\b(25|30|35|40)\b', value: ""}]
+      bandouliere: [{pattern: 'bandouliere|bandolera|shoulder strap|schulterriemen|tracolla', value: "yes"}]
+    retail_price_eur: 1650
+    popularity: 0.9
+    typical_holding_days: 18
+    demo:
+      variants:
+        - {attrs: {bag_size: "30", material: monogram_canvas}, price: 780, weight: 4}
+        - {attrs: {bag_size: "25", material: monogram_canvas, bandouliere: "yes"}, price: 1180, weight: 2}
+        - {attrs: {bag_size: "35", material: damier_ebene}, price: 760, weight: 1}
+      titles:
+        - "Bolso Louis Vuitton Speedy {bag_size} {material_es}"
+        - "Sac Louis Vuitton Speedy {bag_size} {material_fr}"
+        - "LV Speedy {bag_size} {material_en}"
+
+  - slug: loewe-puzzle
+    name: "Loewe Puzzle Bag"
+    brand: Loewe
+    model: "Puzzle Bag"
+    product_type: bag
+    category: luxury_bags
+    patterns: ['\bpuzzle\b']
+    required_keywords: [loewe]
+    excluded_keywords: [rompecabezas, 're:\bpuzzle edge\b', 're:\bstyle\b', 're:\btipo\b', fold, perfume, parfum]
+    variant_attributes: {bag_size: 0.9, color: 0.2}
+    attribute_rules:
+      bag_size: [{pattern: '\bmini\b', value: mini}, {pattern: '\b(?:small|pequeno|petit|piccola|klein)\b', value: small}, {pattern: '\b(?:medium|mediano|moyen|media)\b', value: medium}]
+    retail_price_eur: 3200
+    popularity: 0.75
+    typical_holding_days: 25
+    demo:
+      variants:
+        - {attrs: {bag_size: small}, price: 1750, weight: 3}
+        - {attrs: {bag_size: mini}, price: 1450, weight: 1}
+        - {attrs: {bag_size: medium}, price: 1850, weight: 1}
+      titles:
+        - "Bolso Loewe Puzzle {bag_size} {color_es}"
+        - "Sac Loewe Puzzle {bag_size} {color_fr}"
+        - "Loewe Puzzle bag {bag_size} {color_en}"
+
+  # ------------------------------------------------------------------ luxury watches
+  - slug: rolex-datejust
+    name: "Rolex Datejust"
+    brand: Rolex
+    model: Datejust
+    product_type: watch
+    category: luxury_watches
+    patterns: ['date ?just', '\bdj ?(36|41)\b']
+    required_keywords: [rolex]
+    excluded_keywords: ['re:\bstrap\b', 're:^(correa|bracelet|armband|caja|box|boite)\b', 're:\bhomage\b', 're:\bstyle\b', 're:\btipo\b', lady, 're:\b(28|31) ?mm\b']
+    reference_numbers: ["126300", "126334", "126200", "126234", "126233", "116234", "126331"]
+    variant_attributes: {reference: 1.0}
+    attribute_rules:
+      reference: [{pattern: '\b(1[12]6\d{3})\b', value: ""}]
+      case_size: [{pattern: '\b(36|41) ?mm\b', value: ""}]
+    retail_price_eur: 10000
+    popularity: 0.85
+    typical_holding_days: 30
+    demo:
+      variants:
+        - {attrs: {reference: "126300"}, price: 10400, weight: 3}
+        - {attrs: {reference: "126334"}, price: 12600, weight: 2}
+        - {attrs: {reference: "126200"}, price: 7900, weight: 2}
+        - {attrs: {reference: "126234"}, price: 9100, weight: 2}
+        - {attrs: {reference: "116234"}, price: 7600, weight: 1}
+      titles:
+        - "Rolex Datejust {reference} con caja y papeles"
+        - "Montre Rolex Datejust ref {reference}"
+        - "Rolex Datejust {reference} full set"
+        - "Rolex Datejust Ref. {reference} Uhr"
+
+  - slug: omega-speedmaster-moonwatch
+    name: "Omega Speedmaster Moonwatch Professional"
+    brand: Omega
+    model: "Speedmaster Professional Moonwatch"
+    collection: Speedmaster
+    product_type: watch
+    category: luxury_watches
+    patterns: ['speedmaster', 'moon ?watch']
+    required_keywords: [omega]
+    excluded_keywords: ['re:\bswatch\b', "moonswatch", "mission to", 're:\breduced\b', 're:\bstrap\b', 're:^(correa|bracelet|armband)\b', 're:\bstyle\b', 're:\btipo\b']
+    reference_numbers: ["310.30.42.50.01.001", "310.30.42.50.01.002", "311.30.42.30.01.005"]
+    variant_attributes: {reference: 1.0}
+    attribute_rules:
+      reference: [{pattern: '(31[01]\.?30\.?42\.?[35]0\.?01\.?00[0-9])', value: ""}, {pattern: 'sapphire|zafiro|saphir|sandwich', value: "310.30.42.50.01.002"}, {pattern: 'hesalite|hesalita', value: "310.30.42.50.01.001"}]
+    retail_price_eur: 8000
+    popularity: 0.85
+    typical_holding_days: 25
+    demo:
+      variants:
+        - {attrs: {reference: "310.30.42.50.01.001"}, price: 5400, weight: 3}
+        - {attrs: {reference: "310.30.42.50.01.002"}, price: 6000, weight: 2}
+        - {attrs: {reference: "311.30.42.30.01.005"}, price: 4300, weight: 2}
+      titles:
+        - "Omega Speedmaster Moonwatch {reference}"
+        - "Omega Speedmaster Professional ref {reference}"
+        - "Montre Omega Speedmaster Moonwatch {reference}"
+
+  - slug: omega-seamaster-diver-300m
+    name: "Omega Seamaster Diver 300M"
+    brand: Omega
+    model: "Seamaster Diver 300M"
+    collection: Seamaster
+    product_type: watch
+    category: luxury_watches
+    patterns: ['seamaster', 'diver 300']
+    required_keywords: [omega]
+    excluded_keywords: ["aqua terra", "planet ocean", 're:\bswatch\b', 're:\bstrap\b', 're:\bstyle\b']
+    reference_numbers: ["210.30.42.20.01.001", "210.30.42.20.03.001", "210.30.42.20.06.001"]
+    variant_attributes: {reference: 0.8}
+    attribute_rules:
+      reference: [{pattern: '(210\.?30\.?42\.?20\.?0[136]\.?001)', value: ""}]
+    retail_price_eur: 6300
+    popularity: 0.8
+    typical_holding_days: 25
+    demo:
+      variants:
+        - {attrs: {reference: "210.30.42.20.01.001"}, price: 4000, weight: 3}
+        - {attrs: {reference: "210.30.42.20.03.001"}, price: 4150, weight: 2}
+      titles:
+        - "Omega Seamaster Diver 300M {reference}"
+        - "Montre Omega Seamaster 300 {reference}"
+        - "Omega Seamaster 300M Ref. {reference}"
+
+  - slug: tudor-black-bay
+    name: "Tudor Black Bay"
+    brand: Tudor
+    model: "Black Bay"
+    product_type: watch
+    category: luxury_watches
+    patterns: ['black ?bay', '\bbb ?(58|41)\b']
+    required_keywords: [tudor]
+    excluded_keywords: ['re:\bstrap\b', 're:\bstyle\b', 're:\btipo\b', 're:\bhomage\b']
+    reference_numbers: ["M79030N", "79030N", "M79230R", "79230R", "M79230B", "79230B", "M79030B"]
+    variant_attributes: {reference: 1.0}
+    attribute_rules:
+      reference: [{pattern: '\bm?(79030n|79230r|79230b|79030b)\b', value: ""}, {pattern: '\b(bb ?58|fifty[- ]eight|58)\b', value: "79030n"}]
+    retail_price_eur: 4100
+    popularity: 0.75
+    typical_holding_days: 25
+    demo:
+      variants:
+        - {attrs: {reference: "79030n"}, price: 3050, weight: 3}
+        - {attrs: {reference: "79230r"}, price: 2900, weight: 2}
+        - {attrs: {reference: "79230b"}, price: 2850, weight: 1}
+      titles:
+        - "Tudor Black Bay M{reference_upper}"
+        - "Tudor Black Bay ref {reference_upper} completo"
+        - "Montre Tudor Black Bay {reference_upper}"
+
+  # ------------------------------------------------------------------ household
+  - slug: thermomix-tm6
+    name: "Vorwerk Thermomix TM6"
+    brand: Vorwerk
+    brand_aliases: [thermomix]
+    model: "Thermomix TM6"
+    product_type: kitchen_robot
+    category: kitchen_appliances
+    patterns: ['thermomix\s*(tm)?\s*-?\s*6\b', '\btm\s?-?6\b']
+    excluded_keywords: ['re:^(vaso|jarra|bol|mixtopf|boccale|cuchilla|cuchillo|couteau|messer|varoma|tapa|funda|housse|cubierta|recetario|libro|chip)\b', 're:\btm ?(5|7|31)\b']
+    variant_attributes: {}
+    retail_price_eur: 1499
+    popularity: 0.95
+    typical_holding_days: 7
+    demo:
+      base_price: 820
+      titles:
+        - "Thermomix TM6"
+        - "TM6 Vorwerk"
+        - "Robot Thermomix 6"
+        - "Thermomix TM6 con varoma y recetario"
+        - "Vorwerk Thermomix TM6 comme neuf"
+        - "Thermomix TM6 Küchenmaschine"
+        - "Thermomix TM6 completo poco uso"
+
+  - slug: thermomix-tm5
+    name: "Vorwerk Thermomix TM5"
+    brand: Vorwerk
+    brand_aliases: [thermomix]
+    model: "Thermomix TM5"
+    product_type: kitchen_robot
+    category: kitchen_appliances
+    patterns: ['thermomix\s*(tm)?\s*-?\s*5\b', '\btm\s?-?5\b']
+    excluded_keywords: ['re:^(vaso|jarra|bol|mixtopf|cuchilla|varoma|tapa|funda|recetario|chip)\b', 're:\btm ?(6|7|31)\b']
+    retail_price_eur: 0
+    popularity: 0.7
+    typical_holding_days: 10
+    demo:
+      base_price: 390
+      titles: ["Thermomix TM5", "Thermomix TM5 con chip de recetas", "Vorwerk TM5 bon état"]
+
+  - slug: dyson-v15-detect
+    name: "Dyson V15 Detect"
+    brand: Dyson
+    model: "V15 Detect"
+    product_type: vacuum
+    category: home_appliances
+    patterns: ['\bv ?15\b']
+    required_keywords: [dyson]
+    excluded_keywords: ['re:^(bateria|batterie|battery|akku|cargador|chargeur|cabezal|brosse|bürste|filtro|filtre|filter|soporte)\b']
+    retail_price_eur: 749
+    popularity: 0.8
+    typical_holding_days: 10
+    demo:
+      base_price: 390
+      titles: ["Dyson V15 Detect", "Aspirador Dyson V15 Detect Absolute", "Aspirateur Dyson V15 Detect", "Dyson V15 Detect Akkusauger"]
+
+  - slug: dyson-airwrap
+    name: "Dyson Airwrap"
+    brand: Dyson
+    model: Airwrap
+    product_type: hair_styler
+    category: home_appliances
+    patterns: ['air ?wrap']
+    required_keywords: [dyson]
+    excluded_keywords: ['re:^(accesorio|cepillo|brosse|embout|aufsatz|funda|estuche)\b', 're:\bdupe\b', 're:\btipo\b', 're:\bstyle\b']
+    retail_price_eur: 549
+    popularity: 0.9
+    typical_holding_days: 9
+    demo:
+      base_price: 340
+      titles: ["Dyson Airwrap Complete", "Dyson Airwrap Long", "Dyson Airwrap multi-styler", "Dyson Airwrap Complete Long neuf"]
+
+  - slug: sonos-arc
+    name: "Sonos Arc"
+    brand: Sonos
+    model: "Arc (Gen 1)"
+    product_type: soundbar
+    category: audio
+    patterns: ['\barc\b']
+    required_keywords: [sonos]
+    excluded_keywords: ["arc ultra", 're:^(soporte|support|halterung|wall mount|montaje)\b']
+    retail_price_eur: 999
+    popularity: 0.75
+    typical_holding_days: 12
+    demo:
+      base_price: 560
+      titles: ["Sonos Arc", "Barra de sonido Sonos Arc negra", "Sonos Arc barre de son", "Sonos Arc Soundbar schwarz"]
+
+  - slug: sonos-sub
+    name: "Sonos Sub"
+    brand: Sonos
+    model: "Sub (Gen 3/4)"
+    product_type: subwoofer
+    category: audio
+    patterns: ['\bsub\b(?! ?mini)', 'subwoofer']
+    required_keywords: [sonos]
+    excluded_keywords: ["sub mini", 're:^(soporte|support|halterung)\b']
+    variant_attributes: {generation: 0.5}
+    attribute_rules:
+      generation: [{pattern: 'gen(?:eration|eracion)? ?([34])\b|\b([34])(?:a|e|rd|th)? gen', value: ""}]
+    retail_price_eur: 899
+    popularity: 0.65
+    typical_holding_days: 14
+    demo:
+      base_price: 470
+      titles: ["Sonos Sub Gen 3", "Sonos Sub Gen 4 negro", "Caisson Sonos Sub Gen 3", "Sonos Sub (Gen 3) Subwoofer"]
+
+  # ------------------------------------------------------------------ electronics
+  - slug: apple-macbook-pro
+    name: "Apple MacBook Pro (Apple Silicon)"
+    brand: Apple
+    model: "MacBook Pro"
+    product_type: laptop
+    category: computers
+    patterns: ['macbook ?pro']
+    excluded_keywords: ['re:^(funda|housse|hulle|case|cargador|chargeur|teclado|clavier|pantalla|ecran|display|bateria|batterie|placa|logic board|cover|skin|protector)\b', intel, 're:\b20(1[0-9])\b']
+    variant_attributes: {chip: 1.0, screen: 0.9, ram: 0.4, storage: 0.4}
+    attribute_rules:
+      chip: [{pattern: '\bm([1-4])\s*max\b', value: "m{0}_max"}, {pattern: '\bm([1-4])\s*pro\b', value: "m{0}_pro"}, {pattern: '\bm([1-4])\b', value: "m{0}"}]
+      screen: [{pattern: '\b(13|14|16)(?:[,.]\d)?\s*(?:"|pulgadas|pouces|zoll|inch|in\b|'')', value: ""}, {pattern: 'macbook pro (13|14|16)\b', value: ""}]
+      ram: [{pattern: '\b(8|16|18|24|32|36|48|64)\s?gb\s?(ram|memoria|memoire|unified)', value: ""}]
+      storage: [{pattern: '\b(256|512)\s?gb\s?(ssd|almacenamiento|stockage)?', value: ""}, {pattern: '\b([1248])\s?tb\b', value: ""}]
+    retail_price_eur: 2449
+    popularity: 0.9
+    typical_holding_days: 10
+    demo:
+      variants:
+        - {attrs: {chip: m1_pro, screen: "14"}, price: 1080, weight: 3}
+        - {attrs: {chip: m3_pro, screen: "14"}, price: 1700, weight: 2}
+        - {attrs: {chip: m1_pro, screen: "16"}, price: 1280, weight: 2}
+        - {attrs: {chip: m4_pro, screen: "14"}, price: 1990, weight: 1}
+      titles:
+        - "MacBook Pro {screen}\" {chip_label} 16GB 512GB"
+        - "Apple MacBook Pro {screen} pulgadas {chip_label}"
+        - "MacBook Pro {screen} pouces {chip_label} comme neuf"
+        - "MacBook Pro {screen} Zoll {chip_label} 512GB"
+
+  - slug: sony-a7-iv
+    name: "Sony Alpha 7 IV (ILCE-7M4)"
+    brand: Sony
+    model: "Alpha 7 IV"
+    product_type: camera_body
+    category: cameras
+    patterns: ['\ba ?7 ?(m)?\s?(iv|4)\b', 'alpha ?7 ?(iv|4)', 'ilce-?7m4']
+    reference_numbers: ["ILCE-7M4"]
+    excluded_keywords: ['re:^(bateria|batterie|akku|battery|grip|jaula|cage|funda|correa|cargador)\b']
+    variant_attributes: {kit: 0.6}
+    attribute_rules:
+      kit: [{pattern: '\bkit\b|28-?70|24-?105|con objetivo|avec objectif|mit objektiv', value: "yes"}]
+    retail_price_eur: 2800
+    popularity: 0.75
+    typical_holding_days: 14
+    demo:
+      base_price: 1750
+      titles: ["Sony A7 IV cuerpo", "Sony Alpha 7 IV boitier", "Sony A7IV Body", "Sony ILCE-7M4 A7 IV"]
+
+  - slug: sony-a7-iii
+    name: "Sony Alpha 7 III (ILCE-7M3)"
+    brand: Sony
+    model: "Alpha 7 III"
+    product_type: camera_body
+    category: cameras
+    patterns: ['\ba ?7 ?(m)?\s?(iii|3)\b', 'alpha ?7 ?(iii|3)', 'ilce-?7m3']
+    reference_numbers: ["ILCE-7M3"]
+    excluded_keywords: ['re:^(bateria|batterie|akku|battery|grip|jaula|cage|funda)\b', "a7riii", "a7r iii", "a7siii", "a7s iii"]
+    retail_price_eur: 2000
+    popularity: 0.75
+    typical_holding_days: 12
+    demo:
+      base_price: 1050
+      titles: ["Sony A7 III cuerpo", "Sony Alpha 7 III boitier", "Sony A7III Body 15k Auslösungen"]
+
+  - slug: fujifilm-x100v
+    name: "Fujifilm X100V"
+    brand: Fujifilm
+    brand_aliases: [fuji]
+    model: X100V
+    product_type: camera
+    category: cameras
+    patterns: ['x ?100 ?v\b(?!i)']
+    excluded_keywords: ['re:^(funda|case|grip|bateria|batterie|akku|parasol|lens hood|filtro|filter|adaptador)\b']
+    variant_attributes: {color: 0.3}
+    retail_price_eur: 1499
+    popularity: 0.95
+    typical_holding_days: 6
+    demo:
+      base_price: 1450
+      titles: ["Fujifilm X100V {color_es}", "Fuji X100V {color_fr}", "Fujifilm X100V {color_de}"]
+
+  - slug: fujifilm-x100vi
+    name: "Fujifilm X100VI"
+    brand: Fujifilm
+    brand_aliases: [fuji]
+    model: X100VI
+    product_type: camera
+    category: cameras
+    patterns: ['x ?100 ?vi\b']
+    excluded_keywords: ['re:^(funda|case|grip|bateria|batterie|akku|parasol|filtro|filter)\b']
+    variant_attributes: {color: 0.3}
+    retail_price_eur: 1799
+    popularity: 0.95
+    typical_holding_days: 6
+    demo:
+      base_price: 1800
+      titles: ["Fujifilm X100VI {color_es}", "Fuji X100VI {color_fr} neuf", "Fujifilm X100VI {color_de}"]
+
+  - slug: canon-rf-24-70-f28
+    name: "Canon RF 24-70mm f/2.8L IS USM"
+    brand: Canon
+    model: "RF 24-70mm f/2.8L"
+    product_type: lens
+    category: lenses
+    patterns: ['rf ?24-70', '24-70 ?(mm)? ?f? ?/?2[.,]8.*\brf\b']
+    required_keywords: [canon]
+    excluded_keywords: ['re:\bef\b', 're:^(parasol|tapa|filtro|filter|hood)\b']
+    retail_price_eur: 2700
+    popularity: 0.6
+    typical_holding_days: 18
+    demo:
+      base_price: 1850
+      titles: ["Canon RF 24-70mm f/2.8L IS USM", "Objectif Canon RF 24-70 f2.8", "Canon RF 24-70 2.8 L Objektiv"]
+
+  - slug: sony-fe-24-70-gm-ii
+    name: "Sony FE 24-70mm f/2.8 GM II"
+    brand: Sony
+    model: "FE 24-70mm f/2.8 GM II"
+    product_type: lens
+    category: lenses
+    patterns: ['24-70.*\bgm ?(ii|2)\b', 'sel2470gm2']
+    reference_numbers: [SEL2470GM2]
+    excluded_keywords: ['re:^(parasol|tapa|filtro|filter|hood)\b']
+    retail_price_eur: 2400
+    popularity: 0.6
+    typical_holding_days: 18
+    demo:
+      base_price: 1800
+      titles: ["Sony FE 24-70mm f2.8 GM II", "Sony 24-70 GM II SEL2470GM2", "Objectif Sony FE 24-70 GM II"]
+
+  - slug: ps5
+    name: "Sony PlayStation 5"
+    brand: Sony
+    brand_aliases: [playstation]
+    model: "PlayStation 5"
+    product_type: console
+    category: gaming
+    patterns: ['\bps ?5\b', 'playstation ?5']
+    excluded_keywords: ['re:^(mando|mandos|manette|controller|dualsense|juego|jeu|spiel|gioco|funda|soporte|stand|cargador|base de carga|auriculares|casque|headset|disco duro|ssd|tapa|cover|placa|carcasa|volante|vr|camera|camara)\b', 're:\bps ?4\b', 're:\bportal\b']
+    variant_attributes: {model_variant: 0.9, edition: 0.5}
+    attribute_rules:
+      model_variant: [{pattern: '\bpro\b', value: pro}, {pattern: '\bslim\b', value: slim}]
+      edition: [{pattern: 'digital|sin lector|sans lecteur|ohne laufwerk|sans disque|senza lettore', value: digital}, {pattern: 'lector|disco|disc|standard|blu-?ray|laufwerk|lecteur', value: disc}]
+    retail_price_eur: 549
+    popularity: 0.95
+    typical_holding_days: 5
+    demo:
+      variants:
+        - {attrs: {model_variant: slim, edition: disc}, price: 390, weight: 3}
+        - {attrs: {model_variant: slim, edition: digital}, price: 330, weight: 1}
+        - {attrs: {model_variant: pro}, price: 640, weight: 2}
+      titles:
+        - "PS5 {model_variant} {edition_es} + mando"
+        - "PlayStation 5 {model_variant} {edition_fr} comme neuve"
+        - "PS5 {model_variant} {edition_de} Konsole"
+        - "Consola PS5 {model_variant} {edition_es}"
+
+  - slug: nintendo-switch-oled
+    name: "Nintendo Switch OLED"
+    brand: Nintendo
+    model: "Switch OLED"
+    product_type: console
+    category: gaming
+    patterns: ['switch ?oled', 'oled.*switch']
+    excluded_keywords: ['re:^(funda|housse|hulle|mando|manette|joy-?con|dock|base|juego|jeu|spiel|protector|cargador|estuche)\b', 're:\bswitch 2\b', 're:\blite\b']
+    variant_attributes: {color: 0.2}
+    retail_price_eur: 349
+    popularity: 0.9
+    typical_holding_days: 5
+    demo:
+      base_price: 235
+      titles: ["Nintendo Switch OLED blanca", "Switch OLED néon comme neuve", "Nintendo Switch OLED Konsole weiß", "Consola Nintendo Switch OLED + juegos"]
+
+  # ------------------------------------------------------------------ collectibles
+  - slug: lego-10221-super-star-destroyer
+    name: "LEGO 10221 Super Star Destroyer (UCS)"
+    brand: LEGO
+    model: "10221 Super Star Destroyer"
+    product_type: lego_set
+    category: lego
+    patterns: ['super star destroyer', '\b10221\b']
+    required_keywords: [lego]
+    reference_numbers: ["10221"]
+    variant_attributes: {state: 0.9}
+    attribute_rules:
+      state: [{pattern: 'precintad|sealed|scelle|\bmisb\b|\bnisb\b|\bovp\b.*(neu|sealed)|sigillat|sin abrir|jamais ouvert|ungeoffnet', value: sealed}]
+    retail_price_eur: 399
+    popularity: 0.55
+    typical_holding_days: 35
+    demo:
+      variants:
+        - {attrs: {state: sealed}, price: 1350, weight: 2}
+        - {attrs: {}, price: 780, weight: 3}
+      titles: ["LEGO 10221 Super Star Destroyer {state_es}", "LEGO Star Wars 10221 SSD {state_fr}", "Lego 10221 Super Star Destroyer {state_de}"]
+
+  - slug: lego-10188-death-star
+    name: "LEGO 10188 Death Star"
+    brand: LEGO
+    model: "10188 Death Star"
+    product_type: lego_set
+    category: lego
+    patterns: ['death star', 'estrella de la muerte', 'etoile de la mort', 'todesstern', '\b10188\b']
+    required_keywords: [lego]
+    reference_numbers: ["10188"]
+    excluded_keywords: ['re:\b(75159|75419|75093)\b']
+    variant_attributes: {state: 0.9}
+    attribute_rules:
+      state: [{pattern: 'precintad|sealed|scelle|\bmisb\b|sigillat|sin abrir|ungeoffnet', value: sealed}]
+    popularity: 0.55
+    typical_holding_days: 30
+    demo:
+      variants:
+        - {attrs: {state: sealed}, price: 950, weight: 1}
+        - {attrs: {}, price: 520, weight: 3}
+      titles: ["LEGO 10188 Estrella de la Muerte {state_es}", "LEGO 10188 Death Star {state_en}", "Lego Star Wars Todesstern 10188 {state_de}"]
+
+  - slug: lego-10256-taj-mahal
+    name: "LEGO 10256 Taj Mahal"
+    brand: LEGO
+    model: "10256 Taj Mahal"
+    product_type: lego_set
+    category: lego
+    patterns: ['taj ?mahal', '\b10256\b', '\b10189\b']
+    required_keywords: [lego]
+    reference_numbers: ["10256"]
+    variant_attributes: {state: 0.9}
+    attribute_rules:
+      state: [{pattern: 'precintad|sealed|scelle|\bmisb\b|sigillat|sin abrir|ungeoffnet', value: sealed}]
+    popularity: 0.5
+    typical_holding_days: 30
+    demo:
+      variants:
+        - {attrs: {state: sealed}, price: 520, weight: 2}
+        - {attrs: {}, price: 300, weight: 2}
+      titles: ["LEGO 10256 Taj Mahal {state_es}", "LEGO Creator Expert 10256 Taj Mahal {state_fr}"]
+
+  - slug: nintendo-snes-pal
+    name: "Super Nintendo (SNES) PAL console"
+    brand: Nintendo
+    model: "Super Nintendo (SNES)"
+    product_type: retro_console
+    category: retro_gaming
+    patterns: ['super nintendo', '\bsnes\b', 'super nes']
+    excluded_keywords: ['re:\bmini\b', 're:\bclassic\b', 're:^(juego|jeu|spiel|cartucho|cartouche|mando|manette|controller|cable|fuente|alimentation)\b']
+    variant_attributes: {boxed: 0.6}
+    attribute_rules:
+      boxed: [{pattern: 'en caja|con caja|en boite|avec boite|\bboxed\b|\bcib\b|\bovp\b', value: "yes"}]
+    popularity: 0.6
+    typical_holding_days: 18
+    demo:
+      variants:
+        - {attrs: {}, price: 120, weight: 3}
+        - {attrs: {boxed: "yes"}, price: 260, weight: 1}
+      titles: ["Consola Super Nintendo SNES {boxed_es}", "Super Nintendo PAL {boxed_fr}", "SNES Konsole PAL {boxed_de}"]
+
+  - slug: nintendo-game-boy-dmg
+    name: "Nintendo Game Boy (DMG-01)"
+    brand: Nintendo
+    model: "Game Boy DMG-01"
+    product_type: retro_console
+    category: retro_gaming
+    patterns: ['game ?boy(?! (color|advance|pocket|micro))', '\bdmg-?01\b']
+    excluded_keywords: ['re:^(juego|jeu|spiel|cartucho|cartouche|funda|tapa)\b', "game boy color", "game boy advance", gba, 're:\bpocket\b']
+    reference_numbers: ["DMG-01"]
+    popularity: 0.6
+    typical_holding_days: 14
+    demo:
+      base_price: 75
+      titles: ["Game Boy clásica DMG-01", "Nintendo Game Boy DMG-01 fonctionne", "Original Game Boy DMG 01"]
+
+  - slug: pokemon-evolving-skies-booster-box
+    name: "Pokémon TCG Evolving Skies Booster Box (sealed)"
+    brand: "Pokémon"
+    brand_aliases: [pokemon]
+    model: "Evolving Skies Booster Box"
+    product_type: tcg_sealed
+    category: collectibles
+    patterns: ['evolving skies', 'evolution celeste', 'drachenwandel', 'evoluciones? (en el )?cielo|cielos evolutivos|evolucion celeste']
+    required_keywords: ['re:\b(booster box|display|caja de sobres|boite de boosters|36 (sobres|boosters|packs))\b']
+    excluded_keywords: ['re:\b(carta|card|carte|karte|sobre suelto|single)\b']
+    popularity: 0.6
+    typical_holding_days: 20
+    demo:
+      base_price: 880
+      titles: ["Pokémon Evolving Skies booster box precintado", "Display Pokémon Évolution Céleste 36 boosters scellé"]
+
+  # ------------------------------------------------------------------ baby / mobility
+  - slug: bugaboo-fox
+    name: "Bugaboo Fox"
+    brand: Bugaboo
+    model: Fox
+    product_type: stroller
+    category: strollers
+    patterns: ['\bfox\b']
+    required_keywords: [bugaboo]
+    excluded_keywords: ['re:^(saco|chancelière|fusssack|sombrilla|ombrelle|plastico de lluvia|habillage pluie|regenschutz|capota|ruedas|roues|adaptador|patinete)\b']
+    variant_attributes: {generation: 0.6}
+    attribute_rules:
+      generation: [{pattern: 'fox ?([235])\b', value: ""}]
+    retail_price_eur: 1199
+    popularity: 0.75
+    typical_holding_days: 12
+    demo:
+      variants:
+        - {attrs: {generation: "3"}, price: 560, weight: 3}
+        - {attrs: {generation: "5"}, price: 790, weight: 2}
+        - {attrs: {generation: "2"}, price: 380, weight: 1}
+      titles: ["Bugaboo Fox {generation} completo", "Poussette Bugaboo Fox {generation}", "Bugaboo Fox {generation} Kinderwagen"]
+
+  - slug: cybex-priam
+    name: "Cybex Priam"
+    brand: Cybex
+    model: Priam
+    product_type: stroller
+    category: strollers
+    patterns: ['\b(e-?)?priam\b']
+    required_keywords: [cybex]
+    excluded_keywords: ['re:^(saco|fusssack|sombrilla|capota|ruedas|adaptador|chasis)\b']
+    retail_price_eur: 1299
+    popularity: 0.6
+    typical_holding_days: 16
+    demo:
+      base_price: 620
+      titles: ["Cybex Priam 4 completo", "Poussette Cybex Priam", "Cybex Priam Kinderwagen Platinum"]
+
+  - slug: brompton-c-line
+    name: "Brompton C Line"
+    brand: Brompton
+    model: "C Line"
+    product_type: folding_bike
+    category: bicycles
+    patterns: ['brompton']
+    excluded_keywords: ['re:^(bolsa|sac|tasche|bag|sillin|selle|sattel|rueda|roue|rad|guardabarros|portabultos)\b', electric, 're:\belectric[ao]?\b', 're:\belectrique\b']
+    variant_attributes: {gears: 0.5}
+    attribute_rules:
+      gears: [{pattern: '\b([2346])\s?(v|vel|velocidades|vitesses|gang|speed)\b', value: ""}]
+    retail_price_eur: 1650
+    popularity: 0.8
+    typical_holding_days: 14
+    demo:
+      base_price: 1050
+      titles: ["Bicicleta plegable Brompton C Line", "Vélo pliant Brompton C Line 6 vitesses", "Brompton C Line Explore Faltrad"]
+
+  - slug: specialized-tarmac-sl7
+    name: "Specialized Tarmac SL7"
+    brand: Specialized
+    model: "Tarmac SL7"
+    product_type: road_bike
+    category: bicycles
+    patterns: ['tarmac ?sl ?7']
+    required_keywords: [specialized]
+    excluded_keywords: ['re:^(cuadro|frame|cadre|rahmen|horquilla|fourche)\b']
+    variant_attributes: {groupset: 0.7, frame_size: 0.3}
+    attribute_rules:
+      groupset: [{pattern: 'dura[- ]?ace', value: dura_ace}, {pattern: 'ultegra', value: ultegra}, {pattern: '\b105\b', value: "105"}, {pattern: 'sram (red|force|rival)', value: ""}]
+      frame_size: [{pattern: '\b(49|52|54|56|58|61)\b', value: ""}]
+    retail_price_eur: 5500
+    popularity: 0.55
+    typical_holding_days: 30
+    demo:
+      base_price: 3100
+      titles: ["Specialized Tarmac SL7 Ultegra Di2 talla 54", "Vélo Specialized Tarmac SL7 taille 56", "Specialized Tarmac SL7 Rennrad RH 54"]
+
+  - slug: specialized-turbo-vado
+    name: "Specialized Turbo Vado"
+    brand: Specialized
+    model: "Turbo Vado"
+    product_type: e_bike
+    category: ebikes
+    patterns: ['turbo ?vado']
+    required_keywords: [specialized]
+    excluded_keywords: ['re:^(bateria|batterie|akku|cargador|chargeur|motor)\b']
+    variant_attributes: {model_tier: 0.5}
+    attribute_rules:
+      model_tier: [{pattern: 'vado ?(?:sl)?\s*([3456])\.0', value: ""}]
+    retail_price_eur: 3800
+    popularity: 0.5
+    typical_holding_days: 30
+    demo:
+      base_price: 2200
+      titles: ["Specialized Turbo Vado 4.0 eléctrica", "VAE Specialized Turbo Vado 4.0", "Specialized Turbo Vado 4.0 E-Bike"]
+
+  - slug: cowboy-4
+    name: "Cowboy 4"
+    brand: Cowboy
+    model: "Cowboy 4"
+    product_type: e_bike
+    category: ebikes
+    patterns: ['cowboy ?4\b', 'cowboy ?(cruiser|classic)']
+    required_keywords: [cowboy]
+    excluded_keywords: ['re:^(bateria|batterie|akku|cargador|chargeur)\b']
+    retail_price_eur: 2990
+    popularity: 0.5
+    typical_holding_days: 28
+    demo:
+      base_price: 1300
+      titles: ["Bicicleta eléctrica Cowboy 4", "Vélo électrique Cowboy 4", "Cowboy 4 E-Bike"]

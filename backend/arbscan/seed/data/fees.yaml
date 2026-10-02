@@ -1,0 +1,61 @@
+# Marketplace fee rules and logistics cost profiles (seeded into the DB, editable in
+# Settings -> Fees & costs).
+#
+# IMPORTANT: marketplace fee schedules change frequently and differ for private vs
+# professional sellers. Every value below is an APPROXIMATION for a private seller and is
+# flagged `verified: false`. Check each marketplace's official fee page and update the
+# rule in the UI (then tick "verified") before relying on profit numbers.
+#
+# percent/payment_percent are fractions (0.05 = 5 %).
+
+fee_rules:
+  # ---- buyer-side fees (buyer protection / service fees) ---------------------
+  - {marketplace_code: wallapop, side: buy, percent: 0.05, fixed_eur: 0.99, notes: "Buyer protection fee on shipped purchases (approx.). Not charged for in-person cash deals."}
+  - {marketplace_code: leboncoin, side: buy, percent: 0.04, fixed_eur: 0.79, notes: "Frais de protection acheteur on 'paiement sécurisé' (approx.)."}
+  - {marketplace_code: vinted_es, side: buy, percent: 0.05, fixed_eur: 0.70, notes: "Buyer protection fee (approx.)."}
+  - {marketplace_code: vinted_fr, side: buy, percent: 0.05, fixed_eur: 0.70, notes: "Buyer protection fee (approx.)."}
+  - {marketplace_code: kleinanzeigen, side: buy, percent: 0.05, fixed_eur: 0.49, notes: "'Sicher bezahlen' buyer fee (approx.)."}
+  - {marketplace_code: ebay_de, side: buy, percent: 0.04, fixed_eur: 0.35, notes: "Buyer protection fee on private-seller items (approx.); not charged on business-seller items."}
+  # ---- seller-side fees ----------------------------------------------------
+  - {marketplace_code: wallapop, side: sell, percent: 0.0, fixed_eur: 0, notes: "Private sellers: no selling fee (approx.). Shipping normally paid by buyer."}
+  - {marketplace_code: milanuncios, side: sell, percent: 0.0, fixed_eur: 0, notes: "Free classified ads for private sellers (approx.)."}
+  - {marketplace_code: leboncoin, side: sell, percent: 0.0, fixed_eur: 0, notes: "No commission for private sellers (approx.)."}
+  - {marketplace_code: ebay_es, side: sell, percent: 0.12, fixed_eur: 0.35, notes: "Final value fee incl. payment processing, private seller (approx.)."}
+  - {marketplace_code: ebay_fr, side: sell, percent: 0.12, fixed_eur: 0.35, notes: "Final value fee incl. payment processing, private seller (approx.)."}
+  - {marketplace_code: ebay_de, side: sell, percent: 0.0, fixed_eur: 0, notes: "Private sellers on eBay.de: no selling fee since 2023 (approx.; verify)."}
+  - {marketplace_code: vinted_es, side: sell, percent: 0.0, fixed_eur: 0, notes: "No selling fee (buyer pays protection fee)."}
+  - {marketplace_code: vestiaire, side: sell, percent: 0.15, fixed_eur: 0, payment_percent: 0.03, min_fee_eur: 15, notes: "Commission + payment processing (approx.; tiered by price)."}
+  - {marketplace_code: chrono24, side: sell, percent: 0.065, fixed_eur: 0, notes: "Private seller commission (approx.)."}
+  - {marketplace_code: catawiki, side: sell, percent: 0.125, fixed_eur: 0, notes: "Seller commission (approx.)."}
+  - {marketplace_code: manual, side: sell, percent: 0.0, fixed_eur: 0, notes: "Direct/private sale."}
+  # ---- default when nothing more specific exists ------------------------------
+  - {marketplace_code: null, side: sell, percent: 0.05, fixed_eur: 0, notes: "Conservative default for unknown resale channel."}
+
+cost_profiles:
+  # shipping_class x route. inbound = getting the item to you; outbound = shipping to your buyer
+  # (0 when the resale marketplace's buyer normally pays shipping).
+  - {name: "Small parcel - domestic", shipping_class: parcel_s, route: domestic, inbound_shipping_eur: 4, outbound_shipping_eur: 0}
+  - {name: "Medium parcel - domestic", shipping_class: parcel_m, route: domestic, inbound_shipping_eur: 6, outbound_shipping_eur: 0}
+  - {name: "Large parcel - domestic", shipping_class: parcel_l, route: domestic, inbound_shipping_eur: 9, outbound_shipping_eur: 0}
+  - {name: "Bulky - domestic", shipping_class: bulky, route: domestic, inbound_shipping_eur: 25, outbound_shipping_eur: 0, travel_eur: 0}
+  - {name: "Bike - domestic", shipping_class: bike, route: domestic, inbound_shipping_eur: 45, outbound_shipping_eur: 0}
+  - {name: "Insured small - domestic", shipping_class: insured_small, route: domestic, inbound_shipping_eur: 15, outbound_shipping_eur: 15, insurance_pct: 0.004}
+  - {name: "Insured medium - domestic", shipping_class: insured_medium, route: domestic, inbound_shipping_eur: 18, outbound_shipping_eur: 15, insurance_pct: 0.004}
+
+  - {name: "Small parcel - EU", shipping_class: parcel_s, route: intra_eu, inbound_shipping_eur: 12, outbound_shipping_eur: 0}
+  - {name: "Medium parcel - EU", shipping_class: parcel_m, route: intra_eu, inbound_shipping_eur: 18, outbound_shipping_eur: 0}
+  - {name: "Large parcel - EU", shipping_class: parcel_l, route: intra_eu, inbound_shipping_eur: 28, outbound_shipping_eur: 0}
+  - {name: "Bulky - EU", shipping_class: bulky, route: intra_eu, inbound_shipping_eur: 70, outbound_shipping_eur: 0}
+  - {name: "Bike - EU", shipping_class: bike, route: intra_eu, inbound_shipping_eur: 95, outbound_shipping_eur: 0}
+  - {name: "Insured small - EU", shipping_class: insured_small, route: intra_eu, inbound_shipping_eur: 35, outbound_shipping_eur: 15, insurance_pct: 0.008}
+  - {name: "Insured medium - EU", shipping_class: insured_medium, route: intra_eu, inbound_shipping_eur: 40, outbound_shipping_eur: 15, insurance_pct: 0.008}
+
+  # Non-EU origin (UK, CH, US...): Spanish import VAT (21 %) applies on goods + shipping,
+  # plus customs duty depending on product & origin, plus a clearance/handling fee.
+  - {name: "Import - default", shipping_class: null, route: import, inbound_shipping_eur: 40, outbound_shipping_eur: 0, insurance_pct: 0.01, import_duty_pct: 0.03, import_vat_pct: 0.21, misc_eur: 20, notes: "Duty rate is a placeholder; check TARIC for the HS code and origin."}
+
+  - {name: "Default - domestic", shipping_class: null, route: domestic, inbound_shipping_eur: 8, outbound_shipping_eur: 0}
+  - {name: "Default - EU", shipping_class: null, route: intra_eu, inbound_shipping_eur: 20, outbound_shipping_eur: 0}
+
+# Country groups used to decide the route
+eu_countries: [AT, BE, BG, HR, CY, CZ, DK, EE, FI, FR, DE, GR, HU, IE, IT, LV, LT, LU, MT, NL, PL, PT, RO, SK, SI, ES, SE]

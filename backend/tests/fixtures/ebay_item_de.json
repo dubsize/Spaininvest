@@ -1,0 +1,21 @@
+{
+  "itemId": "v1|405512340000|0",
+  "title": "Omega Speedmaster Professional Moonwatch 310.30.42.50.01.001 Box & Papiere",
+  "shortDescription": "Omega Speedmaster Moonwatch, gekauft 2022, Full Set mit Box und Papieren.",
+  "description": "<div><p>Omega Speedmaster Professional Moonwatch <b>310.30.42.50.01.001</b>.</p><p>Sehr guter Zustand, Full Set mit Box, Papieren und Rechnung.</p><script>alert(1)</script></div>",
+  "price": {"value": "4950.00", "currency": "EUR"},
+  "categoryPath": "Uhren & Schmuck|Armbanduhren",
+  "condition": "Gebraucht",
+  "conditionId": "3000",
+  "itemLocation": {"city": "München", "postalCode": "80331", "country": "DE"},
+  "image": {"imageUrl": "https://i.ebayimg.com/images/g/omegaAAOS/s-l1600.jpg"},
+  "additionalImages": [{"imageUrl": "https://i.ebayimg.com/images/g/omega2AAOS/s-l1600.jpg"}, {"imageUrl": "https://i.ebayimg.com/images/g/omega3AAOS/s-l1600.jpg"}],
+  "brand": "Omega",
+  "seller": {"username": "uhren_max", "feedbackPercentage": "100", "feedbackScore": 87},
+  "localizedAspects": [{"type": "STRING", "name": "Marke", "value": "Omega"}, {"type": "STRING", "name": "Modell", "value": "Speedmaster Professional"}, {"type": "STRING", "name": "Referenznummer", "value": "310.30.42.50.01.001"}],
+  "shippingOptions": [{"shippingCostType": "FIXED", "shippingCost": {"value": "14.90", "currency": "EUR"}}],
+  "buyingOptions": ["FIXED_PRICE", "BEST_OFFER"],
+  "itemWebUrl": "https://www.ebay.de/itm/405512340000",
+  "itemCreationDate": "2026-09-28T10:00:00.000Z",
+  "itemEndDate": "2026-10-28T10:00:00.000Z"
+}

@@ -1,0 +1,56 @@
+{
+  "href": "https://api.ebay.com/buy/browse/v1/item_summary/search?q=thermomix+tm6&limit=3",
+  "total": 3,
+  "limit": 3,
+  "offset": 0,
+  "itemSummaries": [
+    {
+      "itemId": "v1|186512345678|0",
+      "title": "Thermomix TM6 Vorwerk como nuevo con Varoma",
+      "leafCategoryIds": ["20667"],
+      "categories": [{"categoryId": "20667", "categoryName": "Robots de cocina"}, {"categoryId": "20625", "categoryName": "Electrodomésticos de cocina"}],
+      "image": {"imageUrl": "https://i.ebayimg.com/images/g/abcAAOSw1/s-l1600.jpg"},
+      "additionalImages": [{"imageUrl": "https://i.ebayimg.com/images/g/defAAOSw2/s-l1600.jpg"}],
+      "price": {"value": "595.00", "currency": "EUR"},
+      "itemHref": "https://api.ebay.com/buy/browse/v1/item/v1%7C186512345678%7C0",
+      "seller": {"username": "cocina_madrid", "feedbackPercentage": "99.6", "feedbackScore": 312},
+      "condition": "Usado",
+      "conditionId": "3000",
+      "thumbnailImages": [{"imageUrl": "https://i.ebayimg.com/images/g/abcAAOSw1/s-l225.jpg"}],
+      "shippingOptions": [{"shippingCostType": "FIXED", "shippingCost": {"value": "9.90", "currency": "EUR"}}],
+      "buyingOptions": ["FIXED_PRICE", "BEST_OFFER"],
+      "itemWebUrl": "https://www.ebay.es/itm/186512345678",
+      "itemLocation": {"postalCode": "280**", "country": "ES"},
+      "adultOnly": false,
+      "itemCreationDate": "2026-09-30T08:15:02.000Z"
+    },
+    {
+      "itemId": "v1|186598765432|0",
+      "title": "Robot de cocina Thermomix TM6 negro edición",
+      "categories": [{"categoryId": "20667", "categoryName": "Robots de cocina"}],
+      "image": {"imageUrl": "https://i.ebayimg.com/images/g/ghiAAOSw3/s-l1600.jpg"},
+      "price": {"value": "680.00", "currency": "EUR"},
+      "marketingPrice": {"originalPrice": {"value": "750.00", "currency": "EUR"}, "discountPercentage": "9", "discountAmount": {"value": "70.00", "currency": "EUR"}},
+      "seller": {"username": "electro_bcn", "feedbackPercentage": "100.0", "feedbackScore": 12},
+      "condition": "Usado - Como nuevo",
+      "conditionId": "2750",
+      "shippingOptions": [{"shippingCostType": "FIXED", "shippingCost": {"value": "0.00", "currency": "EUR"}}],
+      "buyingOptions": ["FIXED_PRICE"],
+      "itemWebUrl": "https://www.ebay.es/itm/186598765432",
+      "itemLocation": {"postalCode": "080**", "country": "ES"},
+      "itemCreationDate": "2026-09-12T19:44:10.000Z"
+    },
+    {
+      "itemId": "v1|186500000001|0",
+      "title": "Vaso Thermomix TM6 original",
+      "categories": [{"categoryId": "20667", "categoryName": "Recambios"}],
+      "price": {"value": "120.00", "currency": "EUR"},
+      "seller": {"username": "recambios_es", "feedbackPercentage": "98.1", "feedbackScore": 2100},
+      "condition": "Nuevo",
+      "conditionId": "1000",
+      "buyingOptions": ["FIXED_PRICE"],
+      "itemWebUrl": "https://www.ebay.es/itm/186500000001",
+      "itemLocation": {"country": "ES"}
+    }
+  ]
+}
