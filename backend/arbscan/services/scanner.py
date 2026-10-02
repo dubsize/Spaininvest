@@ -27,6 +27,7 @@ from arbscan.connectors.registry import build_connector
 from arbscan.core.logging import get_logger
 from arbscan.db.enums import ConnectorStatus, ListingSource
 from arbscan.db.models import Listing, Marketplace, ScanRun, Watchlist
+from arbscan.normalization.ai import get_ai_normalizer
 from arbscan.normalization.catalog import normalizer_cache
 from arbscan.services.fx import FxService
 from arbscan.services.pipeline import Evaluator, ingest_raw_listing
@@ -122,6 +123,7 @@ def run_marketplace_scan(session: Session, marketplace_code: str, *, now: dateti
 
         fx = FxService(session)
         normalizer = normalizer_cache.get(session)
+        ai = get_ai_normalizer()
         changed_ids: list[int] = []
         price_drop_ids: set[int] = set()
         for w, q in searches:
@@ -132,7 +134,7 @@ def run_marketplace_scan(session: Session, marketplace_code: str, *, now: dateti
                 res = ingest_raw_listing(
                     session, raw,
                     source=ListingSource.DEMO.value if is_demo else ListingSource.CONNECTOR.value,
-                    is_demo=is_demo, now=now, fx=fx, normalizer=normalizer,
+                    is_demo=is_demo, now=now, fx=fx, normalizer=normalizer, ai=None if is_demo else ai,
                 )
                 if res.created:
                     run.listings_new += 1

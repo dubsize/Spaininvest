@@ -91,7 +91,7 @@ def seed_reference_data(session: Session) -> dict[str, int]:
         session.add(Marketplace(
             code=m["code"], name=m["name"], country=m["country"], connector_key=m["connector_key"],
             base_url=m.get("base_url", ""), config=m.get("config", {}), enabled=m.get("enabled", False),
-            status="STUB" if is_stub else "NOT_CONFIGURED",
+            status="STUB" if is_stub else ("OK" if m["connector_key"] == "demo" else "NOT_CONFIGURED"),
             poll_interval_seconds=m.get("poll_interval_seconds", cls.default_poll_seconds),
             max_requests_per_minute=m.get("max_requests_per_minute", cls.default_requests_per_minute),
             supports_sold_data=cls.supports_sold_data,

@@ -28,6 +28,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff>=0.5"]
+ai = ["anthropic>=1.0"]
 
 [tool.setuptools.packages.find]
 include = ["arbscan*"]

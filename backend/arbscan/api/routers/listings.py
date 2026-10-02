@@ -12,6 +12,7 @@ from arbscan.api.schemas import ListingDetail, ListingPatch, ListingSummary, Man
 from arbscan.connectors.base import RawListing
 from arbscan.connectors.page_metadata import detect_marketplace, external_id_from_url, fetch_metadata
 from arbscan.db.models import Listing, ListingPriceHistory, Opportunity
+from arbscan.normalization.ai import get_ai_normalizer
 from arbscan.normalization.catalog import normalizer_cache
 from arbscan.normalization.engine import make_variant_key
 from arbscan.services.fx import FxService
@@ -193,7 +194,7 @@ def create_manual(body: ManualListingIn, db: Session = DB, user: str = User) -> 
         sold_price=float(price) if body.price_kind == "sold" else None,
         source_metadata={"entered": "manual"},
     )
-    res = ingest_raw_listing(db, raw, source="manual")
+    res = ingest_raw_listing(db, raw, source="manual", ai=get_ai_normalizer())
     l = res.listing
     if body.condition:
         l.condition = body.condition if body.condition in {"new", "like_new", "very_good", "good", "fair", "for_parts"} else l.condition

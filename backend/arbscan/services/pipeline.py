@@ -624,6 +624,7 @@ class Evaluator:
                 "p25": val.p25_eur, "p75": val.p75_eur, "median": val.median_eur, "notes": val.notes,
             },
             "listing_age_days": round(age_days, 2),
+            "roi_at_target_offer": score_econ.roi if (score_econ and profit_at_target is not None) else None,
             "target_roi": target_roi,
             "min_roi": min_roi,
         }

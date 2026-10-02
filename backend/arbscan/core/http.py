@@ -145,7 +145,7 @@ class PoliteClient:
         self.client = httpx.Client(
             timeout=s.http_timeout_seconds,
             headers={"User-Agent": ua, "Accept-Language": "es,fr;q=0.9,de;q=0.8,en;q=0.7"},
-            proxy=s.http_proxy or None,
+            proxy=s.outbound_proxy_url or None,
             follow_redirects=True,
             transport=transport,
         )

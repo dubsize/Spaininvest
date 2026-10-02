@@ -41,7 +41,7 @@ class Settings(BaseSettings):
     scanner_tick_seconds: int = 60
     http_user_agent: str = "ArbScanBot/0.2 (+personal research; contact: set HTTP_CONTACT)"
     http_contact: str = ""
-    http_proxy: str = ""  # only set if you are entitled to use it
+    outbound_proxy_url: str = ""  # only set if you are entitled to use it
     http_timeout_seconds: float = 20.0
     respect_robots_txt: bool = True
 
@@ -66,7 +66,7 @@ class Settings(BaseSettings):
     # --- optional AI normalisation -------------------------------------------
     ai_normalizer: str = "none"  # none | anthropic
     anthropic_api_key: str = ""
-    anthropic_model: str = "claude-haiku-4-5"
+    anthropic_model: str = "claude-opus-5-5"
     ai_min_rule_confidence: float = 0.6
 
     # --- FX --------------------------------------------------------------

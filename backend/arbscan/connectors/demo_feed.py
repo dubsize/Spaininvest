@@ -16,7 +16,7 @@ class DemoFeedConnector(Connector):
     display_name = "Demo feed (synthetic)"
     countries = ["ES", "FR", "DE"]
     default_poll_seconds = 300
-    compliance = ComplianceInfo(method="disabled", summary="Synthetic data generator for demos and tests. No network access.")
+    compliance = ComplianceInfo(method="synthetic", summary="Synthetic data generator for demos and tests. No network access.")
 
     def __init__(self, marketplace_code: str, config: dict[str, Any] | None = None, seed: int | None = None):
         super().__init__(marketplace_code, config)
