@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cookie policy — Mémoria</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/legal.css">
+<!-- Mesure d'audience sans cookies — remplacer memoriamadrid.com par votre domaine réel -->
+<script defer data-domain="memoriamadrid.com" src="https://plausible.io/js/script.outbound-links.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="logo" href="/en/">Mémoria<span>.</span></a>
+    <div class="nav-right">
+      <a href="/en/">Home</a>
+      <span class="lang"><a href='/legal/politique-cookies'>FR</a><a class='active' href='/en/legal/cookie-policy'>EN</a><a href='/he/legal/cookie-policy'>עב</a></span>
+    </div>
+  </div>
+</header>
+
+<section class="legal-hero">
+  <div class="container">
+    <p class="eyebrow">Cookies</p>
+    <h1>Cookie policy</h1>
+    <p>Article 22.2 of Law 34/2002 (LSSI-CE) and AEPD cookie guidance</p>
+  </div>
+</section>
+
+<main>
+  <div class="container">
+
+    <h2>What is a cookie?</h2>
+    <p>A cookie is a small text file that websites place on your device to remember information about your browsing.</p>
+
+    <h2>Cookies used on this site</h2>
+    <p>This site is deliberately minimal: we use <strong>no advertising cookies, no profiling cookies and no third-party trackers</strong>.</p>
+    <table class="datatable">
+      <tr><th>Cookie</th><th>Type</th><th>Purpose</th><th>Duration</th></tr>
+      <tr>
+        <td><code>memoria_cookie_consent</code></td>
+        <td>Technical — necessary</td>
+        <td>Remembers your cookie banner choice so it isn't shown on every visit.</td>
+        <td>12 months</td>
+      </tr>
+      <tr><td colspan="4"><em>Hosting provider technical cookies (Netlify)</em> — strictly necessary for the site to function and for form spam protection. They are not used for advertising tracking.</td></tr>
+    </table>
+
+    <div class="callout">
+      <strong>Strictly necessary technical cookies</strong> do not require your prior consent, in accordance with article 22.2 of the LSSI-CE. They are essential for the site to work and for delivering the service you request.
+    </div>
+
+    <h2>Audience measurement — cookie-free</h2>
+    <p>We measure site traffic using an analytics tool that <strong>sets no cookies</strong> and collects no personal data. It does not track visitors across sites, builds no profiles, and uses neither persistent identifiers nor device fingerprinting.</p>
+    <p>The data collected is aggregated and anonymous only: number of visits and page views, pages viewed, referring site or search engine, and country, device type and browser in aggregate form.</p>
+    <p>None of this identifies you. As no cookie is stored on your device and no personal data is processed within the meaning of the GDPR, this does not require your prior consent. We deliberately chose this approach over a conventional advertising analytics tool.</p>
+
+    <h2>Manage your consent</h2>
+    <p><button class="cb-btn cb-accept" id="reopen-banner" style="background:var(--green);color:var(--paper)">Change my cookie preferences</button></p>
+
+    <h2>Managing cookies in your browser</h2>
+    <ul>
+      <li><strong>Chrome</strong>: Settings → Privacy and security → Cookies</li>
+      <li><strong>Safari</strong>: Preferences → Privacy</li>
+      <li><strong>Firefox</strong>: Settings → Privacy & Security</li>
+      <li><strong>Edge</strong>: Settings → Cookies and site permissions</li>
+    </ul>
+    <p>Blocking technical cookies may affect how parts of the site work.</p>
+
+    <h2>More information</h2>
+    <p>The processing of your personal data is described in our <a href='/en/legal/privacy-policy'>privacy policy</a>.</p>
+
+    <p class="updated">Last updated: 19 July 2026</p>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <p>© 2026 Mémoria — Madrid</p>
+    <p>
+      <a href='/en/legal/legal-notice'>Legal notice</a> ·
+      <a href='/en/legal/privacy-policy'>Privacy</a> ·
+      <a href='/en/legal/cookie-policy'>Cookies</a> ·
+      <a href='/en/legal/terms'>Terms</a>
+    </p>
+  </div>
+</footer>
+
+<div id="cookie-banner">
+  <div class="cb-inner">
+    <p>This site only uses technical cookies necessary for it to work. No advertising or analytics cookies are set without your consent. <a href='/en/legal/cookie-policy'>Learn more</a></p>
+    <div class="cb-actions">
+      <button class="cb-btn cb-reject" id="cb-reject">Reject non-essential</button>
+      <button class="cb-btn cb-accept" id="cb-accept">Accept all</button>
+    </div>
+  </div>
+</div>
+
+<script src="/cookies.js"></script>
+<script>
+  document.getElementById('reopen-banner')?.addEventListener('click',()=>{
+    try{localStorage.removeItem('memoria_cookie_consent')}catch(e){}
+    document.getElementById('cookie-banner').classList.add('show');
+    window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+  });
+</script>
+</body>
+</html>

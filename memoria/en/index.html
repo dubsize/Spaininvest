@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mémoria — Life in Spain, without the paperwork</title>
+<meta name="description" content="Services for expats in Spain: settling-in paperwork (NIE, padrón, Cl@ve), savings on your bills, and a complete file for your home. One point of contact, in your language.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="alternate" hreflang="fr" href="/">
+<link rel="alternate" hreflang="en" href="/en/">
+<link rel="alternate" hreflang="he" href="/he/">
+<link rel="alternate" hreflang="x-default" href="/en/">
+<style>
+:root{
+  --green:#1E3D34;
+  --green-deep:#152B25;
+  --green-soft:#2C5245;
+  --paper:#F6F4EE;
+  --paper-dark:#ECE8DD;
+  --ink:#20241F;
+  --ink-soft:#5A6058;
+  --stamp:#B23A2E;
+  --brass:#A8843B;
+  --line:rgba(32,36,31,.14);
+  --line-light:rgba(246,244,238,.18);
+  --radius:14px;
+  --font-display:'Libre Caslon Display',serif;
+  --font-body:'Karla',sans-serif;
+  --font-mono:'IBM Plex Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--paper);color:var(--ink);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.container{max-width:1120px;margin:0 auto;padding:0 24px}
+.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);display:flex;align-items:center;gap:12px}
+.eyebrow::before{content:"";width:26px;height:1px;background:var(--brass);display:inline-block}
+h1,h2,h3{font-family:var(--font-display);font-weight:400;line-height:1.12}
+h2{font-size:clamp(30px,4vw,44px);margin:14px 0 18px}
+.lead{font-size:19px;color:var(--ink-soft);max-width:62ch}
+section{padding:96px 0}
+header{position:sticky;top:0;z-index:50;background:rgba(246,244,238,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+.logo{font-family:var(--font-display);font-size:22px;letter-spacing:.02em;text-decoration:none}
+.logo span{color:var(--stamp)}
+.nav-links{display:flex;gap:26px;align-items:center}
+.nav-links a{text-decoration:none;font-size:15px;color:var(--ink-soft);transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.btn{display:inline-block;padding:13px 26px;border-radius:100px;font-weight:700;font-size:15px;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease;border:none;cursor:pointer}
+.btn-primary{background:var(--green);color:var(--paper)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(30,61,52,.25)}
+.btn-light{background:var(--paper);color:var(--green)}
+.btn-light:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(0,0,0,.2)}
+.btn-ghost{border:1.5px solid var(--line);color:var(--ink);background:transparent}
+.btn-ghost:hover{border-color:var(--ink)}
+.nav .btn{padding:10px 20px}
+.lang{display:flex;gap:10px;font-family:var(--font-mono);font-size:12px;letter-spacing:.06em}
+.lang a{text-decoration:none;color:var(--ink-soft);padding:4px 2px}
+.lang a.active{color:var(--ink);font-weight:700;border-bottom:2px solid var(--stamp)}
+@media(max-width:820px){.nav-links a:not(.btn):not(.lang a){display:none}.nav-links{gap:14px}}
+.hero{background:var(--green);color:var(--paper);padding:88px 0 0;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 500px at 85% -10%,rgba(168,132,59,.14),transparent 60%);pointer-events:none}
+.hero-inner{position:relative;z-index:1;text-align:center;max-width:820px;margin:0 auto}
+.hero .eyebrow{color:#D8C79A;justify-content:center}
+.hero .eyebrow::before{background:#D8C79A}
+.hero h1{font-size:clamp(36px,5vw,58px);margin:18px 0 20px}
+.hero h1 em{font-style:italic;color:#E4D8B4}
+.hero p{font-size:19px;color:rgba(246,244,238,.82);max-width:56ch;margin:0 auto 18px}
+.hero-note{font-family:var(--font-mono);font-size:12.5px;color:rgba(246,244,238,.55);margin-bottom:54px}
+.chooser{position:relative;z-index:2;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;transform:translateY(72px);margin-top:-16px}
+.choice{background:var(--paper);color:var(--ink);border-radius:var(--radius);padding:34px 28px 30px;text-align:left;text-decoration:none;box-shadow:0 24px 50px rgba(0,0,0,.28);border-top:5px solid var(--brass);transition:transform .2s ease,box-shadow .2s ease;display:flex;flex-direction:column;gap:10px}
+.choice:hover{transform:translateY(-6px);box-shadow:0 32px 60px rgba(0,0,0,.32)}
+.choice .c-num{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;color:var(--brass);text-transform:uppercase}
+.choice h3{font-size:23px}
+.choice p{font-size:15px;color:var(--ink-soft);line-height:1.55;flex-grow:1}
+.choice .c-go{font-weight:700;font-size:14.5px;color:var(--green);display:flex;align-items:center;gap:8px}
+.choice .c-go::after{content:"→";transition:transform .2s}
+.choice:hover .c-go::after{transform:translateX(4px)}
+.choice.c2{border-top-color:var(--stamp)}
+.choice.c3{border-top-color:var(--green)}
+.hero-spacer{height:130px;background:var(--paper)}
+@media(max-width:860px){
+  .chooser{grid-template-columns:1fr;transform:translateY(48px)}
+  .hero-spacer{height:auto;padding-bottom:60px}
+  .hero{padding-bottom:0}
+}
+.svc-head{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:end;margin-bottom:48px}
+@media(max-width:820px){.svc-head{grid-template-columns:1fr}}
+.svc-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:start}
+@media(max-width:880px){.svc-grid{grid-template-columns:1fr}}
+.check-list{list-style:none;display:grid;gap:12px;margin:8px 0 26px}
+.check-list li{padding-left:28px;position:relative;font-size:16px}
+.check-list li::before{content:"✓";position:absolute;left:0;color:var(--stamp);font-weight:700}
+.check-list li small{display:block;color:var(--ink-soft);font-size:13.5px}
+.price-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:30px 28px;position:sticky;top:96px}
+.price-card .tag{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass)}
+.price-card .price{font-family:var(--font-display);font-size:40px;margin:10px 0 2px}
+.price-card .price small{font-family:var(--font-body);font-size:15px;color:var(--ink-soft)}
+.price-card .per{font-size:14px;color:var(--ink-soft);margin-bottom:18px}
+.price-card .btn{width:100%;text-align:center;margin-top:6px}
+.price-card .pc-note{font-size:13px;color:var(--ink-soft);margin-top:14px;font-style:italic}
+.svc-install{background:var(--paper)}
+.svc-eco{background:var(--paper-dark)}
+.svc-maison{background:var(--green);color:var(--paper)}
+.svc-maison .eyebrow{color:#D8C79A}.svc-maison .eyebrow::before{background:#D8C79A}
+.svc-maison .lead{color:rgba(246,244,238,.78)}
+.svc-maison .check-list li::before{color:#E4D8B4}
+.svc-maison .check-list li small{color:rgba(246,244,238,.6)}
+.svc-maison .price-card{background:rgba(246,244,238,.06);border-color:var(--line-light);color:var(--paper)}
+.svc-maison .price-card .per,.svc-maison .price-card .pc-note{color:rgba(246,244,238,.6)}
+.svc-maison .price-card .price small{color:rgba(246,244,238,.6)}
+.dossier{background:var(--paper);color:var(--ink);border-radius:var(--radius);box-shadow:0 24px 50px rgba(0,0,0,.3);overflow:hidden;margin-top:8px}
+.dossier-tabs{display:flex;background:var(--paper-dark);border-bottom:1px solid var(--line)}
+.dossier-tab{flex:1;padding:12px 6px;font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;text-align:center;cursor:pointer;border:none;background:transparent;color:var(--ink-soft);border-right:1px solid var(--line);transition:background .2s,color .2s}
+.dossier-tab:last-child{border-right:none}
+.dossier-tab[aria-selected="true"]{background:var(--paper);color:var(--green);font-weight:500;box-shadow:inset 0 -2px 0 var(--stamp)}
+.dossier-body{padding:24px 26px;min-height:250px;position:relative}
+.dossier-ref{font-family:var(--font-mono);font-size:11px;color:var(--ink-soft);letter-spacing:.1em;margin-bottom:12px}
+.dossier-line{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.dossier-line strong{font-weight:700}
+.dossier-line .val{font-family:var(--font-mono);font-size:12px;color:var(--ink-soft);text-align:right}
+.ok{color:var(--green);font-weight:700}
+.warn{color:var(--stamp);font-weight:700}
+.stamp{position:absolute;bottom:18px;right:22px;font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--stamp);border:2px solid var(--stamp);border-radius:6px;padding:5px 11px;transform:rotate(-7deg);opacity:.85}
+.eco-demo{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px;margin-top:8px}
+.eco-row{display:grid;grid-template-columns:1.2fr 1fr 1fr .8fr;gap:10px;padding:12px 0;border-bottom:1px dashed var(--line);font-size:14px;align-items:baseline}
+.eco-row.head{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);border-bottom:1px solid var(--line)}
+.eco-row .save{font-weight:700;color:var(--green);text-align:right;font-family:var(--font-mono);font-size:13px}
+.eco-row .old{color:var(--ink-soft);text-decoration:line-through;text-decoration-color:rgba(178,58,46,.5)}
+.eco-total{display:flex;justify-content:space-between;padding-top:16px;font-weight:700;font-size:16px}
+.eco-total .save{color:var(--green);font-family:var(--font-mono)}
+.pourquoi{background:var(--paper)}
+.pq-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
+.pq-card{border:1px solid var(--line);border-radius:var(--radius);padding:26px 24px;background:#fff}
+.pq-card h3{font-size:19px;margin-bottom:8px}
+.pq-card p{font-size:14.5px;color:var(--ink-soft)}
+@media(max-width:820px){.pq-grid{grid-template-columns:1fr}}
+.carte{background:var(--paper);border-top:1px solid var(--line)}
+.carte-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px 40px;margin-top:44px}
+.carte-col h3{font-family:var(--font-mono);font-weight:500;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--brass);margin:26px 0 6px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.carte-item{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:11px 0;border-bottom:1px dashed var(--line)}
+.carte-item .ci-name{font-size:15.5px}
+.carte-item .ci-name small{display:block;color:var(--ink-soft);font-size:13px}
+.carte-item .ci-price{font-family:var(--font-display);font-size:20px;white-space:nowrap}
+.carte-item.star .ci-name strong::after{content:"★";color:var(--brass);font-size:11px;margin-inline-start:6px;vertical-align:super}
+.carte-foot{margin-top:34px;padding:24px 26px;background:var(--paper-dark);border-radius:var(--radius);font-size:15px;color:var(--ink-soft)}
+.carte-foot strong{color:var(--ink)}
+@media(max-width:820px){.carte-grid{grid-template-columns:1fr}}
+.faq .container{max-width:820px}
+details{border-top:1px solid var(--line);padding:6px 0}
+details:last-of-type{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;font-weight:700;font-size:17.5px;padding:18px 34px 18px 0;list-style:none;position:relative}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";position:absolute;right:4px;top:14px;font-family:var(--font-display);font-size:26px;color:var(--stamp);transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{padding:0 0 20px;color:var(--ink-soft);max-width:66ch}
+.final{background:var(--green);color:var(--paper);text-align:center;padding:110px 0}
+.final h2{font-size:clamp(32px,4.6vw,50px);max-width:22ch;margin:14px auto 20px}
+.final p{color:rgba(246,244,238,.78);max-width:54ch;margin:0 auto 36px;font-size:18px}
+.final .eyebrow{justify-content:center;color:#D8C79A}
+.final .eyebrow::before{background:#D8C79A}
+.carte-legend{margin-top:20px;font-size:14px;color:var(--ink-soft);max-width:76ch;line-height:2.1}
+.lg,.tagline{display:inline-block;font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:100px;margin-inline-end:6px;vertical-align:middle;font-weight:500}
+.lg-we,.tl-we{background:rgba(30,61,52,.1);color:var(--green);border:1px solid rgba(30,61,52,.25)}
+.lg-you,.tl-you{background:rgba(178,58,46,.08);color:var(--stamp);border:1px solid rgba(178,58,46,.3)}
+.tl-remote{background:rgba(168,132,59,.1);color:var(--brass);border:1px solid rgba(168,132,59,.35)}
+.carte-item .ci-name small .tagline{margin-bottom:3px}
+.rdv-form{max-width:680px;margin:0 auto;text-align:start;background:rgba(246,244,238,.06);border:1px solid var(--line-light);border-radius:var(--radius);padding:34px 32px}
+.hidden-field{display:none}
+.rdv-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.rdv-form label{display:block}
+.rdv-form label>span{display:block;font-size:14px;color:rgba(246,244,238,.75);margin-bottom:7px;font-weight:700}
+.rdv-form label>span em{font-style:normal;font-weight:400;opacity:.65}
+.rdv-form input[type=text],.rdv-form input[type=email],.rdv-form input[type=tel],.rdv-form select,.rdv-form textarea{width:100%;padding:12px 14px;border-radius:8px;border:1px solid rgba(246,244,238,.25);background:rgba(246,244,238,.08);color:var(--paper);font-family:var(--font-body);font-size:15.5px;transition:border-color .2s,background .2s}
+.rdv-form input:focus,.rdv-form select:focus,.rdv-form textarea:focus{outline:none;border-color:#D8C79A;background:rgba(246,244,238,.13)}
+.rdv-form input::placeholder,.rdv-form textarea::placeholder{color:rgba(246,244,238,.4)}
+.rdv-form select option{background:var(--green-deep);color:var(--paper)}
+.rdv-full{margin-bottom:18px}
+.rdv-check{border:none;margin:6px 0 20px}
+.rdv-check legend{font-size:14px;color:rgba(246,244,238,.75);font-weight:700;margin-bottom:10px;padding:0}
+.rdv-check legend em{font-style:normal;font-weight:400;opacity:.65}
+.chk{display:inline-flex;align-items:center;gap:9px;font-size:15px;color:rgba(246,244,238,.9);margin:0 18px 9px 0;cursor:pointer;font-weight:400}
+[dir=rtl] .chk{margin:0 0 9px 18px}
+.chk input{width:17px;height:17px;accent-color:#D8C79A;cursor:pointer}
+.rdv-form button[type=submit]{width:100%;margin-top:8px;padding:15px;font-size:16px}
+.rdv-note{font-size:13px!important;color:rgba(246,244,238,.55)!important;margin:16px 0 0!important;max-width:none!important;text-align:center}
+@media(max-width:640px){.rdv-row{grid-template-columns:1fr}.rdv-form{padding:26px 20px}}
+footer{background:var(--green-deep);color:rgba(246,244,238,.6);padding:34px 0;font-size:13.5px}
+footer .container{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer a{color:rgba(246,244,238,.75);text-decoration:none}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  html{scroll-behavior:auto}
+}
+:focus-visible{outline:2px solid var(--stamp);outline-offset:3px}
+
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--green-deep);color:var(--paper);padding:20px 24px;box-shadow:0 -8px 30px rgba(0,0,0,.25);display:none}
+#cookie-banner.show{display:block}
+.cb-inner{max-width:1120px;margin:0 auto;display:flex;gap:22px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.cb-inner p{margin:0;font-size:14.5px;color:rgba(246,244,238,.85);max-width:64ch}
+.cb-inner a{color:#D8C79A}
+.cb-actions{display:flex;gap:10px;flex-wrap:wrap}
+.cb-btn{padding:11px 22px;border-radius:100px;font-weight:700;font-size:14px;cursor:pointer;border:none;font-family:var(--font-body)}
+.cb-accept{background:var(--paper);color:var(--green)}
+.cb-reject{background:transparent;color:var(--paper);border:1.5px solid rgba(246,244,238,.4)}
+.cb-btn:hover{opacity:.9}
+@media(max-width:700px){.cb-inner{flex-direction:column;align-items:flex-start}.cb-actions{width:100%}.cb-btn{flex:1}}
+.chk.consent{display:flex;align-items:flex-start;margin:0 0 20px;font-size:13.5px;color:rgba(246,244,238,.72);line-height:1.5}
+.chk.consent input{margin-top:3px;flex-shrink:0}
+.chk.consent a{color:#D8C79A}
+</style>
+<!-- Mesure d'audience sans cookies — remplacer memoriamadrid.com par votre domaine réel -->
+<script defer data-domain="memoriamadrid.com" src="https://plausible.io/js/script.outbound-links.js"></script>
+<link rel="canonical" href="https://memoriamadrid.com/en/">
+<link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/">
+<link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/">
+<link rel="alternate" hreflang="he" href="https://memoriamadrid.com/he/">
+<link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/">
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <a class="logo" href="#top">Mémoria<span>.</span></a>
+    <nav class="nav-links">
+      <a href="#installation">Settling in</a>
+      <a href="#economies">Savings</a>
+      <a href="#maison">Home Dossier</a>
+      <a href="#carte">À la carte</a>
+      <a href="#faq">FAQ</a>
+      <span class="lang"><a href="/">FR</a><a class="active" href="/en/">EN</a><a href="/he/">עב</a></span>
+      <a class="btn btn-primary" href="#contact">Free consultation</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO + CHOOSER -->
+<section class="hero" id="top">
+  <div class="container">
+    <div class="hero-inner">
+      <p class="eyebrow">Expats in Spain</p>
+      <h1>Life in Spain, <em>without</em> the paperwork.</h1>
+      <p>Settling-in bureaucracy, overpriced contracts, documents scattered everywhere: we take care of it — in your language, with a single point of contact. Where would you like to start?</p>
+      <p class="hero-note">MADRID · ENGLISH, SPANISH, FRENCH</p>
+    </div>
+    <div class="chooser">
+      <a class="choice c1" href="#installation">
+        <span class="c-num">Service 01</span>
+        <h3>I'm moving to Spain</h3>
+        <p>NIE, empadronamiento, social security, Cl@ve, bank account, utilities: everything you need to get started, done for you, in the right order.</p>
+        <span class="c-go">Settling-In Pack</span>
+      </a>
+      <a class="choice c2" href="#economies">
+        <span class="c-num">Service 02</span>
+        <h3>I'm paying too much</h3>
+        <p>Gas, electricity, telecom, insurance, banking: we audit your bills and make the changes with you, on the spot.</p>
+        <span class="c-go">Savings Audit</span>
+      </a>
+      <a class="choice c3" href="#maison">
+        <span class="c-num">Service 03</span>
+        <h3>I just bought a home</h3>
+        <p>Contracts, warranties, invoices, deadlines, emergencies: the complete file of your home, built for you and kept up to date.</p>
+        <span class="c-go">Home Dossier</span>
+      </a>
+    </div>
+  </div>
+  <div class="hero-spacer"></div>
+</section>
+
+<!-- SERVICE 01: SETTLING IN -->
+<section class="svc-install" id="installation">
+  <div class="container">
+    <div class="svc-head">
+      <div>
+        <p class="eyebrow reveal">Service 01 — Settling in</p>
+        <h2 class="reveal">Land here. We handle the rest.</h2>
+        <p class="lead reveal">Your first weeks in Spain follow a precise order: no NIE means no bank account, no padrón means no school enrolment, no Cl@ve means no online administration. We know the order — and the shortcuts.</p>
+      </div>
+    </div>
+    <div class="svc-grid">
+      <div class="reveal">
+        <ul class="check-list">
+          <li><strong>NIE / TIE</strong><small>Immigration appointments, EX-15/EX-17 forms, fees — without the sleepless nights hunting for a cita previa.</small></li>
+          <li><strong>Empadronamiento</strong><small>The key to schools, healthcare and benefits — file prepared, appointment booked.</small></li>
+          <li><strong>Social security number</strong><small>TA.1 form filed, number obtained within days.</small></li>
+          <li><strong>Cl@ve & digital certificate</strong><small>The key that unlocks all of Spain's online administration for the next ten years.</small></li>
+          <li><strong>Fee-free bank account</strong><small>The right bank for your profile, file assembled, account opened.</small></li>
+          <li><strong>Starter contracts</strong><small>Phone, internet, gas, electricity — negotiated at the right rate from day one, not in a rush.</small></li>
+        </ul>
+        <p style="color:var(--ink-soft);font-size:15px">Also available: driving licence exchange, consular registration, health card, school enrolment, autónomo registration.</p>
+      </div>
+      <div class="price-card reveal">
+        <p class="tag">Settling-In Pack</p>
+        <p class="price">€690<small> incl. VAT</small></p>
+        <p class="per">One person · Family Pack: €990 (2 adults + children's school enrolment)</p>
+        <a class="btn btn-primary" href="#contact">Book a free call</a>
+        <p class="pc-note">Single procedures: €90 to €150 depending on complexity.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE 02: SAVINGS -->
+<section class="svc-eco" id="economies">
+  <div class="container">
+    <div class="svc-head">
+      <div>
+        <p class="eyebrow reveal">Service 02 — Savings</p>
+        <h2 class="reveal">Your bills speak Spanish. So do we.</h2>
+        <p class="lead reveal">A gas tariff never renegotiated, oversized electrical power, duplicate insurance, avoidable bank fees: most expat households pay every month for contracts signed in a hurry. We review everything — and make the changes with you, on the spot.</p>
+      </div>
+    </div>
+    <div class="svc-grid">
+      <div class="reveal">
+        <div class="eco-demo" aria-label="Sample audit report">
+          <div class="eco-row head"><span>Item</span><span>Before</span><span>After</span><span style="text-align:right">Savings / year</span></div>
+          <div class="eco-row"><strong>Gas</strong><span class="old">open-market rate</span><span>TUR2 regulated</span><span class="save">− €480</span></div>
+          <div class="eco-row"><strong>Electricity</strong><span class="old">5.75 kW</span><span>4.6 kW · adjusted rate</span><span class="save">− €212</span></div>
+          <div class="eco-row"><strong>Internet + mobiles</strong><span class="old">€89/mo</span><span>€62/mo</span><span class="save">− €324</span></div>
+          <div class="eco-row"><strong>Home insurance</strong><span class="old">duplicate cover</span><span>adjusted policy</span><span class="save">− €190</span></div>
+          <div class="eco-row"><strong>Banking</strong><span class="old">account fees</span><span>fee-free account</span><span class="save">− €160</span></div>
+          <div class="eco-total"><span>Sample audited household</span><span class="save">− €1,366 / year</span></div>
+        </div>
+        <p style="font-size:13px;color:var(--ink-soft);font-style:italic;margin-top:12px">Illustrative example — every household is different; the report details every line, before/after, with supporting documents.</p>
+      </div>
+      <div class="price-card reveal">
+        <p class="tag">Savings Audit</p>
+        <p class="price">€99<small> + 15% of savings</small></p>
+        <p class="per">Variable fee capped at €400 — calculated on savings identified and implemented, invoiced when the report is delivered.</p>
+        <a class="btn btn-primary" href="#contact">Book a free call</a>
+        <p class="pc-note">Six areas reviewed: electricity, gas, telecom, insurance, banking, subscriptions. Changes made with you, live.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE 03: HOME DOSSIER -->
+<section class="svc-maison" id="maison">
+  <div class="container">
+    <div class="svc-head">
+      <div>
+        <p class="eyebrow reveal">Service 03 — Home Dossier</p>
+        <h2 class="reveal">They hand you the keys. We hand you the manual.</h2>
+        <p class="lead reveal">Where is the water shut-off valve? When is IBI due? How long do the building warranties run? We build the complete file of your home — emergencies, contracts, warranties, invoices, deadlines — then keep it up to date, year after year.</p>
+      </div>
+    </div>
+    <div class="svc-grid">
+      <div class="reveal">
+        <div class="dossier" id="dossier">
+          <div class="dossier-tabs" role="tablist" aria-label="Dossier preview">
+            <button class="dossier-tab" role="tab" aria-selected="true" data-panel="p1">Emergencies</button>
+            <button class="dossier-tab" role="tab" aria-selected="false" data-panel="p2">Deadlines</button>
+            <button class="dossier-tab" role="tab" aria-selected="false" data-panel="p3">Warranties</button>
+            <button class="dossier-tab" role="tab" aria-selected="false" data-panel="p4">History</button>
+          </div>
+          <div class="dossier-body">
+            <div class="dossier-panel" id="p1">
+              <p class="dossier-ref">PAGE 1 — IN CASE OF EMERGENCY</p>
+              <div class="dossier-line"><strong>Water leak</strong><span class="val">Main valve: garage, north wall<br>Plumber: J. Ramírez — 6XX XXX XXX</span></div>
+              <div class="dossier-line"><strong>Gas leak</strong><span class="val">Nedgia — 900 750 750<br>Shut-off valve: kitchen, under sink</span></div>
+              <div class="dossier-line"><strong>Home insurance claim</strong><span class="val">Policy no. 84-XXXX-XX · report within 7 days</span></div>
+              <div class="stamp">Up to date · 2026</div>
+            </div>
+            <div class="dossier-panel" id="p2" hidden>
+              <p class="dossier-ref">CALENDAR — NEXT 12 MONTHS</p>
+              <div class="dossier-line"><strong>IBI property tax</strong><span class="val"><span class="warn">due in 41 days</span> · direct debit, −5% discount</span></div>
+              <div class="dossier-line"><strong>Home insurance</strong><span class="val"><span class="warn">renewal in 26 days</span> · 30-day notice</span></div>
+              <div class="dossier-line"><strong>Pool winterisation</strong><span class="val">October · provider confirmed</span></div>
+              <div class="dossier-line"><strong>Boiler service</strong><span class="val">January · <span class="ok">reminder active</span></span></div>
+              <div class="stamp">Monitored</div>
+            </div>
+            <div class="dossier-panel" id="p3" hidden>
+              <p class="dossier-ref">WARRANTIES — EQUIPMENT & WORKS</p>
+              <div class="dossier-line"><strong>Pool pump</strong><span class="val"><span class="ok">under warranty until 2028</span></span></div>
+              <div class="dossier-line"><strong>Air conditioning</strong><span class="val"><span class="ok">3 years · invoice filed</span></span></div>
+              <div class="dossier-line"><strong>Structural works</strong><span class="val">10-year warranty · until 2036</span></div>
+              <div class="dossier-line"><strong>Renovation finishes</strong><span class="val"><span class="warn">expires June 2027</span> · inspection scheduled</span></div>
+              <div class="stamp">Filed</div>
+            </div>
+            <div class="dossier-panel" id="p4" hidden>
+              <p class="dossier-ref">TIMELINE & INVOICES</p>
+              <div class="dossier-line"><strong>Purchase — deed</strong><span class="val">06/2026 · filed</span></div>
+              <div class="dossier-line"><strong>Full renovation</strong><span class="val">invoices & before/after photos</span></div>
+              <div class="dossier-line"><strong>Technical references</strong><span class="val">paints, tiles, RAL colours, filters</span></div>
+              <div class="dossier-line"><strong>Resale file</strong><span class="val"><span class="ok">ready in one hour, when the day comes</span></span></div>
+              <div class="stamp">Memory</div>
+            </div>
+          </div>
+        </div>
+        <p style="font-size:13px;color:rgba(246,244,238,.6);font-style:italic;margin-top:12px">The dossier lives in your own storage (Dropbox, Drive, OneDrive) — you own it.</p>
+      </div>
+      <div class="price-card reveal">
+        <p class="tag">Home Dossier</p>
+        <p class="price">€1,490<small> incl. VAT</small></p>
+        <p class="per">One-off engagement, 3 to 4 weeks: collection, digitisation, filing, contract optimisation, calendar configured.</p>
+        <a class="btn btn-light" href="#contact">Book a free call</a>
+        <p class="pc-note">Afterwards, documentary maintenance (€590/year) keeps it alive: filing within 48 h, deadline monitoring, annual review.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- A LA CARTE -->
+<section class="carte" id="carte">
+  <div class="container">
+    <p class="eyebrow reveal">À la carte</p>
+    <h2 class="reveal">Just one procedure? Fixed price, no package.</h2>
+    <p class="lead reveal">You only need the social security number, the padrón or the digital certificate? Every procedure can be ordered on its own, at a price announced upfront. Official fees are passed on at cost.</p>
+    <p class="carte-legend reveal"><span class="lg lg-we">We go for you</span> we attend in your place, with a signed authorisation. <span class="lg lg-you">You must attend</span> the law requires your presence: we prepare everything and come with you, but you sign in person.</p>
+    <div class="carte-grid">
+      <div class="carte-col reveal">
+        <h3>Identity & residency</h3>
+        <div class="carte-item star"><span class="ci-name"><strong>Consular NIE file, before you fly</strong><small><span class="tagline tl-remote">Remote</span> EX-15 form, complete file, fee, and instructions for your appointment at the Spanish consulate in your country. Unlocks bank, purchase and contracts from the day you land — almost nobody knows this route exists.</small></span><span class="ci-price">€90</span></div>
+        <div class="carte-item"><span class="ci-name"><strong>EU certificate (“green NIE”)</strong><small><span class="tagline tl-you">You must attend</span> EX-18, fee, appointment hunt until secured, file prepared, briefing before the appointment</small></span><span class="ci-price">€250</span></div>
+        <div class="carte-item"><span class="ci-name"><strong>EU certificate — couple</strong><small><span class="tagline tl-you">You must attend</span> Two files, coordinated appointments</small></span><span class="ci-price">€400</span></div>
+        <div class="carte-item"><span class="ci-name"><strong>TIE (non-EU)</strong><small><span class="tagline tl-you">You must attend</span> Forms, fee, appointment, fingerprinting support</small></span><span class="ci-price">€250</span></div>
+        <div class="carte-item"><span class="ci-name"><strong>Empadronamiento</strong><small><span class="tagline tl-we">We go for you</span> Signed authorisation, file, appointment — you don't need to show up</small></span><span class="ci-price">€90</span></div>
+        <div class="carte-item"><span class="ci-name"><strong>Empadronamiento — family</strong><small><span class="tagline tl-we">We go for you</span></small></span><span class="ci-price">€130</span></div>
+
+        <h3>Social security & health</h3>
+        <div class="carte-item"><span class="ci-name"><strong>Social security number</strong><small><span class="tagline tl-we">We go for you</span> TA.1 form, filing, number obtained</small></span><span class="ci-price">€90</span></div>
+        <div class="carte-item"><span class="ci-name"><strong>Health card (tarjeta sanitaria)</strong><small><span class="tagline tl-we">We go for you</span> Registration at your local health centre</small></span><span class="ci-price">€90</span></div>
+        <div class="carte-item"><span class="ci-name"><strong>Both together</strong></span><span class="ci-price">€150</span></div>
+
+        <h3>Digital access</h3>
+        <div class="carte-item"><span class="ci-name"><strong>Cl@ve</strong><small><span class="tagline tl-you">You must attend</span> Registration, activation, how to use it</small></span><span class="ci-price">€90</span></div>
+        <div class="carte-item"><span class="ci-name"><strong>FNMT digital certificate</strong><small><span class="tagline tl-you">You must attend</span> Request, accreditation, installation, backup</small></span><span class="ci-price">€120</span></div>
+        <div class="carte-item star"><span class="ci-name"><strong>Cl@ve + digital certificate</strong><small>The master key: once installed, your future procedures happen online — and we can act on your behalf electronically</small></span><span class="ci-price">€180</span></div>
+      </div>
+
+      <div class="carte-col reveal">
+        <h3>Banking & bills</h3>
+        <div class="carte-item"><span class="ci-name"><strong>Bank account opening</strong><small><span class="tagline tl-you">You must attend</span> Bank chosen for your profile, file assembled</small></span><span class="ci-price">€120</span></div>
+        <div class="carte-item"><span class="ci-name"><strong>Express audit, single item</strong><small><span class="tagline tl-we">We handle it</span> Gas, electricity, telecom, insurance or banking — change made</small></span><span class="ci-price">€60</span></div>
+
+        <h3>Home utilities</h3>
+        <div class="carte-item"><span class="ci-name"><strong>Utilities set-up</strong><small><span class="tagline tl-we">We handle it</span> Electricity, gas, water — on the right tariff from day one</small></span><span class="ci-price">€150</span></div>
+        <div class="carte-item"><span class="ci-name"><strong>Internet + mobile contract</strong><small><span class="tagline tl-we">We handle it</span> Comparison, subscription, installation follow-up</small></span><span class="ci-price">€90</span></div>
+
+        <h3>Vehicles</h3>
+        <div class="carte-item"><span class="ci-name"><strong>Driving licence exchange</strong><small><span class="tagline tl-we">We go for you</span> DGT file, fee, appointment, follow-up</small></span><span class="ci-price">€150</span></div>
+        <div class="carte-item"><span class="ci-name"><strong>Vehicle ownership transfer</strong><small><span class="tagline tl-we">We go for you</span></small></span><span class="ci-price">€150</span></div>
+        <div class="carte-item"><span class="ci-name"><strong>ITV (roadworthiness test)</strong><small>Appointment and administrative support</small></span><span class="ci-price">€60</span></div>
+
+        <h3>Family & work</h3>
+        <div class="carte-item"><span class="ci-name"><strong>School enrolment</strong><small><span class="tagline tl-we">We go for you</span> Spanish school or international school</small></span><span class="ci-price">€150</span></div>
+        <div class="carte-item"><span class="ci-name"><strong>Consular registration</strong><small><span class="tagline tl-remote">Remote</span> Your home country's register of citizens abroad</small></span><span class="ci-price">€60</span></div>
+        <div class="carte-item"><span class="ci-name"><strong>Autónomo registration</strong><small><span class="tagline tl-we">We handle it</span> Census declaration, RETA, contribution base</small></span><span class="ci-price">€290</span></div>
+      </div>
+    </div>
+    <div class="carte-foot reveal">
+      <p><strong>Three procedures or more: −15%.</strong> From four onwards, the Settling-In Pack (€690) usually works out cheaper — we'll tell you rather than let you overpay. Official fees passed on at cost. Travel within Madrid included. Rush jobs (under 7 days): +50%.</p>
+    </div>
+    <p style="text-align:center;margin-top:30px"><a class="btn btn-primary reveal" href="#contact">Book a free call</a></p>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="pourquoi">
+  <div class="container">
+    <p class="eyebrow reveal">Why Mémoria</p>
+    <h2 class="reveal">One contact, three languages, nothing lost</h2>
+    <div class="pq-grid">
+      <div class="pq-card reveal"><h3>Lived, not theoretical</h3><p>Every service exists because we went through it ourselves — relocation, purchase, renovation, contracts. We know the pitfalls because we've met them.</p></div>
+      <div class="pq-card reveal"><h3>Your documents stay yours</h3><p>Everything is built in your own storage space. You can revoke our access at any time. No passwords stored, GDPR-compliant processing.</p></div>
+      <div class="pq-card reveal"><h3>Paid by you, not by them</h3><p>We take no commission from the suppliers, banks or insurers we recommend. Our only fees are yours — our advice serves one side only.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="container">
+    <p class="eyebrow reveal">Your questions</p>
+    <h2 class="reveal">Frequently asked questions</h2>
+    <div class="reveal">
+      <details>
+        <summary>My documents are sensitive. Where are they stored?</summary>
+        <p>With you. Everything is built in your own space (Dropbox, Google Drive or OneDrive): you own it and can revoke our access at any time. No passwords are ever stored in the folders — only references. Our data processing is contractually governed and GDPR-compliant.</p>
+      </details>
+      <details>
+        <summary>Do you handle procedures on my behalf?</summary>
+        <p>Routine procedures, yes — with your power of attorney where required. For matters reserved to regulated professions (complex tax, legal), we work with a partner gestoría and lawyers — you keep a single point of contact.</p>
+      </details>
+      <details>
+        <summary>How is the Savings Audit variable fee calculated?</summary>
+        <p>15% of the annualised savings identified and implemented during the audit, capped at €400. The calculation is line by line in the report (rate before, rate after, supporting documents), which you approve before invoicing. If we find nothing, you only pay the €99 base fee.</p>
+      </details>
+      <details>
+        <summary>Couldn't I do all this myself?</summary>
+        <p>Absolutely. In practice, it takes knowing the order of procedures, administrative Spanish, the regulated tariffs that don't appear in comparison sites, and keeping a filing system going over years. That time and consistency is what we sell.</p>
+      </details>
+      <details>
+        <summary>I rent out my property in Madrid but live elsewhere. Is this for me?</summary>
+        <p>That's actually where the Home Dossier delivers the most: rental contracts, mandatory certificates, invoices, remote interventions. Tell us about your situation in the call.</p>
+      </details>
+      <details>
+        <summary>What languages do you work in?</summary>
+        <p>English or French with you, Spanish with the administrations and suppliers. That bridge is precisely what we provide.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA: FREE ZOOM CALL -->
+<section class="final" id="contact">
+  <div class="container">
+    <p class="eyebrow reveal">First call — free</p>
+    <h2 class="reveal">Thirty minutes on Zoom, no commitment.</h2>
+    <p class="reveal">Tell us your situation — arrival, bills or home. You'll leave with a clear plan and a precise quote, whether you work with us or not.</p>
+
+    <form class="rdv-form reveal" name="rdv-en" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="rdv-en">
+      <p class="hidden-field"><label>Do not fill: <input name="bot-field"></label></p>
+
+      <div class="rdv-row">
+        <label><span>Full name</span><input type="text" name="name" required autocomplete="name"></label>
+        <label><span>Email</span><input type="email" name="email" required autocomplete="email"></label>
+      </div>
+
+      <div class="rdv-row">
+        <label><span>Phone / WhatsApp <em>(optional)</em></span><input type="tel" name="phone" autocomplete="tel"></label>
+        <label><span>Your situation</span>
+          <select name="situation" required>
+            <option value="">Choose…</option>
+            <option>I'm preparing my move to Spain</option>
+            <option>I've just arrived</option>
+            <option>I've been here a while</option>
+            <option>I've just bought a home</option>
+            <option>I own a property I rent out</option>
+            <option>Other</option>
+          </select>
+        </label>
+      </div>
+
+      <fieldset class="rdv-check">
+        <legend>What you're interested in <em>(select any)</em></legend>
+        <label class="chk"><input type="checkbox" name="interest" value="Settling in"> Settling-in procedures</label>
+        <label class="chk"><input type="checkbox" name="interest" value="Savings"> Savings on my bills</label>
+        <label class="chk"><input type="checkbox" name="interest" value="Home Dossier"> Home Dossier</label>
+        <label class="chk"><input type="checkbox" name="interest" value="One procedure"> One specific procedure</label>
+      </fieldset>
+
+      <label class="rdv-full">
+        <span>Where do you stand, in a few words? <em>(optional)</em></span>
+        <textarea name="message" rows="3" placeholder="e.g. arriving in September with two children, need NIE, padrón and school…"></textarea>
+      </label>
+
+      <label class="rdv-full">
+        <span>Language for the call</span>
+        <select name="language">
+          <option>English</option>
+          <option>Español</option>
+          <option>Français</option>
+          <option>עברית</option>
+        </select>
+      </label>
+
+      <label class="chk consent"><input type="checkbox" name="consent" value="yes" required> I agree that my data may be used to respond to my request, in accordance with the <a href='/en/legal/privacy-policy'>privacy policy</a>.</label>
+
+      <button class="btn btn-light" type="submit">Request my free call</button>
+      <p class="rdv-note">We reply within 24 h with a Zoom link and two time slots. Your details are used only to prepare the call and are never shared.</p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>© 2026 Mémoria — Madrid. Services for expats in Spain.</p>
+    <p>
+      <a href='/en/legal/legal-notice'>Legal notice</a> ·
+      <a href='/en/legal/privacy-policy'>Privacy</a> ·
+      <a href='/en/legal/cookie-policy'>Cookies</a> ·
+      <a href='/en/legal/terms'>Terms</a>
+    </p>
+  </div>
+</footer>
+
+<div id="cookie-banner">
+  <div class="cb-inner">
+    <p>This site only uses technical cookies necessary for it to work. No advertising or analytics cookies are set without your consent. <a href='/en/legal/cookie-policy'>Learn more</a></p>
+    <div class="cb-actions">
+      <button class="cb-btn cb-reject" id="cb-reject">Reject non-essential</button>
+      <button class="cb-btn cb-accept" id="cb-accept">Accept all</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const tabs=document.querySelectorAll('.dossier-tab');
+const panels=document.querySelectorAll('.dossier-panel');
+tabs.forEach(t=>{
+  t.addEventListener('click',()=>{
+    tabs.forEach(x=>x.setAttribute('aria-selected','false'));
+    t.setAttribute('aria-selected','true');
+    panels.forEach(p=>p.hidden=(p.id!==t.dataset.panel));
+  });
+});
+let auto=true;let idx=0;
+tabs.forEach(t=>t.addEventListener('click',()=>auto=false,{once:true}));
+if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  setInterval(()=>{if(!auto)return;idx=(idx+1)%tabs.length;tabs[idx].click();auto=true;},4500);
+}
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+<script src="/cookies.js"></script>
+</body>
+</html>
