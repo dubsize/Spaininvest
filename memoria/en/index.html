@@ -209,6 +209,7 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
 .chk.consent input{margin-top:3px;flex-shrink:0}
 .chk.consent a{color:#D8C79A}
 </style>
+<link rel="stylesheet" href="/site-v2.css">
 <!-- Mesure d'audience sans cookies — remplacer memoriamadrid.com par votre domaine réel -->
 <script defer data-domain="memoriamadrid.com" src="https://plausible.io/js/script.outbound-links.js"></script>
 <!-- [GOOGLE_BUSINESS_PROFILE] : une fois la fiche Google Business créée, ajouter son URL dans "sameAs" ci-dessous et dans le pied de page -->
@@ -285,11 +286,11 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
   <div class="container nav">
     <a class="logo" href="#top">Mémoria<span>.</span></a>
     <nav class="nav-links">
-      <a href="#installation">Settling in</a>
-      <a href="#economies">Savings</a>
-      <a href="#maison">Home Dossier</a>
-      <a href="#carte">À la carte</a>
-      <a href="#faq">FAQ</a>
+      <a class="nav-txt" href="/en/services/">Services</a>
+      <a class="nav-txt" href="/en/corporate/">Corporate</a>
+      <a class="nav-txt" href="/en/landlords/">Landlords</a>
+      <a class="nav-txt" href="/en/guides/">Guides</a>
+      <a class="nav-txt" href="#faq">FAQ</a>
       <span class="lang"><a href="/">FR</a><a class="active" href="/en/">EN</a><a href="/he/">עב</a></span>
       <a class="btn btn-primary" href="#contact">Free consultation</a>
     </nav>
@@ -300,33 +301,81 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
 <section class="hero" id="top">
   <div class="container">
     <div class="hero-inner">
-      <p class="eyebrow">Expats in Spain</p>
-      <h1>Life in Spain, <em>without</em> the paperwork.</h1>
-      <p>Settling-in bureaucracy, overpriced contracts, documents scattered everywhere: we take care of it — in your language, with a single point of contact. Where would you like to start?</p>
-      <p class="hero-note">MADRID · ENGLISH, SPANISH, FRENCH</p>
+      <p class="eyebrow">Relocation & destination services · Madrid</p>
+      <h1>Moving to Madrid, <em>without</em> the paperwork.</h1>
+      <p>Housing, red tape, schools, departure: we organise expats' arrival in Madrid end to end — for you, for the employees you are relocating, or for the tenants of your property. One point of contact, from the first call to the keys.</p>
+      <p class="hero-note">MADRID · ENGLISH · FRANÇAIS · עברית · ESPAÑOL</p>
     </div>
     <div class="chooser">
-      <a class="choice c1" href="#installation">
-        <span class="c-num">Service 01</span>
-        <h3>I'm moving to Spain</h3>
-        <p>NIE, empadronamiento, social security, Cl@ve, bank account, utilities: everything you need to get started, done for you, in the right order.</p>
-        <span class="c-go">Settling-In Pack</span>
+      <a class="choice c1" href="/en/services/">
+        <span class="c-num">Individuals</span>
+        <h3>I'm moving to Madrid</h3>
+        <p>Housing, NIE, padrón, schools, bank, contracts: your arrival organised end to end, at published prices.</p>
+        <span class="c-go">See services</span>
       </a>
-      <a class="choice c2" href="#economies">
-        <span class="c-num">Service 02</span>
-        <h3>I'm paying too much</h3>
-        <p>Gas, electricity, telecom, insurance, banking: we audit your bills and make the changes with you, on the spot.</p>
-        <span class="c-go">Savings Audit</span>
+      <a class="choice c2" href="/en/corporate/">
+        <span class="c-num">Employers & RMCs</span>
+        <h3>I'm relocating an employee</h3>
+        <p>Your people settled in Madrid without tying up HR: destination services packages, invoiced to the employer.</p>
+        <span class="c-go">Corporate quote</span>
       </a>
-      <a class="choice c3" href="#maison">
-        <span class="c-num">Service 03</span>
-        <h3>I just bought a home</h3>
-        <p>Contracts, warranties, invoices, deadlines, emergencies: the complete file of your home, built for you and kept up to date.</p>
-        <span class="c-go">Home Dossier</span>
+      <a class="choice c3" href="/en/landlords/">
+        <span class="c-num">Landlords</span>
+        <h3>I rent to expats</h3>
+        <p>Reliable, supported tenants: bilingual listing, verified applications, LAU lease, photo inventory.</p>
+        <span class="c-go">Let my property</span>
       </a>
     </div>
   </div>
   <div class="hero-spacer"></div>
+</section>
+
+<!-- SIX FAMILLES DE SERVICES -->
+<section class="carte" id="carte">
+  <div class="container">
+    <p class="eyebrow reveal">Our services — six families</p>
+    <h2 class="reveal">Everything a move to Madrid takes.</h2>
+    <p class="lead reveal">We follow the relocation industry's own service families. For each service: what we do, what you do, the documents, the timing and the price.</p>
+    <div class="fam-grid">
+      <a class="fam-card reveal" href="/en/services/#logement">
+        <span class="fam-term">01 · Home Search & Orientation</span>
+        <h3>Home search & orientation</h3>
+        <p>Pre-arrival briefing, neighbourhood orientation day, viewings, lease negotiation and review, photo check-in.</p>
+        <span class="fam-from">On quote</span>
+      </a>
+      <a class="fam-card reveal" href="/en/services/#installation">
+        <span class="fam-term">02 · Settling-in Services</span>
+        <h3>Settling-in</h3>
+        <p>NIE, padrón, social security, health card, bank, electricity and gas, internet, Cl@ve.</p>
+        <span class="fam-from">Pack €690 · single items from €60</span>
+      </a>
+      <a class="fam-card reveal" href="/en/services/#immigration">
+        <span class="fam-term">03 · Visa & Immigration</span>
+        <h3>Immigration</h3>
+        <p>EU citizens handled directly. Visas, work permits, digital nomad and family reunification with our partner lawyer.</p>
+        <span class="fam-from">EU certificate €250 · visas on quote</span>
+      </a>
+      <a class="fam-card reveal" href="/en/services/#ecoles">
+        <span class="fam-term">04 · Schools & Kindergarten</span>
+        <h3>Schools</h3>
+        <p>School mapping, admission round, mid-year enrolment through the SAE, international schools.</p>
+        <span class="fam-from">from €150</span>
+      </a>
+      <a class="fam-card reveal" href="/en/services/#vehicules">
+        <span class="fam-term">05 · Vehicles & Driving Licences</span>
+        <h3>Vehicles & driving licences</h3>
+        <p>Licence exchange, imported vehicle registration, ITV, renting.</p>
+        <span class="fam-from">from €60</span>
+      </a>
+      <a class="fam-card reveal" href="/en/services/#depart">
+        <span class="fam-term">06 · Departure Services</span>
+        <h3>Departure</h3>
+        <p>Lease termination, check-out inventory, fianza recovery, closing contracts, padrón removal.</p>
+        <span class="fam-from">On quote</span>
+      </a>
+    </div>
+    <p class="gt-all reveal" style="margin-top:28px"><a href="/en/services/">See the detailed catalogue →</a></p>
+  </div>
 </section>
 
 <!-- SERVICE 01: SETTLING IN -->
@@ -367,7 +416,7 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
   <div class="container">
     <div class="svc-head">
       <div>
-        <p class="eyebrow reveal">Service 02 — Savings</p>
+        <p class="eyebrow reveal">Additional service — Savings</p>
         <h2 class="reveal">Your bills speak Spanish. So do we.</h2>
         <p class="lead reveal">A gas tariff never renegotiated, oversized electrical power, duplicate insurance, avoidable bank fees: most expat households pay every month for contracts signed in a hurry. We review everything — and make the changes with you, on the spot.</p>
       </div>
@@ -401,7 +450,7 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
   <div class="container">
     <div class="svc-head">
       <div>
-        <p class="eyebrow reveal">Service 03 — Home Dossier</p>
+        <p class="eyebrow reveal">Additional service — Home Dossier</p>
         <h2 class="reveal">They hand you the keys. We hand you the manual.</h2>
         <p class="lead reveal">Where is the water shut-off valve? When is IBI due? How long do the building warranties run? We build the complete file of your home — emergencies, contracts, warranties, invoices, deadlines — then keep it up to date, year after year.</p>
       </div>
@@ -462,70 +511,18 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
   </div>
 </section>
 
-<!-- A LA CARTE -->
-<section class="carte" id="carte">
-  <div class="container">
-    <p class="eyebrow reveal">À la carte</p>
-    <h2 class="reveal">Just one procedure? Fixed price, no package.</h2>
-    <p class="lead reveal">You only need the social security number, the padrón or the digital certificate? Every procedure can be ordered on its own, at a price announced upfront. Official fees are passed on at cost.</p>
-    <p class="carte-legend reveal"><span class="lg lg-we">We go for you</span> we attend in your place, with a signed authorisation. <span class="lg lg-you">You must attend</span> the law requires your presence: we prepare everything and come with you, but you sign in person.</p>
-    <div class="carte-grid">
-      <div class="carte-col reveal">
-        <h3>Identity & residency</h3>
-        <div class="carte-item star"><span class="ci-name"><strong>Consular NIE file, before you fly</strong><small><span class="tagline tl-remote">Remote</span> EX-15 form, complete file, fee, and instructions for your appointment at the Spanish consulate in your country. Unlocks bank, purchase and contracts from the day you land — almost nobody knows this route exists.</small></span><span class="ci-price">€90</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>EU certificate (“green NIE”)</strong><small><span class="tagline tl-you">You must attend</span> EX-18, fee, appointment hunt until secured, file prepared, briefing before the appointment</small></span><span class="ci-price">€250</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>EU certificate — couple</strong><small><span class="tagline tl-you">You must attend</span> Two files, coordinated appointments</small></span><span class="ci-price">€400</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>TIE (non-EU)</strong><small><span class="tagline tl-you">You must attend</span> Forms, fee, appointment, fingerprinting support</small></span><span class="ci-price">€250</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>Empadronamiento</strong><small><span class="tagline tl-we">We go for you</span> Signed authorisation, file, appointment — you don't need to show up</small></span><span class="ci-price">€90</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>Empadronamiento — family</strong><small><span class="tagline tl-we">We go for you</span></small></span><span class="ci-price">€130</span></div>
-
-        <h3>Social security & health</h3>
-        <div class="carte-item"><span class="ci-name"><strong>Social security number</strong><small><span class="tagline tl-we">We go for you</span> TA.1 form, filing, number obtained</small></span><span class="ci-price">€90</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>Health card (tarjeta sanitaria)</strong><small><span class="tagline tl-we">We go for you</span> Registration at your local health centre</small></span><span class="ci-price">€90</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>Both together</strong></span><span class="ci-price">€150</span></div>
-
-        <h3>Digital access</h3>
-        <div class="carte-item"><span class="ci-name"><strong>Cl@ve</strong><small><span class="tagline tl-you">You must attend</span> Registration, activation, how to use it</small></span><span class="ci-price">€90</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>FNMT digital certificate</strong><small><span class="tagline tl-you">You must attend</span> Request, accreditation, installation, backup</small></span><span class="ci-price">€120</span></div>
-        <div class="carte-item star"><span class="ci-name"><strong>Cl@ve + digital certificate</strong><small>The master key: once installed, your future procedures happen online — and we can act on your behalf electronically</small></span><span class="ci-price">€180</span></div>
-      </div>
-
-      <div class="carte-col reveal">
-        <h3>Banking & bills</h3>
-        <div class="carte-item"><span class="ci-name"><strong>Bank account opening</strong><small><span class="tagline tl-you">You must attend</span> Bank chosen for your profile, file assembled</small></span><span class="ci-price">€120</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>Express audit, single item</strong><small><span class="tagline tl-we">We handle it</span> Gas, electricity, telecom, insurance or banking — change made</small></span><span class="ci-price">€60</span></div>
-
-        <h3>Home utilities</h3>
-        <div class="carte-item"><span class="ci-name"><strong>Utilities set-up</strong><small><span class="tagline tl-we">We handle it</span> Electricity, gas, water — on the right tariff from day one</small></span><span class="ci-price">€150</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>Internet + mobile contract</strong><small><span class="tagline tl-we">We handle it</span> Comparison, subscription, installation follow-up</small></span><span class="ci-price">€90</span></div>
-
-        <h3>Vehicles</h3>
-        <div class="carte-item"><span class="ci-name"><strong>Driving licence exchange</strong><small><span class="tagline tl-we">We go for you</span> DGT file, fee, appointment, follow-up</small></span><span class="ci-price">€150</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>Vehicle ownership transfer</strong><small><span class="tagline tl-we">We go for you</span></small></span><span class="ci-price">€150</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>ITV (roadworthiness test)</strong><small>Appointment and administrative support</small></span><span class="ci-price">€60</span></div>
-
-        <h3>Family & work</h3>
-        <div class="carte-item"><span class="ci-name"><strong>School enrolment</strong><small><span class="tagline tl-we">We go for you</span> Spanish school or international school</small></span><span class="ci-price">€150</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>Consular registration</strong><small><span class="tagline tl-remote">Remote</span> Your home country's register of citizens abroad</small></span><span class="ci-price">€60</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>Autónomo registration</strong><small><span class="tagline tl-we">We handle it</span> Census declaration, RETA, contribution base</small></span><span class="ci-price">€290</span></div>
-      </div>
-    </div>
-    <div class="carte-foot reveal">
-      <p><strong>Three procedures or more: −15%.</strong> From four onwards, the Settling-In Pack (€690) usually works out cheaper — we'll tell you rather than let you overpay. Official fees passed on at cost. Travel within Madrid included. Rush jobs (under 7 days): +50%.</p>
-    </div>
-    <p style="text-align:center;margin-top:30px"><a class="btn btn-primary reveal" href="#contact">Book a free call</a></p>
-  </div>
-</section>
-
 <!-- WHY US -->
 <section class="pourquoi">
   <div class="container">
     <p class="eyebrow reveal">Why Mémoria</p>
-    <h2 class="reveal">One contact, three languages, nothing lost</h2>
+    <h2 class="reveal">One contact, four languages, nothing lost</h2>
     <div class="pq-grid">
-      <div class="pq-card reveal"><h3>Lived, not theoretical</h3><p>Every service exists because we went through it ourselves — relocation, purchase, renovation, contracts. We know the pitfalls because we've met them.</p></div>
+      <div class="pq-card reveal"><h3>Lived, not theoretical</h3><p>Our founder went through every procedure first-hand: NIE, padrón, schools — all the way to buying, renovating and letting a house in Valdebebas. We know the pitfalls because we have met them.</p></div>
+      <div class="pq-card reveal"><h3>Hebrew, too</h3><p>English, French, Spanish — and Hebrew: as far as we know, we are the only ones in Madrid supporting a relocation in Hebrew. Every member of the family talks to someone who understands them.</p></div>
+      <div class="pq-card reveal"><h3>One point of contact</h3><p>The same person follows your file from briefing to departure, and coordinates our partner gestoría and lawyer whenever a procedure calls for them.</p></div>
+      <div class="pq-card reveal"><h3>Published prices, online booking</h3><p>Prices for individuals are listed procedure by procedure. Your first call is booked online in two minutes, and you receive a written quote.</p></div>
       <div class="pq-card reveal"><h3>Your documents stay yours</h3><p>Everything is built in your own storage space. You can revoke our access at any time. No passwords stored, GDPR-compliant processing.</p></div>
-      <div class="pq-card reveal"><h3>Paid by you, not by them</h3><p>We take no commission from the suppliers, banks or insurers we recommend. Our only fees are yours — our advice serves one side only.</p></div>
+      <div class="pq-card reveal"><h3>No hidden commissions</h3><p>We take nothing from the suppliers, banks or insurers we recommend. Whoever hires us pays us — you, your employer or a landlord — and we never represent both sides of the same lease.</p></div>
     </div>
   </div>
 </section>
@@ -542,7 +539,11 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
       </details>
       <details>
         <summary>Do you handle procedures on my behalf?</summary>
-        <p>Routine procedures, yes — with your power of attorney where required. For matters reserved to regulated professions (complex tax, legal), we work with a partner gestoría and lawyers — you keep a single point of contact.</p>
+        <p>Routine procedures, yes — with your power of attorney where required. Mémoria is neither a registered gestor nor a law firm: regulated matters (non-EU visas and work permits, complex tax, disputes) are coordinated with our partner gestoría and lawyer — you keep a single point of contact.</p>
+      </details>
+      <details>
+        <summary>Do you also work for employers and landlords?</summary>
+        <p>Yes. Employers and relocation management companies entrust us with their transferees, invoiced to the company (<a href="/en/corporate/">see corporate services</a>). Landlords entrust us with letting their property to expats (<a href="/en/landlords/">see landlord services</a>). We never represent the tenant and the landlord of the same lease.</p>
       </details>
       <details>
         <summary>How is the Savings Audit variable fee calculated?</summary>
@@ -569,7 +570,7 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
   <div class="container">
     <p class="eyebrow reveal">First call — free</p>
     <h2 class="reveal">Thirty minutes on Zoom, no commitment.</h2>
-    <p class="reveal">Tell us your situation — arrival, bills or home. You'll leave with a clear plan and a precise quote, whether you work with us or not.</p>
+    <p class="reveal">Tell us your situation — arrival, housing, school, bills or home. You will leave with a clear plan and a precise quote, whether you work with us or not.</p>
 
     <form class="rdv-form reveal" name="rdv-en" method="POST" data-netlify="true" netlify-honeypot="bot-field">
       <input type="hidden" name="form-name" value="rdv-en">
@@ -628,7 +629,8 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
 
 <footer>
   <div class="container">
-    <p>© 2026 Mémoria — Madrid. Services for expats in Spain.</p>
+    <p>© 2026 Mémoria — Madrid. Relocation & destination services for expats, employers and landlords.</p>
+    <p class="foot-nav"><a href="/en/services/">Services</a> · <a href="/en/corporate/">Corporate</a> · <a href="/en/landlords/">Landlords</a> · <a href="/en/guides/">Guides</a></p>
     <!-- [GOOGLE_BUSINESS_PROFILE] : <p><a href="URL_FICHE_GOOGLE" rel="noopener">Avis Google</a></p> -->
     <p>
       <a href='/en/legal/legal-notice'>Legal notice</a> ·
@@ -670,5 +672,6 @@ const io=new IntersectionObserver(es=>{
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 </script>
 <script src="/cookies.js"></script>
+<script src="/site-v2.js" defer></script>
 </body>
 </html>

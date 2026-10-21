@@ -209,6 +209,7 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
 .chk.consent input{margin-top:3px;flex-shrink:0}
 .chk.consent a{color:#D8C79A}
 </style>
+<link rel="stylesheet" href="/site-v2.css">
 <!-- Mesure d'audience sans cookies — remplacer memoriamadrid.com par votre domaine réel -->
 <script defer data-domain="memoriamadrid.com" src="https://plausible.io/js/script.outbound-links.js"></script>
 <!-- [GOOGLE_BUSINESS_PROFILE] : une fois la fiche Google Business créée, ajouter son URL dans "sameAs" ci-dessous et dans le pied de page -->
@@ -285,11 +286,11 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
   <div class="container nav">
     <a class="logo" href="#top">Mémoria<span>.</span></a>
     <nav class="nav-links">
-      <a href="#installation">קליטה</a>
-      <a href="#economies">חיסכון</a>
-      <a href="#maison">תיק הבית</a>
-      <a href="#carte">שירותים בודדים</a>
-      <a href="#faq">שאלות</a>
+      <a class="nav-txt" href="/he/services/">שירותים</a>
+      <a class="nav-txt" href="/he/corporate/">לחברות</a>
+      <a class="nav-txt" href="/he/landlords/">לבעלי נכסים</a>
+      <a class="nav-txt" href="/he/guides/">מדריכים</a>
+      <a class="nav-txt" href="#faq">שאלות</a>
       <span class="lang"><a href="/">FR</a><a href="/en/">EN</a><a class="active" href="/he/">עב</a></span>
       <a class="btn btn-primary" href="#contact">שיחת ייעוץ חינם</a>
     </nav>
@@ -300,33 +301,81 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
 <section class="hero" id="top">
   <div class="container">
     <div class="hero-inner">
-      <p class="eyebrow">ישראלים ותושבי חוץ בספרד</p>
-      <h1>החיים בספרד, <em>בלי</em> הניירת.</h1>
-      <p>ביורוקרטיה של קליטה, חוזים יקרים מדי, מסמכים מפוזרים בכל מקום: אנחנו מטפלים בהכל — בשפה שלכם, מול איש קשר אחד. מאיפה תרצו להתחיל?</p>
-      <p class="hero-note">מדריד · עברית · אנגלית · ספרדית · צרפתית</p>
+      <p class="eyebrow">רילוקיישן ושירותי Destination · מדריד</p>
+      <h1>לעבור למדריד, <em>בלי</em> הניירת.</h1>
+      <p>דירה, ביורוקרטיה, בתי ספר, עזיבה: אנחנו מארגנים את ההגעה למדריד מקצה לקצה — בשבילכם, בשביל העובדים שהחברה שלכם מעבירה, או בשביל השוכרים של הנכס שלכם. איש קשר אחד, מהשיחה הראשונה ועד מסירת המפתחות.</p>
+      <p class="hero-note">מדריד · עברית · English · Français · Español</p>
     </div>
     <div class="chooser">
-      <a class="choice c1" href="#installation">
-        <span class="c-num">שירות 01</span>
-        <h3>עוברים לספרד</h3>
-        <p>‏NIE, פדרון (רישום עירוני), ביטוח לאומי, Cl@ve, חשבון בנק, חוזי בסיס: כל מה שצריך כדי להתחיל, עשוי בשבילכם, בסדר הנכון.</p>
-        <span class="c-go">חבילת קליטה</span>
+      <a class="choice c1" href="/he/services/">
+        <span class="c-num">לקוחות פרטיים</span>
+        <h3>עוברים למדריד</h3>
+        <p>דירה, NIE, פדרון, בתי ספר, בנק וחוזים: ההגעה שלכם מאורגנת מקצה לקצה, במחירים גלויים.</p>
+        <span class="c-go">לכל השירותים</span>
       </a>
-      <a class="choice c2" href="#economies">
-        <span class="c-num">שירות 02</span>
-        <h3>משלמים יותר מדי</h3>
-        <p>גז, חשמל, תקשורת, ביטוחים, בנק: אנחנו עוברים על החשבונות שלכם ומבצעים את השינויים יחד איתכם, במקום.</p>
-        <span class="c-go">ביקורת חיסכון</span>
+      <a class="choice c2" href="/he/corporate/">
+        <span class="c-num">חברות וחברות רילוקיישן</span>
+        <h3>מעבירים עובד למדריד</h3>
+        <p>העובדים שלכם מתמקמים במדריד בלי להעמיס על משאבי האנוש: חבילות Destination Services, בחיוב המעסיק.</p>
+        <span class="c-go">הצעת מחיר לחברות</span>
       </a>
-      <a class="choice c3" href="#maison">
-        <span class="c-num">שירות 03</span>
-        <h3>קניתם בית</h3>
-        <p>חוזים, אחריות, חשבוניות, מועדים, חירום: תיק מלא של הבית שלכם, שנבנה עבורכם ומתוחזק לאורך זמן.</p>
-        <span class="c-go">תיק הבית</span>
+      <a class="choice c3" href="/he/landlords/">
+        <span class="c-num">בעלי נכסים</span>
+        <h3>משכירים לתושבי חוץ</h3>
+        <p>שוכרים אמינים ומלווים: מודעה דו־לשונית, תיקים נבדקים, חוזה לפי LAU, פרוטוקול מסירה עם תמונות.</p>
+        <span class="c-go">להשכיר את הנכס</span>
       </a>
     </div>
   </div>
   <div class="hero-spacer"></div>
+</section>
+
+<!-- SIX FAMILLES DE SERVICES -->
+<section class="carte" id="carte">
+  <div class="container">
+    <p class="eyebrow reveal">השירותים שלנו — שש קטגוריות</p>
+    <h2 class="reveal">כל מה שמעבר למדריד דורש.</h2>
+    <p class="lead reveal">אנחנו עובדים לפי החלוקה המקובלת בענף הרילוקיישן. לכל שירות: מה אנחנו עושים, מה אתם עושים, מסמכים, זמנים ומחיר.</p>
+    <div class="fam-grid">
+      <a class="fam-card reveal" href="/he/services/#logement">
+        <span class="fam-term">01 · Home Search & Orientation</span>
+        <h3>התמצאות וחיפוש דירה</h3>
+        <p>תדריך לפני ההגעה, יום התמצאות בשכונות, צפיות, משא ומתן ובדיקת חוזה, פרוטוקול כניסה עם תמונות.</p>
+        <span class="fam-from">לפי הצעת מחיר</span>
+      </a>
+      <a class="fam-card reveal" href="/he/services/#installation">
+        <span class="fam-term">02 · Settling-in Services</span>
+        <h3>קליטה והתמקמות</h3>
+        <p>NIE, פדרון, ביטוח לאומי, כרטיס בריאות, בנק, חשמל וגז, אינטרנט, Cl@ve.</p>
+        <span class="fam-from">חבילה €690 · הליך בודד החל מ-€60</span>
+      </a>
+      <a class="fam-card reveal" href="/he/services/#immigration">
+        <span class="fam-term">03 · Visa & Immigration</span>
+        <h3>הגירה ואשרות</h3>
+        <p>אזרחי האיחוד ישירות. אשרות, היתרי עבודה, נווד דיגיטלי ואיחוד משפחות עם עורך הדין השותף.</p>
+        <span class="fam-from">תעודה אירופית €250 · אשרות לפי הצעה</span>
+      </a>
+      <a class="fam-card reveal" href="/he/services/#ecoles">
+        <span class="fam-term">04 · Schools & Kindergarten</span>
+        <h3>בתי ספר וגנים</h3>
+        <p>מפת בתי ספר, סבב רישום, רישום באמצע השנה דרך ה-SAE, בתי ספר בינלאומיים.</p>
+        <span class="fam-from">החל מ-€150</span>
+      </a>
+      <a class="fam-card reveal" href="/he/services/#vehicules">
+        <span class="fam-term">05 · Vehicles & Driving Licences</span>
+        <h3>רכב ורישיון נהיגה</h3>
+        <p>המרת רישיון, רישום רכב מיובא, טסט, ליסינג.</p>
+        <span class="fam-from">החל מ-€60</span>
+      </a>
+      <a class="fam-card reveal" href="/he/services/#depart">
+        <span class="fam-term">06 · Departure Services</span>
+        <h3>עזיבה</h3>
+        <p>סיום חוזה, פרוטוקול יציאה, החזר פיקדון, סגירת חשבונות, ביטול פדרון.</p>
+        <span class="fam-from">לפי הצעת מחיר</span>
+      </a>
+    </div>
+    <p class="gt-all reveal" style="margin-top:28px"><a href="/he/services/">לקטלוג המפורט ←</a></p>
+  </div>
 </section>
 
 <!-- שירות 01: קליטה -->
@@ -367,7 +416,7 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
   <div class="container">
     <div class="svc-head">
       <div>
-        <p class="eyebrow reveal">שירות 02 — חיסכון</p>
+        <p class="eyebrow reveal">שירות נוסף — חיסכון</p>
         <h2 class="reveal">החשבונות שלכם מדברים ספרדית. גם אנחנו.</h2>
         <p class="lead reveal">תעריף גז שמעולם לא עודכן, הספק חשמל גדול מדי, ביטוח כפול, עמלות בנק מיותרות: רוב משקי הבית של תושבי חוץ משלמים כל חודש על חוזים שנחתמו בלחץ. אנחנו עוברים על הכל — ומבצעים את השינויים יחד איתכם, במקום.</p>
       </div>
@@ -401,7 +450,7 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
   <div class="container">
     <div class="svc-head">
       <div>
-        <p class="eyebrow reveal">שירות 03 — תיק הבית</p>
+        <p class="eyebrow reveal">שירות נוסף — תיק הבית</p>
         <h2 class="reveal">לכם מוסרים את המפתחות. אנחנו מוסרים את ספר ההוראות.</h2>
         <p class="lead reveal">איפה ברז הניתוק הראשי? מתי משלמים IBI (ארנונה)? עד מתי בתוקף האחריות על השיפוץ? אנחנו בונים את התיק המלא של הבית שלכם — חירום, חוזים, אחריות, חשבוניות, מועדים — ושומרים אותו מעודכן, שנה אחר שנה.</p>
       </div>
@@ -462,70 +511,18 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
   </div>
 </section>
 
-<!-- תפריט שירותים בודדים -->
-<section class="carte" id="carte">
-  <div class="container">
-    <p class="eyebrow reveal">שירותים בודדים</p>
-    <h2 class="reveal">רק הליך אחד? מחיר קבוע, בלי חבילה.</h2>
-    <p class="lead reveal">צריכים רק מספר ביטוח לאומי, פדרון או תעודה דיגיטלית? כל הליך ניתן להזמנה בנפרד, במחיר שנקבע מראש. אגרות רשמיות מחויבות בנפרד, לפי העלות המדויקת.</p>
-    <p class="carte-legend reveal"><span class="lg lg-we">אנחנו הולכים במקומכם</span> מספיק ייפוי כוח חתום — אתם לא צריכים להגיע. <span class="lg lg-you">נדרשת נוכחות</span> החוק מחייב אתכם להתייצב: אנחנו מכינים הכל ומלווים אתכם, אבל החתימה שלכם.</p>
-    <div class="carte-grid">
-      <div class="carte-col reveal">
-        <h3>זהות ותושבות</h3>
-        <div class="carte-item star"><span class="ci-name"><strong>תיק NIE קונסולרי, לפני הטיסה</strong><small><span class="tagline tl-remote">מרחוק</span> טופס EX-15, תיק מלא, אגרה, והנחיות לתור בקונסוליה הספרדית בארץ שלכם. פותח חשבון בנק, רכישה וחוזים כבר מהיום הראשון — כמעט אף אחד לא מכיר את המסלול הזה.</small></span><span class="ci-price">€90</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>תעודת רישום אזרח האיחוד (״NIE ירוק״)</strong><small><span class="tagline tl-you">נדרשת נוכחות</span> טופס EX-18, אגרה, ציד תורים עד להשגה, תיק מוכן, תדריך לפני התור</small></span><span class="ci-price">€250</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>תעודת רישום — זוג</strong><small><span class="tagline tl-you">נדרשת נוכחות</span> שני תיקים, תורים מתואמים</small></span><span class="ci-price">€400</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>TIE (לא-אירופאים)</strong><small><span class="tagline tl-you">נדרשת נוכחות</span> טפסים, אגרה, תור, ליווי בטביעות אצבע</small></span><span class="ci-price">€250</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>פדרון (רישום עירוני)</strong><small><span class="tagline tl-we">אנחנו הולכים במקומכם</span> ייפוי כוח חתום, תיק, תור — אתם לא צריכים להגיע</small></span><span class="ci-price">€90</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>פדרון — משפחה</strong><small><span class="tagline tl-we">אנחנו הולכים במקומכם</span></small></span><span class="ci-price">€130</span></div>
-
-        <h3>ביטוח לאומי ובריאות</h3>
-        <div class="carte-item"><span class="ci-name"><strong>מספר ביטוח לאומי</strong><small><span class="tagline tl-we">אנחנו הולכים במקומכם</span> טופס TA.1, הגשה, קבלת המספר</small></span><span class="ci-price">€90</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>כרטיס בריאות (tarjeta sanitaria)</strong><small><span class="tagline tl-we">אנחנו הולכים במקומכם</span> רישום במרפאה האזורית</small></span><span class="ci-price">€90</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>שניהם יחד</strong></span><span class="ci-price">€150</span></div>
-
-        <h3>גישה דיגיטלית</h3>
-        <div class="carte-item"><span class="ci-name"><strong>Cl@ve</strong><small><span class="tagline tl-you">נדרשת נוכחות</span> רישום, הפעלה, הסבר שימוש</small></span><span class="ci-price">€90</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>תעודה דיגיטלית FNMT</strong><small><span class="tagline tl-you">נדרשת נוכחות</span> בקשה, אימות, התקנה, גיבוי</small></span><span class="ci-price">€120</span></div>
-        <div class="carte-item star"><span class="ci-name"><strong>Cl@ve + תעודה דיגיטלית</strong><small>מפתח־העל: אחרי ההתקנה, כל ההליכים הבאים נעשים אונליין — ואנחנו יכולים לפעול בשמכם דיגיטלית</small></span><span class="ci-price">€180</span></div>
-      </div>
-
-      <div class="carte-col reveal">
-        <h3>בנק וחשבונות</h3>
-        <div class="carte-item"><span class="ci-name"><strong>פתיחת חשבון בנק</strong><small><span class="tagline tl-you">נדרשת נוכחות</span> הבנק המתאים לפרופיל שלכם, התיק מורכב</small></span><span class="ci-price">€120</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>בדיקה מהירה של סעיף בודד</strong><small><span class="tagline tl-we">אנחנו מטפלים</span> גז, חשמל, תקשורת, ביטוח או בנק — כולל ביצוע השינוי</small></span><span class="ci-price">€60</span></div>
-
-        <h3>הבית</h3>
-        <div class="carte-item"><span class="ci-name"><strong>חיבור תשתיות</strong><small><span class="tagline tl-we">אנחנו מטפלים</span> חשמל, גז, מים — בתעריף הנכון מהיום הראשון</small></span><span class="ci-price">€150</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>חוזה אינטרנט + נייד</strong><small><span class="tagline tl-we">אנחנו מטפלים</span> השוואה, הרשמה, מעקב אחרי ההתקנה</small></span><span class="ci-price">€90</span></div>
-
-        <h3>רכב</h3>
-        <div class="carte-item"><span class="ci-name"><strong>המרת רישיון נהיגה</strong><small><span class="tagline tl-we">אנחנו הולכים במקומכם</span> תיק DGT, אגרה, תור, מעקב</small></span><span class="ci-price">€150</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>העברת בעלות על רכב</strong><small><span class="tagline tl-we">אנחנו הולכים במקומכם</span></small></span><span class="ci-price">€150</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>ITV (טסט)</strong><small>תור וליווי מנהלתי</small></span><span class="ci-price">€60</span></div>
-
-        <h3>משפחה ועבודה</h3>
-        <div class="carte-item"><span class="ci-name"><strong>רישום לבית ספר</strong><small><span class="tagline tl-we">אנחנו הולכים במקומכם</span> בית ספר ספרדי או בינלאומי</small></span><span class="ci-price">€150</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>רישום קונסולרי</strong><small><span class="tagline tl-remote">מרחוק</span> מרשם האזרחים בחו״ל</small></span><span class="ci-price">€60</span></div>
-        <div class="carte-item"><span class="ci-name"><strong>רישום כעצמאי (autónomo)</strong><small><span class="tagline tl-we">אנחנו מטפלים</span> הצהרת מס, RETA, בחירת בסיס הביטוח</small></span><span class="ci-price">€290</span></div>
-      </div>
-    </div>
-    <div class="carte-foot reveal">
-      <p><strong>שלושה הליכים ומעלה: הנחה של 15%.</strong> מארבעה ומעלה, חבילת הקליטה (€690) בדרך כלל משתלמת יותר — ונגיד לכם את זה, במקום לתת לכם לשלם מיותר. אגרות רשמיות בנפרד, לפי העלות. נסיעות בתוך מדריד כלולות. דחוף (פחות מ-7 ימים): תוספת של 50%.</p>
-    </div>
-    <p style="text-align:center;margin-top:30px"><a class="btn btn-primary reveal" href="#contact">לקבוע שיחה חינם</a></p>
-  </div>
-</section>
-
 <!-- למה אנחנו -->
 <section class="pourquoi">
   <div class="container">
     <p class="eyebrow reveal">למה Mémoria</p>
-    <h2 class="reveal">איש קשר אחד, כמה שפות, שום מסמך לא הולך לאיבוד</h2>
+    <h2 class="reveal">איש קשר אחד, ארבע שפות, שום מסמך לא הולך לאיבוד</h2>
     <div class="pq-grid">
-      <div class="pq-card reveal"><h3>מניסיון, לא מהספר</h3><p>כל שירות קיים כי עברנו אותו בעצמנו — קליטה, רכישה, שיפוץ, חוזים. אנחנו מכירים את המלכודות כי נפלנו בהן.</p></div>
+      <div class="pq-card reveal"><h3>מניסיון, לא מהספר</h3><p>המייסד עבר כל הליך בעצמו: NIE, פדרון, בתי ספר — ועד קנייה, שיפוץ והשכרה של בית ב-Valdebebas. אנחנו מכירים את המלכודות כי נתקלנו בהן.</p></div>
+      <div class="pq-card reveal"><h3>גם בעברית</h3><p>עברית, אנגלית, צרפתית וספרדית: למיטב ידיעתנו, אנחנו היחידים במדריד שמלווים רילוקיישן בעברית. כל אחד מבני המשפחה מדבר עם מישהו שמבין אותו.</p></div>
+      <div class="pq-card reveal"><h3>איש קשר אחד</h3><p>אותו אדם מלווה את התיק שלכם מהתדריך ועד העזיבה, ומתאם את ה-gestoría ועורך הדין השותפים כשהליך מחייב אותם.</p></div>
+      <div class="pq-card reveal"><h3>מחירים גלויים, קביעת פגישה אונליין</h3><p>המחירים ללקוחות פרטיים מפורסמים, הליך אחר הליך. את השיחה הראשונה קובעים אונליין בשתי דקות, ומקבלים הצעת מחיר בכתב.</p></div>
       <div class="pq-card reveal"><h3>המסמכים נשארים שלכם</h3><p>הכל נבנה באחסון הפרטי שלכם. אפשר לבטל את הגישה שלנו בכל רגע. שום סיסמה לא נשמרת, והטיפול בנתונים תואם GDPR.</p></div>
-      <div class="pq-card reveal"><h3>משולמים על ידכם, לא על ידם</h3><p>איננו מקבלים עמלות מספקים, בנקים או חברות ביטוח שאנחנו ממליצים עליהם. שכר הטרחה היחיד שלנו הוא שלכם — הייעוץ שלנו משרת צד אחד בלבד.</p></div>
+      <div class="pq-card reveal"><h3>בלי עמלות נסתרות</h3><p>איננו מקבלים דבר מספקים, בנקים או חברות ביטוח שאנחנו ממליצים עליהם. מי ששוכר אותנו משלם לנו — אתם, המעסיק או בעל נכס — ולעולם איננו מייצגים את שני הצדדים של אותו חוזה.</p></div>
     </div>
   </div>
 </section>
@@ -542,7 +539,11 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
       </details>
       <details>
         <summary>אתם מבצעים הליכים בשמי?</summary>
-        <p>הליכים שגרתיים — כן, עם ייפוי כוח היכן שנדרש. בנושאים השמורים למקצועות מוסדרים (מס מורכב, משפטי), אנחנו עובדים עם gestoría ועורכי דין שותפים — ואתם שומרים על איש קשר אחד.</p>
+        <p>הליכים שגרתיים — כן, עם ייפוי כוח היכן שנדרש. Mémoria אינה gestor מוסמך ואינה משרד עורכי דין: הליכים מוסדרים (אשרות והיתרי עבודה מחוץ לאיחוד, מס מורכב, הליכים משפטיים) מתואמים עם ה-gestoría ועורך הדין השותפים שלנו — ואתם שומרים על איש קשר אחד.</p>
+      </details>
+      <details>
+        <summary>אתם עובדים גם עם חברות ובעלי נכסים?</summary>
+        <p>כן. חברות וחברות רילוקיישן מפקידות בידינו את קליטת העובדים שהן מעבירות, בחיוב החברה (<a href="/he/corporate/">לשירותים לחברות</a>). בעלי נכסים מפקידים בידינו את השכרת הנכס לתושבי חוץ (<a href="/he/landlords/">לשירותים לבעלי נכסים</a>). לעולם איננו מייצגים את השוכר ואת המשכיר של אותו חוזה.</p>
       </details>
       <details>
         <summary>איך מחושב הרכיב המשתנה של ביקורת החיסכון?</summary>
@@ -569,7 +570,7 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
   <div class="container">
     <p class="eyebrow reveal">שיחה ראשונה — ללא עלות</p>
     <h2 class="reveal">שלושים דקות בזום, בלי התחייבות.</h2>
-    <p class="reveal">ספרו לנו על המצב שלכם — הגעה, חשבונות או בית. תצאו עם תוכנית ברורה והצעת מחיר מדויקת, בין אם תעבדו איתנו ובין אם לא.</p>
+    <p class="reveal">ספרו לנו על המצב שלכם — הגעה, דירה, בית ספר, חשבונות או בית. תצאו עם תוכנית ברורה והצעת מחיר מדויקת, בין אם תעבדו איתנו ובין אם לא.</p>
 
     <form class="rdv-form reveal" name="rdv-he" method="POST" data-netlify="true" netlify-honeypot="bot-field">
       <input type="hidden" name="form-name" value="rdv-he">
@@ -628,7 +629,8 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
 
 <footer>
   <div class="container">
-    <p>© 2026 Mémoria — מדריד. שירותים לישראלים ותושבי חוץ בספרד.</p>
+    <p>© 2026 Mémoria — מדריד. רילוקיישן ושירותי Destination לתושבי חוץ, לחברות ולבעלי נכסים.</p>
+    <p class="foot-nav"><a href="/he/services/">שירותים</a> · <a href="/he/corporate/">לחברות</a> · <a href="/he/landlords/">לבעלי נכסים</a> · <a href="/he/guides/">מדריכים</a></p>
     <!-- [GOOGLE_BUSINESS_PROFILE] : <p><a href="URL_FICHE_GOOGLE" rel="noopener">Avis Google</a></p> -->
     <p>
       <a href='/he/legal/legal-notice'>תנאים משפטיים</a> ·
@@ -670,5 +672,6 @@ const io=new IntersectionObserver(es=>{
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 </script>
 <script src="/cookies.js"></script>
+<script src="/site-v2.js" defer></script>
 </body>
 </html>
