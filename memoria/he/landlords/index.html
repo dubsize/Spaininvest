@@ -3,11 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <title>השכרת נכס במדריד לתושבי חוץ — Mémoria לבעלי נכסים</title>
 <meta name="description" content="השכירו את הדירה או הבית שלכם במדריד לתושבי חוץ ולמנהלים מועברים: מודעה דו־לשונית, מועמדים נבדקים, ערבויות מתאימות, חוזה LAU דו־לשוני, פרוטוקול עם תמונות.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500&family=Assistant:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500&family=Assistant:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500&family=Assistant:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="/guides.css">
 <link rel="stylesheet" href="/site-v2.css">
 <script defer data-domain="memoriamadrid.com" src="https://plausible.io/js/script.outbound-links.js"></script>
@@ -138,7 +140,7 @@
         <label><span>מרוהט?</span><select name="meuble"><option value="">בחרו…</option><option value="oui">כן</option><option value="non">לא</option><option value="a-voir">גמיש</option></select></label>
       </div>
       <div class="rdv-row">
-        <label><span>שכר דירה מבוקש (€ לחודש)</span><input type="number" name="loyer_vise" min="0" step="50" inputmode="numeric" required></label>
+        <label><span>שכר דירה מבוקש (€ לחודש)</span><input type="number" name="loyer_vise" min="0" step="1" inputmode="numeric" required></label>
         <label><span>פנוי החל מ</span><input type="date" name="disponibilite" required></label>
       </div>
       <label class="rdv-full"><span>פרטים (שטח, חדרים, חוץ, חיות…) <em>(לא חובה)</em></span><textarea name="message" rows="3"></textarea></label>
@@ -160,7 +162,7 @@
 
 <div id="cookie-banner">
   <div class="cb-inner">
-    <p>האתר משתמש רק בעוגיות טכניות הנחוצות לפעולתו. שום עוגיית פרסום או אנליטיקה לא נשמרת ללא הסכמתכם. <a href="/he/legal/cookie-policy">מידע נוסף</a></p>
+    <p>האתר משתמש רק בעוגיות טכניות הנחוצות לפעולתו. שום עוגיית פרסום או אנליטיקה לא נשמרת ללא הסכמתכם. <a href="/he/legal/cookie-policy">מידע נוסף על עוגיות</a></p>
     <div class="cb-actions">
       <button class="cb-btn cb-reject" id="cb-reject">לדחות עוגיות לא חיוניות</button>
       <button class="cb-btn cb-accept" id="cb-accept">לאשר הכל</button>

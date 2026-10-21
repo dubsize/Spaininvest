@@ -234,3 +234,14 @@ main:has(> .v2-final:last-child)+footer{margin-top:0}
 .nav-links a.btn-primary{color:var(--paper)}
 .nav-links a.btn-primary:hover{color:var(--paper)}
 @media(max-width:600px){.hero .eyebrow{flex-wrap:wrap;justify-content:center;text-align:center}.hero .eyebrow::before{display:none}}
+
+/* contraste AA : le laiton de guides.css (#A8843B) est trop clair sur fond clair pour du petit texte */
+.datatable th,.toc p,.related p.lbl,.guide-card .tag,.gt-tag{color:#7A5F24}
+.v2-final label>span em,.v2-final legend em{opacity:1;color:rgba(246,244,238,.82)}
+
+/* mobile : les tableaux larges défilent dans leur cadre au lieu d'élargir la page */
+@media(max-width:600px){
+  .datatable:not(.v2-table){display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .datatable td,.datatable th{overflow-wrap:anywhere}
+  .cap-foot{flex-direction:column}
+}

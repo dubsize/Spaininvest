@@ -24,7 +24,7 @@ T = {
         legal=[('/legal/mentions-legales', 'Mentions légales'), ('/legal/politique-confidentialite', 'Confidentialité'),
                ('/legal/politique-cookies', 'Cookies'), ('/legal/conditions-generales', 'CGV')],
         cookie="Ce site utilise uniquement des cookies techniques nécessaires à son fonctionnement. Aucun cookie publicitaire ou d'analyse n'est déposé sans votre consentement.",
-        cookie_more=('/legal/politique-cookies', 'En savoir plus'),
+        cookie_more=('/legal/politique-cookies', 'En savoir plus sur les cookies'),
         reject='Refuser les cookies non essentiels', accept='Tout accepter', skip='Aller au contenu',
     ),
     'en': dict(
@@ -35,7 +35,7 @@ T = {
         legal=[('/en/legal/legal-notice', 'Legal notice'), ('/en/legal/privacy-policy', 'Privacy'),
                ('/en/legal/cookie-policy', 'Cookies'), ('/en/legal/terms', 'Terms')],
         cookie='This site only uses technical cookies necessary for it to work. No advertising or analytics cookies are set without your consent.',
-        cookie_more=('/en/legal/cookie-policy', 'Learn more'),
+        cookie_more=('/en/legal/cookie-policy', 'Learn more about cookies'),
         reject='Reject non-essential', accept='Accept all', skip='Skip to content',
     ),
     'he': dict(
@@ -46,7 +46,7 @@ T = {
         legal=[('/he/legal/legal-notice', 'תנאים משפטיים'), ('/he/legal/privacy-policy', 'פרטיות'),
                ('/he/legal/cookie-policy', 'עוגיות'), ('/he/legal/terms', 'תנאי שירות')],
         cookie='האתר משתמש רק בעוגיות טכניות הנחוצות לפעולתו. שום עוגיית פרסום או אנליטיקה לא נשמרת ללא הסכמתכם.',
-        cookie_more=('/he/legal/cookie-policy', 'מידע נוסף'),
+        cookie_more=('/he/legal/cookie-policy', 'מידע נוסף על עוגיות'),
         reject='לדחות עוגיות לא חיוניות', accept='לאשר הכל', skip='דלג לתוכן',
     ),
 }
@@ -116,11 +116,13 @@ def page(lang, url, title, description, body, alts=None, current=None, head_extr
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <title>{title}</title>
 <meta name="description" content="{description}">{robots_tag}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="{FONTS[lang]}" rel="stylesheet">
+<link href="{FONTS[lang]}" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="{FONTS[lang]}" rel="stylesheet"></noscript>
 <link rel="stylesheet" href="/guides.css">
 <link rel="stylesheet" href="/site-v2.css">
 <script defer data-domain="memoriamadrid.com" src="https://plausible.io/js/script.outbound-links.js"></script>{head_extra}

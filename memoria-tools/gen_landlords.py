@@ -169,7 +169,7 @@ def landlord_form(lang, f):
         <label><span>{f['furnished']}</span><select name="meuble"><option value="">{f['choose']}</option>{furn}</select></label>
       </div>
       <div class="rdv-row">
-        <label><span>{f['rent']}</span><input type="number" name="loyer_vise" min="0" step="50" inputmode="numeric" required></label>
+        <label><span>{f['rent']}</span><input type="number" name="loyer_vise" min="0" step="1" inputmode="numeric" required></label>
         <label><span>{f['avail']}</span><input type="date" name="disponibilite" required></label>
       </div>
       <label class="rdv-full"><span>{f['message']} <em>{f['optional']}</em></span><textarea name="message" rows="3"></textarea></label>

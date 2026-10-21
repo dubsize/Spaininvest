@@ -1,0 +1,7 @@
+# Repli si netlify.toml n'est pas appliqué : copier ce fichier à la racine de memoria/
+# (ne pas garder les deux en même temps pour éviter des en-têtes en double).
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()

@@ -1,0 +1,21 @@
+# Mémoria — redirections Netlify (lu à la racine du dossier déployé).
+# Aucune URL existante n'a changé : ces règles ajoutent des raccourcis
+# et les équivalents de langue les plus probables.
+
+# Raccourcis
+/corporate              /en/corporate/                          301
+/landlords              /en/landlords/                          301
+/devis                  /entreprises/                           301
+/capability-statement   /docs/memoria-capability-statement      301
+
+# Slug d'une langue tapé dans une autre
+/en/entreprises         /en/corporate/                          301
+/en/proprietaires       /en/landlords/                          301
+/he/entreprises         /he/corporate/                          301
+/he/proprietaires       /he/landlords/                          301
+/fr                     /                                       301
+/fr/*                   /:splat                                 301
+
+# Page 404 dans la langue de la section (la 404 FR /404.html sert le reste du site)
+/en/*                   /en/404.html                            404
+/he/*                   /he/404.html                            404

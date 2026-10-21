@@ -1,0 +1,18 @@
+# Mémoria — configuration Netlify (site statique, aucune commande de build).
+# Les redirections sont dans _redirects.
+#
+# À vérifier après chaque déploiement :
+#   curl -sI https://memoriamadrid.com/ | grep -iE "x-frame|x-content|referrer|permissions"
+# Si les en-têtes n'apparaissent pas (cas possible d'un déploiement par
+# glisser-déposer), copier memoria-tools/_headers dans ce dossier.
+
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
