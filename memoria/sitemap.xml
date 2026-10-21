@@ -22,6 +22,57 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/corporate/"/>
   </url>
   <url>
+    <loc>https://memoriamadrid.com/en/guides/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/guides/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/guides/"/>
+    <xhtml:link rel="alternate" hreflang="he" href="https://memoriamadrid.com/he/guides/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/guides/"/>
+  </url>
+  <url>
+    <loc>https://memoriamadrid.com/en/guides/cita-previa-nie-eu-certificate-madrid</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/guides/cita-previa-nie-certificat-ue-madrid"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/guides/cita-previa-nie-eu-certificate-madrid"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/guides/cita-previa-nie-eu-certificate-madrid"/>
+  </url>
+  <url>
+    <loc>https://memoriamadrid.com/en/guides/digital-certificate-clave</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/guides/certificat-numerique-clave"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/guides/digital-certificate-clave"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/guides/digital-certificate-clave"/>
+  </url>
+  <url>
+    <loc>https://memoriamadrid.com/en/guides/electricity-gas-water-madrid</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/guides/electricite-gaz-eau-madrid"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/guides/electricity-gas-water-madrid"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/guides/electricity-gas-water-madrid"/>
+  </url>
+  <url>
+    <loc>https://memoriamadrid.com/en/guides/empadronamiento-madrid</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/guides/empadronamiento-madrid"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/guides/empadronamiento-madrid"/>
+    <xhtml:link rel="alternate" hreflang="he" href="https://memoriamadrid.com/he/guides/empadronamiento-madrid"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/guides/empadronamiento-madrid"/>
+  </url>
+  <url>
+    <loc>https://memoriamadrid.com/en/guides/nie-before-you-move</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/guides/nie-avant-le-depart"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/guides/nie-before-you-move"/>
+    <xhtml:link rel="alternate" hreflang="he" href="https://memoriamadrid.com/he/guides/nie-before-you-move"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/guides/nie-before-you-move"/>
+  </url>
+  <url>
+    <loc>https://memoriamadrid.com/en/guides/renting-in-madrid-as-an-expat</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/guides/louer-madrid-expatrie"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/guides/renting-in-madrid-as-an-expat"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/guides/renting-in-madrid-as-an-expat"/>
+  </url>
+  <url>
+    <loc>https://memoriamadrid.com/en/guides/school-enrolment-madrid-mid-year</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/guides/scolariser-madrid-hors-campagne"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/guides/school-enrolment-madrid-mid-year"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/guides/school-enrolment-madrid-mid-year"/>
+  </url>
+  <url>
     <loc>https://memoriamadrid.com/en/landlords/</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/proprietaires/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/landlords/"/>
@@ -44,18 +95,54 @@
   </url>
   <url>
     <loc>https://memoriamadrid.com/guides/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/guides/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/guides/"/>
+    <xhtml:link rel="alternate" hreflang="he" href="https://memoriamadrid.com/he/guides/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/guides/"/>
   </url>
   <url>
     <loc>https://memoriamadrid.com/guides/certificat-numerique-clave</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/guides/certificat-numerique-clave"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/guides/digital-certificate-clave"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/guides/digital-certificate-clave"/>
+  </url>
+  <url>
+    <loc>https://memoriamadrid.com/guides/cita-previa-nie-certificat-ue-madrid</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/guides/cita-previa-nie-certificat-ue-madrid"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/guides/cita-previa-nie-eu-certificate-madrid"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/guides/cita-previa-nie-eu-certificate-madrid"/>
+  </url>
+  <url>
+    <loc>https://memoriamadrid.com/guides/electricite-gaz-eau-madrid</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/guides/electricite-gaz-eau-madrid"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/guides/electricity-gas-water-madrid"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/guides/electricity-gas-water-madrid"/>
   </url>
   <url>
     <loc>https://memoriamadrid.com/guides/empadronamiento-madrid</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/guides/empadronamiento-madrid"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/guides/empadronamiento-madrid"/>
+    <xhtml:link rel="alternate" hreflang="he" href="https://memoriamadrid.com/he/guides/empadronamiento-madrid"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/guides/empadronamiento-madrid"/>
+  </url>
+  <url>
+    <loc>https://memoriamadrid.com/guides/louer-madrid-expatrie</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/guides/louer-madrid-expatrie"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/guides/renting-in-madrid-as-an-expat"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/guides/renting-in-madrid-as-an-expat"/>
   </url>
   <url>
     <loc>https://memoriamadrid.com/guides/nie-avant-le-depart</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/guides/nie-avant-le-depart"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/guides/nie-before-you-move"/>
+    <xhtml:link rel="alternate" hreflang="he" href="https://memoriamadrid.com/he/guides/nie-before-you-move"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/guides/nie-before-you-move"/>
   </url>
   <url>
     <loc>https://memoriamadrid.com/guides/scolariser-madrid-hors-campagne</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/guides/scolariser-madrid-hors-campagne"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/guides/school-enrolment-madrid-mid-year"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/guides/school-enrolment-madrid-mid-year"/>
   </url>
   <url>
     <loc>https://memoriamadrid.com/he/</loc>
@@ -70,6 +157,27 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/corporate/"/>
     <xhtml:link rel="alternate" hreflang="he" href="https://memoriamadrid.com/he/corporate/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/corporate/"/>
+  </url>
+  <url>
+    <loc>https://memoriamadrid.com/he/guides/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/guides/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/guides/"/>
+    <xhtml:link rel="alternate" hreflang="he" href="https://memoriamadrid.com/he/guides/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/guides/"/>
+  </url>
+  <url>
+    <loc>https://memoriamadrid.com/he/guides/empadronamiento-madrid</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/guides/empadronamiento-madrid"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/guides/empadronamiento-madrid"/>
+    <xhtml:link rel="alternate" hreflang="he" href="https://memoriamadrid.com/he/guides/empadronamiento-madrid"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/guides/empadronamiento-madrid"/>
+  </url>
+  <url>
+    <loc>https://memoriamadrid.com/he/guides/nie-before-you-move</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/guides/nie-avant-le-depart"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/guides/nie-before-you-move"/>
+    <xhtml:link rel="alternate" hreflang="he" href="https://memoriamadrid.com/he/guides/nie-before-you-move"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/guides/nie-before-you-move"/>
   </url>
   <url>
     <loc>https://memoriamadrid.com/he/landlords/</loc>
