@@ -22,6 +22,13 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/corporate/"/>
   </url>
   <url>
+    <loc>https://memoriamadrid.com/en/landlords/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/proprietaires/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/landlords/"/>
+    <xhtml:link rel="alternate" hreflang="he" href="https://memoriamadrid.com/he/landlords/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/landlords/"/>
+  </url>
+  <url>
     <loc>https://memoriamadrid.com/en/services/</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/services/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/services/"/>
@@ -65,11 +72,25 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/corporate/"/>
   </url>
   <url>
+    <loc>https://memoriamadrid.com/he/landlords/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/proprietaires/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/landlords/"/>
+    <xhtml:link rel="alternate" hreflang="he" href="https://memoriamadrid.com/he/landlords/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/landlords/"/>
+  </url>
+  <url>
     <loc>https://memoriamadrid.com/he/services/</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/services/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/services/"/>
     <xhtml:link rel="alternate" hreflang="he" href="https://memoriamadrid.com/he/services/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/services/"/>
+  </url>
+  <url>
+    <loc>https://memoriamadrid.com/proprietaires/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://memoriamadrid.com/proprietaires/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://memoriamadrid.com/en/landlords/"/>
+    <xhtml:link rel="alternate" hreflang="he" href="https://memoriamadrid.com/he/landlords/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://memoriamadrid.com/en/landlords/"/>
   </url>
   <url>
     <loc>https://memoriamadrid.com/services/</loc>

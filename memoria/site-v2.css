@@ -192,3 +192,7 @@ html[lang=he] .eyebrow,html[lang=he] .fam-term{letter-spacing:.04em}
 .art-hero a.hero-btn:hover{opacity:.92;color:var(--green)}
 .art-hero a.hero-btn.ghost{background:transparent;color:var(--paper);border:1.5px solid rgba(246,244,238,.5);margin-inline-start:8px}
 main:has(> .v2-final:last-child)+footer{margin-top:0}
+.v2-table{background:#fff;border-radius:var(--radius);overflow:hidden}
+.v2-table th{font-family:var(--font-body);font-size:15.5px;font-weight:700;text-transform:none;letter-spacing:0;color:var(--ink);width:30%}
+.v2-table th,.v2-table td{padding:14px 16px}
+@media(max-width:600px){.v2-table th,.v2-table td{display:block;width:auto}.v2-table th{padding-bottom:0;border-bottom:none}}
