@@ -31,6 +31,7 @@ C = {
            ('Calendrier partagé', "Sous 48 h, un planning daté de chaque étape, partagé avec vous et le collaborateur."),
            ("Rapports d'étape", "Un point écrit chaque semaine : fait, à venir, points d'attention, dépenses engagées."),
            ('Rapport de fin de mission', "Synthèse des prestations réalisées, documents obtenus, échéances à venir pour le collaborateur.")],
+    cap="Vous référencez un nouveau prestataire ? Notre fiche fournisseur (capability statement, en anglais) est prête à joindre à vos formulaires →",
     cm_eyebrow='Nos engagements',
     cm_h2='Ce sur quoi vous pouvez compter',
     commits=[('Réponse sous 24 h ouvrées', 'À toute demande RH ou collaborateur.'),
@@ -77,6 +78,7 @@ C = {
            ('Shared timeline', 'Within 48 h, a dated plan of every step, shared with you and the transferee.'),
            ('Progress reports', 'A written update every week: done, next, watch-outs, costs committed.'),
            ('End-of-assignment report', 'Summary of services delivered, documents obtained, upcoming deadlines for the transferee.')],
+    cap='Onboarding a new supplier? Our capability statement is ready to attach to your vendor forms →',
     cm_eyebrow='Our commitments',
     cm_h2='What you can count on',
     commits=[('Reply within 24 working hours', 'To any HR or transferee request.'),
@@ -123,6 +125,7 @@ C = {
            ('לוח זמנים משותף', 'תוך 48 שעות: תוכנית עם תאריכים לכל שלב, משותפת לכם ולעובד.'),
            ('דוחות התקדמות', 'עדכון כתוב בכל שבוע: מה נעשה, מה הלאה, נקודות לתשומת לב, הוצאות.'),
            ('דוח סיום', 'סיכום השירותים שניתנו, המסמכים שהתקבלו והמועדים הבאים של העובד.')],
+    cap='מוסיפים ספק חדש? דף היכולות שלנו (capability statement, באנגלית) מוכן לצירוף לטפסי הספקים שלכם ←',
     cm_eyebrow='ההתחייבויות שלנו',
     cm_h2='על מה אפשר לסמוך',
     commits=[('מענה תוך 24 שעות עבודה', 'לכל פנייה של משאבי אנוש או של העובד.'),
@@ -229,6 +232,7 @@ def build(lang, extra_sections=''):
     <ul class="commit-grid">
 {commits}
     </ul>
+    <p class="v2-fine"><a href="/docs/memoria-capability-statement">{c['cap']}</a></p>
   </div>
 </section>
 {extra_sections}

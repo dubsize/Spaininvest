@@ -337,6 +337,7 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
       <a class="nav-txt" href="/guides/">Guides</a>
       <a class="nav-txt" href="#faq">Questions</a>
       <span class="lang"><a class="active" href="/">FR</a><a href="/en/">EN</a><a href="/he/">עב</a></span>
+      <a class="btn-nav-ghost" href="/entreprises/#devis">Devis entreprise</a>
       <a class="btn btn-primary" href="#contact">Entretien gratuit</a>
     </nav>
   </div>
@@ -670,6 +671,11 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
       <input type="hidden" name="form-name" value="rdv">
       <p class="hidden-field"><label>Ne pas remplir : <input name="bot-field"></label></p>
 
+      <fieldset class="rdv-check profil">
+        <legend>Vous êtes</legend>
+        <label class="chk"><input type="radio" name="profil" value="particulier" required> Particulier</label><label class="chk"><input type="radio" name="profil" value="entreprise" required> Entreprise</label><label class="chk"><input type="radio" name="profil" value="proprietaire" required> Propriétaire</label>
+      </fieldset>
+
       <div class="rdv-row">
         <label>
           <span>Prénom et nom</span>
@@ -706,6 +712,7 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
         <label class="chk"><input type="checkbox" name="interet" value="Economies"> Économies sur mes factures</label>
         <label class="chk"><input type="checkbox" name="interet" value="Dossier Maison"> Dossier Maison</label>
         <label class="chk"><input type="checkbox" name="interet" value="Une démarche précise"> Une démarche précise</label>
+        <label class="chk"><input type="checkbox" name="interet" value="Logement"> Recherche de logement</label>
       </fieldset>
 
       <label class="rdv-full">
@@ -723,7 +730,7 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
         </select>
       </label>
 
-      <label class="chk consent"><input type="checkbox" name="consentement" value="oui" required> J'accepte que mes données soient utilisées pour répondre à ma demande, conformément à la <a href='/legal/politique-confidentialite'>politique de confidentialité</a>.</label>
+      <label class="chk consent"><input type="checkbox" name="consentement" value="oui" required> <span>J'accepte que mes données soient utilisées pour répondre à ma demande, conformément à la <a href='/legal/politique-confidentialite'>politique de confidentialité</a>.</span></label>
 
       <button class="btn btn-light" type="submit">Demander mon entretien gratuit</button>
       <p class="rdv-note">Nous vous répondons sous 24 h avec un lien Zoom et deux créneaux au choix. Vos informations ne servent qu'à préparer l'entretien et ne sont transmises à personne.</p>

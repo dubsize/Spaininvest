@@ -225,3 +225,12 @@ main:has(> .v2-final:last-child)+footer{margin-top:0}
   .cap-tools{display:none}
   .cap-sheet{box-shadow:none;margin:0;width:210mm;height:297mm;overflow:hidden}
 }
+
+/* bouton principal de l'en-tête sur les pages légales (legal.css ne le définit pas) */
+.nav-right a.btn-nav{background:var(--green);color:var(--paper);padding:9px 18px;border-radius:100px;font-weight:700;font-size:14px}
+.nav-right a.btn-nav:hover{background:var(--green-deep);color:var(--paper)}
+
+/* accueils : contraste du bouton d'en-tête (la couleur des liens de nav l'emportait) */
+.nav-links a.btn-primary{color:var(--paper)}
+.nav-links a.btn-primary:hover{color:var(--paper)}
+@media(max-width:600px){.hero .eyebrow{flex-wrap:wrap;justify-content:center;text-align:center}.hero .eyebrow::before{display:none}}

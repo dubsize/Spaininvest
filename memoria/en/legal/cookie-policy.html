@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Display&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/legal.css">
+<link rel="stylesheet" href="/site-v2.css">
 <!-- Mesure d'audience sans cookies — remplacer memoriamadrid.com par votre domaine réel -->
 <script defer data-domain="memoriamadrid.com" src="https://plausible.io/js/script.outbound-links.js"></script>
 <!-- seo:start -->
@@ -40,8 +41,10 @@
   <div class="nav">
     <a class="logo" href="/en/">Mémoria<span>.</span></a>
     <div class="nav-right">
-      <a href="/en/">Home</a>
+      <a class="nav-txt" href="/en/services/">Services</a> <a class="nav-txt" href="/en/corporate/">Corporate</a> <a class="nav-txt" href="/en/landlords/">Landlords</a> <a class="nav-txt" href="/en/guides/">Guides</a>
       <span class="lang"><a href='/legal/politique-cookies'>FR</a><a class='active' href='/en/legal/cookie-policy'>EN</a><a href='/he/legal/cookie-policy'>עב</a></span>
+      <a class="btn-nav-ghost" href="/en/corporate/#devis">Corporate quote</a>
+      <a class="btn-nav" href="/en/#contact">Free consultation</a>
     </div>
   </div>
 </header>
@@ -104,6 +107,7 @@
 <footer>
   <div class="container">
     <p>© 2026 Mémoria — Madrid</p>
+    <p class="foot-nav"><a href="/en/services/">Services</a> · <a href="/en/corporate/">Corporate</a> · <a href="/en/landlords/">Landlords</a> · <a href="/en/guides/">Guides</a></p>
     <p>
       <a href='/en/legal/legal-notice'>Legal notice</a> ·
       <a href='/en/legal/privacy-policy'>Privacy</a> ·
@@ -124,6 +128,7 @@
 </div>
 
 <script src="/cookies.js"></script>
+<script src="/site-v2.js" defer></script>
 <script>
   document.getElementById('reopen-banner')?.addEventListener('click',()=>{
     try{localStorage.removeItem('memoria_cookie_consent')}catch(e){}

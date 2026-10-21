@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500&family=Assistant:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/legal.css">
+<link rel="stylesheet" href="/site-v2.css">
 <style>
   :root{--font-display:'Frank Ruhl Libre',serif;--font-body:'Assistant',sans-serif;--font-mono:'IBM Plex Mono','Assistant',monospace}
   body{line-height:1.85}
@@ -48,8 +49,10 @@
   <div class="nav">
     <a class="logo" href="/he/">Mémoria<span>.</span></a>
     <div class="nav-right">
-      <a href="/he/">דף הבית</a>
+      <a class="nav-txt" href="/he/services/">שירותים</a> <a class="nav-txt" href="/he/corporate/">לחברות</a> <a class="nav-txt" href="/he/landlords/">לבעלי נכסים</a> <a class="nav-txt" href="/he/guides/">מדריכים</a>
       <span class="lang"><a href='/legal/politique-cookies'>FR</a><a href='/en/legal/cookie-policy'>EN</a><a class='active' href='/he/legal/cookie-policy'>עב</a></span>
+      <a class="btn-nav-ghost" href="/he/corporate/#devis">הצעת מחיר לחברות</a>
+      <a class="btn-nav" href="/he/#contact">שיחת ייעוץ חינם</a>
     </div>
   </div>
 </header>
@@ -112,6 +115,7 @@
 <footer>
   <div class="container">
     <p>© 2026 Mémoria — מדריד</p>
+    <p class="foot-nav"><a href="/he/services/">שירותים</a> · <a href="/he/corporate/">לחברות</a> · <a href="/he/landlords/">לבעלי נכסים</a> · <a href="/he/guides/">מדריכים</a></p>
     <p>
       <a href='/he/legal/legal-notice'>תנאים משפטיים</a> ·
       <a href='/he/legal/privacy-policy'>פרטיות</a> ·
@@ -132,6 +136,7 @@
 </div>
 
 <script src="/cookies.js"></script>
+<script src="/site-v2.js" defer></script>
 <script>
   document.getElementById('reopen-banner')?.addEventListener('click',()=>{
     try{localStorage.removeItem('memoria_cookie_consent')}catch(e){}

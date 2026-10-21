@@ -292,6 +292,7 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
       <a class="nav-txt" href="/he/guides/">מדריכים</a>
       <a class="nav-txt" href="#faq">שאלות</a>
       <span class="lang"><a href="/">FR</a><a href="/en/">EN</a><a class="active" href="/he/">עב</a></span>
+      <a class="btn-nav-ghost" href="/he/corporate/#devis">הצעת מחיר לחברות</a>
       <a class="btn btn-primary" href="#contact">שיחת ייעוץ חינם</a>
     </nav>
   </div>
@@ -593,6 +594,11 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
       <input type="hidden" name="form-name" value="rdv-he">
       <p class="hidden-field"><label>לא למלא: <input name="bot-field"></label></p>
 
+      <fieldset class="rdv-check profil">
+        <legend>אתם</legend>
+        <label class="chk"><input type="radio" name="profil" value="particulier" required> לקוח פרטי</label><label class="chk"><input type="radio" name="profil" value="entreprise" required> חברה</label><label class="chk"><input type="radio" name="profil" value="proprietaire" required> בעלי נכס</label>
+      </fieldset>
+
       <div class="rdv-row">
         <label><span>שם מלא</span><input type="text" name="name" required autocomplete="name"></label>
         <label><span>אימייל</span><input type="email" name="email" required autocomplete="email"></label>
@@ -619,6 +625,7 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
         <label class="chk"><input type="checkbox" name="interest" value="חיסכון"> חיסכון בחשבונות</label>
         <label class="chk"><input type="checkbox" name="interest" value="תיק הבית"> תיק הבית</label>
         <label class="chk"><input type="checkbox" name="interest" value="הליך בודד"> הליך ספציפי</label>
+        <label class="chk"><input type="checkbox" name="interest" value="דירה"> חיפוש דירה</label>
       </fieldset>
 
       <label class="rdv-full">
@@ -636,7 +643,7 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
         </select>
       </label>
 
-      <label class="chk consent"><input type="checkbox" name="consent" value="כן" required> אני מאשר/ת שהנתונים שלי ישמשו למענה לפנייתי, בהתאם ל<a href='/he/legal/privacy-policy'>מדיניות הפרטיות</a>.</label>
+      <label class="chk consent"><input type="checkbox" name="consent" value="כן" required> <span>אני מאשר/ת שהנתונים שלי ישמשו למענה לפנייתי, בהתאם ל<a href='/he/legal/privacy-policy'>מדיניות הפרטיות</a>.</span></label>
 
       <button class="btn btn-light" type="submit">לקבוע שיחת ייעוץ חינם</button>
       <p class="rdv-note">נחזור אליכם תוך 24 שעות עם קישור לזום ושני מועדים לבחירה. הפרטים משמשים רק להכנת השיחה ואינם מועברים לאף אחד.</p>

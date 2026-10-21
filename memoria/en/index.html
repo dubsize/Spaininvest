@@ -292,6 +292,7 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
       <a class="nav-txt" href="/en/guides/">Guides</a>
       <a class="nav-txt" href="#faq">FAQ</a>
       <span class="lang"><a href="/">FR</a><a class="active" href="/en/">EN</a><a href="/he/">עב</a></span>
+      <a class="btn-nav-ghost" href="/en/corporate/#devis">Corporate quote</a>
       <a class="btn btn-primary" href="#contact">Free consultation</a>
     </nav>
   </div>
@@ -593,6 +594,11 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
       <input type="hidden" name="form-name" value="rdv-en">
       <p class="hidden-field"><label>Do not fill: <input name="bot-field"></label></p>
 
+      <fieldset class="rdv-check profil">
+        <legend>You are</legend>
+        <label class="chk"><input type="radio" name="profil" value="particulier" required> An individual</label><label class="chk"><input type="radio" name="profil" value="entreprise" required> A company</label><label class="chk"><input type="radio" name="profil" value="proprietaire" required> A landlord</label>
+      </fieldset>
+
       <div class="rdv-row">
         <label><span>Full name</span><input type="text" name="name" required autocomplete="name"></label>
         <label><span>Email</span><input type="email" name="email" required autocomplete="email"></label>
@@ -619,6 +625,7 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
         <label class="chk"><input type="checkbox" name="interest" value="Savings"> Savings on my bills</label>
         <label class="chk"><input type="checkbox" name="interest" value="Home Dossier"> Home Dossier</label>
         <label class="chk"><input type="checkbox" name="interest" value="One procedure"> One specific procedure</label>
+        <label class="chk"><input type="checkbox" name="interest" value="Housing"> Home search</label>
       </fieldset>
 
       <label class="rdv-full">
@@ -636,7 +643,7 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
         </select>
       </label>
 
-      <label class="chk consent"><input type="checkbox" name="consent" value="yes" required> I agree that my data may be used to respond to my request, in accordance with the <a href='/en/legal/privacy-policy'>privacy policy</a>.</label>
+      <label class="chk consent"><input type="checkbox" name="consent" value="yes" required> <span>I agree that my data may be used to respond to my request, in accordance with the <a href='/en/legal/privacy-policy'>privacy policy</a>.</span></label>
 
       <button class="btn btn-light" type="submit">Request my free call</button>
       <p class="rdv-note">We reply within 24 h with a Zoom link and two time slots. Your details are used only to prepare the call and are never shared.</p>
