@@ -1,4 +1,4 @@
-# Checklist QA — refonte Mémoria (21 octobre 2026)
+# Checklist QA — refonte Mémoria (mise en ligne le 22 octobre 2026)
 
 Tests faits sur une copie locale du dossier `memoria/`, servie en HTTP et parcourue dans Chromium
 (Playwright), et par le script `memoria-tools/qa.py`. Ce qui ne peut être vérifié qu'une fois le site
@@ -12,10 +12,10 @@ sur Netlify est marqué « après déploiement ».
 | 4 | **hreflang** : réciprocité vérifiée automatiquement sur toutes les pages, `x-default` = version EN | ✅ |
 | 5 | **Canonical** sur 47/47 pages, alignés sur les URL sans `.html` | ✅ |
 | 6 | **Liens internes et ancres** : 0 lien cassé, 0 ancre manquante | ✅ |
-| 7 | **Formulaires** (9 : rdv, rdv-en, rdv-he, corporate ×3, proprietaires ×3) : `data-netlify`, champ caché `form-name`, honeypot, consentement obligatoire ; envoi vide bloqué ; envoi rempli → requête POST avec le bon `form-name` et tous les champs ; mêmes champs dans les trois langues | ✅ côté navigateur — réception Netlify : **après déploiement** |
+| 7 | **Formulaires** (9 : rdv, rdv-en, rdv-he, corporate ×3, proprietaires ×3) : `data-netlify`, champ caché `form-name`, honeypot, consentement obligatoire ; envoi vide bloqué ; envoi rempli → requête POST avec le bon `form-name` et tous les champs ; mêmes champs dans les trois langues | ✅ navigateur ; ✅ en production : les 5 formulaires détectés par Netlify, un envoi test reçu sur `rdv`, `corporate` et `proprietaires` (tests supprimés ensuite) |
 | 8 | Bug corrigé pendant le test : le champ « loyer visé » refusait les montants non multiples de 50 | ✅ |
 | 9 | **Sitemap** : XML valide, 31 URL, toutes existantes, aucune page `noindex`, alternates hreflang inclus | ✅ |
-| 10 | **404 personnalisée** : `/404.html` (FR), `/en/404.html`, `/he/404.html` via `_redirects` | ✅ fichiers — comportement : **après déploiement** |
+| 10 | **404 personnalisée** : `/404.html` (FR), `/en/404.html`, `/he/404.html` via `_redirects` | ✅ en production : /page-inexistante, /en/… et /he/… renvoient 404 avec la page de la bonne langue |
 | 11 | **Mobile** : aucune page plus large que l'écran à 390 px (tableaux larges rendus défilables) | ✅ |
 | 12 | **Lighthouse** (mobile, local) — accueil FR : perf 99 / access. 99 / bonnes pratiques 96 / SEO 100 ; accueil HE : 100 / 99 / 96 / 100 ; Services : 100 / 100 / 96 / 100 ; Entreprises : 100 / 100 / 96 / 100 ; guide EN : 100 / 100 / 96 / 92. Pages légales : SEO 66, car en `noindex` (choix existant, inchangé) | ✅ ≥ 90 hors pages légales |
 | 13 | **Contraste** : texte laiton trop clair remplacé par une teinte AA sur les petits textes ; bouton d'en-tête des accueils corrigé | ✅ |
@@ -23,6 +23,6 @@ sur Netlify est marqué « après déploiement ».
 | 15 | Plausible et bannière cookies présents sur toutes les pages (sauf la fiche imprimable, qui n'a pas de bannière) | ✅ |
 | 16 | Pages légales : contenu inchangé (hors description de l'activité élargie aux entreprises et propriétaires), canonical et hreflang ajoutés | ✅ |
 | 17 | Capability statement : une page A4 en PDF (impression Chromium) | ✅ |
-| 18 | En-têtes de sécurité (`netlify.toml`) | **après déploiement** (voir README) |
-| 19 | Placeholders restants : voir `PLACEHOLDERS.md` | ⚠️ à remplir |
+| 18 | En-têtes de sécurité (`netlify.toml`) | ✅ en production : X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy présents ; redirections `_redirects` actives (12 règles) |
+| 19 | Aucun « […] » visible en ligne ; contenus à fournir : voir `PLACEHOLDERS.md` | ✅ / ⚠️ à fournir |
 | 20 | Relecture native des textes hébreux ; validation juridique des pages Propriétaires et du guide location | ⚠️ à faire |

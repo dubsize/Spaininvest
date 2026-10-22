@@ -1,5 +1,9 @@
 # Mémoria — mise en ligne de la refonte
 
+> **Déployé en production le 22 octobre 2026** (déploiement Netlify `6ad9a2fbcbdfe3e596d45d63`).
+> Version précédente, pour revenir en arrière en un clic (Netlify → Deploys → « Publish deploy ») : `6a5cfa17baef82e9eb10766d`.
+> Les sections ci-dessous servent pour les prochaines mises à jour.
+
 ## Ce qu'il faut glisser sur Netlify
 
 Le dossier **`memoria/`** (ou le contenu de `livrables/memoria-netlify.zip`, décompressé) :
