@@ -1,15 +1,32 @@
 # Mémoria — mise en ligne de la refonte
 
-> **En production : grille tarifaire v2, 22 octobre 2026** (déploiement Netlify `6ad9a96b305d06f8ec31b5fd`).
+> **En production depuis le 22 octobre 2026** : grille v2, logo, notifications e-mail
+> (déploiement Netlify `6ada6bd79da5b226784099f3`).
 > Versions précédentes, pour revenir en arrière en un clic (Netlify → Deploys → « Publish deploy ») :
-> refonte sans grille v2 `6ad9a2fbcbdfe3e596d45d63` ; site d'origine `6a5cfa17baef82e9eb10766d`.
-> Les sections ci-dessous servent pour les prochaines mises à jour.
+> grille v2 sans logo `6ad9a96b305d06f8ec31b5fd` ; refonte initiale `6ad9a2fbcbdfe3e596d45d63` ;
+> site d'origine `6a5cfa17baef82e9eb10766d`.
 
-## Ce qu'il faut glisser sur Netlify
+## ⚠️ Notifications des formulaires : ne plus déployer par glisser-déposer
 
-Le dossier **`memoria/`** (ou le contenu de `livrables/memoria-netlify.zip`, décompressé) :
-c'est le site complet, prêt à déployer, sans étape de build.
-Dans Netlify : projet *beamish-valkyrie-7aeabd* → **Deploys** → glisser le dossier.
+Les demandes des formulaires `corporate` et `proprietaires` sont envoyées par e-mail à
+info@starallianceconsult.com par la fonction `memoria/netlify/functions/submission-created.mjs`
+(via Resend, domaine starallianceconsult.com ; réponse directe à la personne).
+
+- Un **glisser-déposer** du dossier n'embarque **pas** cette fonction : les notifications
+  s'arrêteraient sans message d'erreur. Déployer avec la CLI Netlify depuis `memoria/`
+  (`npx netlify deploy --prod` après `netlify link`), ou demander à Claude de déployer.
+- La clé Resend est la variable secrète `RESEND_API_KEY` du site (contexte production,
+  portée Functions). Clé Resend « memoriamadrid-netlify-form-notifications », envoi seul.
+- Destinataire différent : ajouter la variable `NOTIFY_TO` dans Netlify puis redéployer.
+- Être prévenu aussi des demandes de RDV : ajouter `'rdv', 'rdv-en', 'rdv-he'` à
+  `NOTIFIED_FORMS` en tête de la fonction.
+- Journal des envois : Resend → Emails ; erreurs : Netlify → Logs → Functions.
+
+## Ce qu'il faut déployer
+
+Le dossier **`memoria/`** : c'est le site complet, sans étape de build, plus la fonction de
+notification. À déployer avec la CLI (voir ci-dessus) ; le glisser-déposer reste possible
+en dépannage, mais coupe les notifications jusqu'au prochain déploiement CLI.
 
 `memoria-tools/` n'est **pas** à déployer : ce sont les scripts qui ont produit les pages
 (gabarit commun, catalogue, guides, SEO, QA). Ils ne servent que si vous voulez régénérer.
