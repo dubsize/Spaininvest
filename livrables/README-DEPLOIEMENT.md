@@ -1,7 +1,8 @@
 # Mémoria — mise en ligne de la refonte
 
-> **Déployé en production le 22 octobre 2026** (déploiement Netlify `6ad9a2fbcbdfe3e596d45d63`).
-> Version précédente, pour revenir en arrière en un clic (Netlify → Deploys → « Publish deploy ») : `6a5cfa17baef82e9eb10766d`.
+> **En production : grille tarifaire v2, 22 octobre 2026** (déploiement Netlify `6ad9a96b305d06f8ec31b5fd`).
+> Versions précédentes, pour revenir en arrière en un clic (Netlify → Deploys → « Publish deploy ») :
+> refonte sans grille v2 `6ad9a2fbcbdfe3e596d45d63` ; site d'origine `6a5cfa17baef82e9eb10766d`.
 > Les sections ci-dessous servent pour les prochaines mises à jour.
 
 ## Ce qu'il faut glisser sur Netlify
