@@ -9,6 +9,12 @@
 [build]
   publish = "."
 
+# Fonction de notification des formulaires (voir netlify/functions/submission-created.mjs).
+# Attention : un déploiement par glisser-déposer n'embarque pas les fonctions ;
+# déployer avec la CLI Netlify depuis ce dossier pour garder les notifications.
+[functions]
+  directory = "netlify/functions"
+
 [[headers]]
   for = "/*"
   [headers.values]

@@ -2,6 +2,9 @@
 # Aucune URL existante n'a changé : ces règles ajoutent des raccourcis
 # et les équivalents de langue les plus probables.
 
+# Code source des fonctions : jamais servi comme fichier statique
+/netlify/*              /404.html                               404!
+
 # Raccourcis
 /corporate              /en/corporate/                          301
 /landlords              /en/landlords/                          301

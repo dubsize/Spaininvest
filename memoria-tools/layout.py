@@ -74,7 +74,7 @@ def header(lang, alts, current=None):
     return f'''<a class="skip-link" href="#main">{t['skip']}</a>
 <header>
   <div class="nav">
-    <a class="logo" href="{HOME[lang]}">Mémoria<span>.</span></a>
+    <a class="logo" href="{HOME[lang]}"><img src="/logo/memoria-mark.svg" width="30" height="30" alt="">Mémoria<span>.</span></a>
     <nav class="nav-right" aria-label="Navigation">
       {' '.join(links)}
       {lang_switch(lang, alts)}

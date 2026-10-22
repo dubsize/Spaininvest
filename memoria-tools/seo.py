@@ -117,10 +117,12 @@ def process(path):
         if l != lang:
             lines.append(f'<meta property="og:locale:alternate" content="{LOCALES[l]}">')
     lines += [
-        '<!-- [IMAGE : visuel de partage 1200×630 (logo Mémoria sur fond vert), à déposer en /og-image.png puis décommenter les deux lignes suivantes] -->',
-        f'<!-- <meta property="og:image" content="{BASE}/og-image.png"> -->',
-        '<!-- <meta name="twitter:image" content="https://memoriamadrid.com/og-image.png"> -->',
-        '<meta name="twitter:card" content="summary">',
+        f'<meta property="og:image" content="{BASE}/og-image.png">',
+        '<meta property="og:image:width" content="1200">',
+        '<meta property="og:image:height" content="630">',
+        '<meta property="og:image:alt" content="Mémoria — Relocation & destination services, Madrid">',
+        '<meta name="twitter:card" content="summary_large_image">',
+        f'<meta name="twitter:image" content="{BASE}/og-image.png">',
         f'<meta name="twitter:title" content="{esc(title)}">',
         f'<meta name="twitter:description" content="{esc(desc)}">',
         '<!-- seo:end -->',
