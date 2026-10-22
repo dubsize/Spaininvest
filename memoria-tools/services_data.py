@@ -19,7 +19,9 @@ def eur(n):
 
 
 QUOTE = {'fr': 'Sur devis', 'en': 'On quote', 'he': 'לפי הצעת מחיר'}
-FROM_TBD = {'fr': 'à partir de [PRIX] €', 'en': 'from €[PRIX]', 'he': 'החל מ-€[PRIX]'}
+# Tarifs encore à fixer : affichés « Sur devis » en attendant.
+# Pour publier un prix, remplacer price=FROM_TBD par price=eur(XXX) sur le service concerné.
+FROM_TBD = QUOTE
 
 FAMILIES = [
     {

@@ -4,6 +4,9 @@ Tous les [CHAMPS] sont à remplacer par du contenu réel (avec accord écrit des
 clients pour les logos et témoignages) avant mise en ligne.
 """
 
+# Passer à True une fois les logos, témoignages et chiffres de l'étude de cas remplis.
+SHOW_PROOF = False
+
 P = {
 'fr': dict(
     logos_eyebrow='Ils nous ont fait confiance',
@@ -117,6 +120,17 @@ def testimonials(lang):
 
 def corporate_extra(lang):
     p = P[lang]
+    if not SHOW_PROOF:
+        faq = '\n'.join(f'      <details><summary>{q}</summary><p>{a}</p></details>' for q, a in p['faq'])
+        return f'''
+<section class="v2-section alt" id="faq">
+  <div class="container v2-faq">
+    <p class="eyebrow">{p['faq_eyebrow']}</p>
+    <h2>{p['faq_h2']}</h2>
+{faq}
+  </div>
+</section>
+'''
     kpis = ''.join(f'<div><strong>{a}</strong><span>{b}</span></div>' for a, b in p['kpis'])
     steps = ''.join(f'<li><strong>{a}</strong> — {b}</li>' for a, b in p['case_steps'])
     faq = '\n'.join(f'      <details><summary>{q}</summary><p>{a}</p></details>' for q, a in p['faq'])
