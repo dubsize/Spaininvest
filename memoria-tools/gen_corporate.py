@@ -14,8 +14,8 @@ C = {
     hero_cta='Demander un devis entreprise',
     pk_eyebrow='Packages destination services',
     pk_h2='Six packages, combinables, facturés à l\'employeur',
-    pk_lead="Les intitulés suivent la terminologie du secteur, pour s'intégrer directement à vos politiques de mobilité et aux bons de commande de votre RMC. Prix sur devis, selon la taille du foyer et le calendrier.",
-    pk_price='Sur devis · facturé à l\'employeur',
+    pk_lead="Les intitulés suivent la terminologie du secteur, pour s'intégrer directement à vos politiques de mobilité et aux bons de commande de votre RMC. Prix sur devis, exprimés HT (la TVA est récupérable par l'entreprise), selon la taille du foyer et le calendrier.",
+    pk_price='Sur devis, montants HT · facturé à l\'employeur',
     packages=[
         ('Pre-arrival briefing', 'À distance · 1 h + compte rendu', ["Visio avec le collaborateur (et son conjoint)", "Calendrier des démarches et des pièces à préparer avant le départ", "Premières pistes de quartiers et d'écoles", "Compte rendu écrit, copie RH"]),
         ('Orientation', '1 jour sur place', ["Trois à quatre quartiers selon le lieu de travail", "Trajets réels aux heures de pointe", "Écoles, commerces, santé, sport", "Carnet comparatif remis le soir même"]),
@@ -61,8 +61,8 @@ C = {
     hero_cta='Request a corporate quote',
     pk_eyebrow='Destination services packages',
     pk_h2='Six packages, combinable, invoiced to the employer',
-    pk_lead='Package names follow industry terminology, so they slot straight into your mobility policy and your RMC\'s purchase orders. Priced on quote, depending on household size and timing.',
-    pk_price='On quote · invoiced to the employer',
+    pk_lead='Package names follow industry terminology, so they slot straight into your mobility policy and your RMC\'s purchase orders. Priced on quote, before VAT (recoverable by the company), depending on household size and timing.',
+    pk_price='On quote, amounts before VAT · invoiced to the employer',
     packages=[
         ('Pre-arrival briefing', 'Remote · 1 h + written summary', ['Video call with the transferee (and partner)', 'Timeline and documents to prepare before leaving', 'First neighbourhood and school options', 'Written summary, copied to HR']),
         ('Orientation', '1 day on the ground', ['Three to four neighbourhoods around the workplace', 'Real rush-hour commutes', 'Schools, shops, healthcare, sport', 'Side-by-side comparison delivered the same evening']),
@@ -108,8 +108,8 @@ C = {
     hero_cta='לבקש הצעת מחיר לחברה',
     pk_eyebrow='חבילות Destination Services',
     pk_h2='שש חבילות, ניתנות לשילוב, בחיוב המעסיק',
-    pk_lead='שמות החבילות לפי המינוח המקובל בענף, כך שהן משתלבות ישירות במדיניות הניידות שלכם ובהזמנות הרכש של חברת הרילוקיישן. מחיר לפי הצעה, בהתאם לגודל המשפחה וללוח הזמנים.',
-    pk_price='לפי הצעת מחיר · בחיוב המעסיק',
+    pk_lead='שמות החבילות לפי המינוח המקובל בענף, כך שהן משתלבות ישירות במדיניות הניידות שלכם ובהזמנות הרכש של חברת הרילוקיישן. מחיר לפי הצעה, לפני מע״מ (שהחברה יכולה לקזז), בהתאם לגודל המשפחה וללוח הזמנים.',
+    pk_price='לפי הצעת מחיר, סכומים לפני מע״מ · בחיוב המעסיק',
     packages=[
         ('Pre-arrival briefing', 'מרחוק · שעה + סיכום כתוב', ['שיחת וידאו עם העובד (ובן או בת הזוג)', 'לוח זמנים ומסמכים להכנה לפני הטיסה', 'כיווני שכונות ובתי ספר ראשונים', 'סיכום כתוב, בהעתק למשאבי אנוש']),
         ('Orientation', 'יום אחד בשטח', ['שלוש־ארבע שכונות סביב מקום העבודה', 'נסיעות אמיתיות בשעות העומס', 'בתי ספר, קניות, בריאות, ספורט', 'טבלת השוואה באותו ערב']),
