@@ -2,6 +2,7 @@
 """Génère /services/, /en/services/, /he/services/ à partir de services_data.py."""
 from layout import page
 from services_data import BADGES, FAMILIES, EXTRAS
+from packs import T as PACKS, section_services as packs_section
 
 URLS = {'fr': '/services/', 'en': '/en/services/', 'he': '/he/services/'}
 
@@ -88,7 +89,7 @@ def family_html(f, lang, i, t):
 def build(lang):
     t = TXT[lang]
     fams = FAMILIES + [EXTRAS]
-    chips = ''.join(f'<a href="#{f["id"]}">{f["title"][lang]}</a>' for f in fams)
+    chips = f'<a href="#packs">{PACKS[lang]["eyebrow"]}</a>' + ''.join(f'<a href="#{f["id"]}">{f["title"][lang]}</a>' for f in fams)
     sections = '\n'.join(family_html(f, lang, i + 1 if f is not EXTRAS else 0, t) for i, f in enumerate(fams))
     body = f'''
 <section class="art-hero">
@@ -102,6 +103,7 @@ def build(lang):
 <div class="container v2-wrap">
   <p class="carte-legend">{t['legend']}</p>
   <nav class="fam-nav" aria-label="{t['jump']}">{chips}</nav>
+{packs_section(lang)}
 {sections}
   <p class="v2-fine">{t['fine']}</p>
   <div class="art-cta">

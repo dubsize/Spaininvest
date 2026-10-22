@@ -245,3 +245,28 @@ main:has(> .v2-final:last-child)+footer{margin-top:0}
   .datatable td,.datatable th{overflow-wrap:anywhere}
   .cap-foot{flex-direction:column}
 }
+
+/* ---------- packs particuliers : tableau comparatif ---------- */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.pk-wrap{position:relative;overflow-x:auto;margin-top:26px;-webkit-overflow-scrolling:touch}
+.pk-table{width:100%;min-width:560px;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid var(--line);border-radius:var(--radius);font-size:15px}
+.pk-table th,.pk-table td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:center;vertical-align:middle}
+.pk-table tbody th{text-align:start;font-weight:400;color:var(--ink)}
+.pk-table thead th{vertical-align:bottom;border-bottom:2px solid var(--green);padding-top:20px}
+.pk-table thead th:nth-child(4){background:rgba(30,61,52,.05)}
+.pk-table tbody td:nth-child(4){background:rgba(30,61,52,.05)}
+.pk-name{display:block;font-family:var(--font-display);font-size:24px;line-height:1.1}
+.pk-sub{display:block;font-size:13px;color:var(--ink-soft);margin:2px 0 8px}
+.pk-price{display:block;font-family:var(--font-display);font-size:26px;color:var(--green)}
+.pk-price small{font-family:var(--font-body);font-size:12px;color:var(--ink-soft)}
+.pk-alt{display:block;font-size:12.5px;color:var(--ink-soft)}
+.pk-yes{color:var(--green);font-weight:700;font-size:18px}
+.pk-no{color:rgba(32,36,31,.35)}
+.pk-cta td,.pk-cta th{border-bottom:none}
+.pk-cta a{display:inline-block;background:var(--green);color:var(--paper);text-decoration:none;font-weight:700;font-size:13.5px;padding:9px 14px;border-radius:100px;white-space:nowrap}
+.pk-cta a:hover{background:var(--green-deep);color:var(--paper)}
+.pk-install{margin-top:16px;font-size:15.5px}
+.pk-fine{font-size:13.5px;color:var(--ink-soft);margin-top:6px}
+/* prix longs de la grille v2 : passage à la ligne autorisé */
+.svc-price{white-space:normal;max-width:44%;line-height:1.3}
+@media(max-width:600px){.svc-price{max-width:none}}
