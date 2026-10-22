@@ -413,7 +413,7 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
   <div class="container">
     <div class="svc-head">
       <div>
-        <p class="eyebrow reveal">שירות 01 — קליטה</p>
+        <p class="eyebrow reveal">קטגוריה 02 — קליטה</p>
         <h2 class="reveal">תנחתו. אנחנו נטפל בכל השאר.</h2>
         <p class="lead reveal">השבועות הראשונים בספרד מתנהלים בסדר מדויק: בלי NIE אין חשבון בנק, בלי פדרון אין רישום לבית ספר, בלי Cl@ve אין גישה למינהל המקוון. אנחנו מכירים את הסדר — ואת קיצורי הדרך.</p>
       </div>
@@ -589,7 +589,7 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
       </details>
       <details>
         <summary>באילו שפות אתם עובדים?</summary>
-        <p>עברית, אנגלית או צרפתית מולכם, ספרדית מול הרשויות והספקים. הגשר הזה הוא בדיוק מה שאנחנו מספקים.</p>
+        <p>עברית, אנגלית, צרפתית וספרדית — מולכם ומול המשפחה; ספרדית מול הרשויות והספקים. המסמכים המרכזיים (חוזה, פרוטוקולים, דוחות) ניתנים בגרסה דו־לשונית. הגשר הזה הוא בדיוק מה שאנחנו מספקים.</p>
       </details>
     </div>
   </div>
@@ -674,18 +674,10 @@ footer a{color:rgba(246,244,238,.75);text-decoration:none}
       <a href='/he/legal/cookie-policy'>עוגיות</a> ·
       <a href='/he/legal/terms'>תנאי שירות</a>
     </p>
+    <p class="foot-info">האתר אינו שומר עוגיות פרסום או מדידה. <a href='/he/legal/cookie-policy'>מדיניות עוגיות</a></p>
   </div>
 </footer>
 
-<div id="cookie-banner">
-  <div class="cb-inner">
-    <p>האתר משתמש רק בעוגיות טכניות הנחוצות לפעולתו. שום עוגיית פרסום או אנליטיקה לא נשמרת ללא הסכמתכם. <a href='/he/legal/cookie-policy'>מידע נוסף על עוגיות</a></p>
-    <div class="cb-actions">
-      <button class="cb-btn cb-reject" id="cb-reject">לדחות עוגיות לא חיוניות</button>
-      <button class="cb-btn cb-accept" id="cb-accept">לאשר הכל</button>
-    </div>
-  </div>
-</div>
 
 <script>
 const tabs=document.querySelectorAll('.dossier-tab');
@@ -707,7 +699,6 @@ const io=new IntersectionObserver(es=>{
 },{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 </script>
-<script src="/cookies.js"></script>
 <script src="/site-v2.js" defer></script>
 </body>
 </html>

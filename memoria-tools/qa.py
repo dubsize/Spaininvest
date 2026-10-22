@@ -83,8 +83,10 @@ def main():
                 errors.append(f'{rel}: {tag} manquant')
         if ps.h1 != 1 and 'cap-body' not in src:
             warns.append(f'{rel}: {ps.h1} h1')
-        if '/404' not in u and 'cookies.js' not in src and 'cap-body' not in src:
-            errors.append(f'{rel}: cookies.js absent')
+        if '<div id="cookie-banner"' in src or 'cookies.js"' in src:
+            errors.append(f'{rel}: ancien bandeau cookies encore présent')
+        if 'cap-body' not in src and 'class="foot-info"' not in src:
+            errors.append(f'{rel}: mention cookies du pied de page absente')
         if 'plausible.io' not in src:
             errors.append(f'{rel}: Plausible absent')
         if 'site-v2.js' not in src and 'cap-body' not in src:

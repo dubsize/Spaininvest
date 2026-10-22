@@ -26,6 +26,7 @@ T = {
         cookie="Ce site utilise uniquement des cookies techniques nécessaires à son fonctionnement. Aucun cookie publicitaire ou d'analyse n'est déposé sans votre consentement.",
         cookie_more=('/legal/politique-cookies', 'En savoir plus sur les cookies'),
         reject='Refuser les cookies non essentiels', accept='Tout accepter', skip='Aller au contenu',
+        cookie_info="Ce site ne dépose aucun cookie publicitaire ni de mesure d'audience. <a href='/legal/politique-cookies'>Politique cookies</a>",
     ),
     'en': dict(
         services=('/en/services/', 'Services'), corporate=('/en/corporate/', 'Corporate'),
@@ -37,6 +38,7 @@ T = {
         cookie='This site only uses technical cookies necessary for it to work. No advertising or analytics cookies are set without your consent.',
         cookie_more=('/en/legal/cookie-policy', 'Learn more about cookies'),
         reject='Reject non-essential', accept='Accept all', skip='Skip to content',
+        cookie_info="This site sets no advertising or analytics cookies. <a href='/en/legal/cookie-policy'>Cookie policy</a>",
     ),
     'he': dict(
         services=('/he/services/', 'שירותים'), corporate=('/he/corporate/', 'לחברות'),
@@ -48,6 +50,7 @@ T = {
         cookie='האתר משתמש רק בעוגיות טכניות הנחוצות לפעולתו. שום עוגיית פרסום או אנליטיקה לא נשמרת ללא הסכמתכם.',
         cookie_more=('/he/legal/cookie-policy', 'מידע נוסף על עוגיות'),
         reject='לדחות עוגיות לא חיוניות', accept='לאשר הכל', skip='דלג לתוכן',
+        cookie_info="האתר אינו שומר עוגיות פרסום או מדידה. <a href='/he/legal/cookie-policy'>מדיניות עוגיות</a>",
     ),
 }
 
@@ -91,18 +94,9 @@ def footer(lang):
     <p>{t['copy']}</p>
     <p class="foot-nav">{nav}</p>
     <p>{legal}</p>
+    <p class="foot-info">{t['cookie_info']}</p>
   </div>
-</footer>
-
-<div id="cookie-banner">
-  <div class="cb-inner">
-    <p>{t['cookie']} <a href="{t['cookie_more'][0]}">{t['cookie_more'][1]}</a></p>
-    <div class="cb-actions">
-      <button class="cb-btn cb-reject" id="cb-reject">{t['reject']}</button>
-      <button class="cb-btn cb-accept" id="cb-accept">{t['accept']}</button>
-    </div>
-  </div>
-</div>'''
+</footer>'''
 
 
 def page(lang, url, title, description, body, alts=None, current=None, head_extra='', robots=None):
@@ -137,7 +131,6 @@ def page(lang, url, title, description, body, alts=None, current=None, head_extr
 
 {footer(lang)}
 
-<script src="/cookies.js"></script>
 <script src="/site-v2.js" defer></script>
 </body>
 </html>

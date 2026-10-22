@@ -77,12 +77,6 @@
     <p>האתר הזה מינימלי במכוון: איננו משתמשים <strong>בעוגיות פרסום, בעוגיות פרופיילינג או בעוקבים של צד שלישי</strong>.</p>
     <table class="datatable">
       <tr><th>עוגייה</th><th>סוג</th><th>מטרה</th><th>משך</th></tr>
-      <tr>
-        <td><code>memoria_cookie_consent</code></td>
-        <td>טכנית — הכרחית</td>
-        <td>שומרת את הבחירה שלכם לגבי באנר העוגיות, כדי לא להציג אותו בכל ביקור.</td>
-        <td>12 חודשים</td>
-      </tr>
       <tr><td colspan="4"><em>עוגיות טכניות של ספק האחסון (Netlify)</em> — הכרחיות לפעולת האתר ולהגנה מפני ספאם בטפסים. אינן משמשות למעקב פרסומי.</td></tr>
     </table>
 
@@ -95,8 +89,8 @@
     <p>המידע הנאסף הוא מצטבר ואנונימי בלבד: מספר ביקורים וצפיות בדפים, אילו דפים נצפו, האתר או מנוע החיפוש שממנו הגעתם, ומדינה, סוג מכשיר ודפדפן בצורה מצטברת.</p>
     <p>שום פרט מכך אינו מאפשר לזהות אתכם. מאחר שלא נשמרת עוגייה במכשיר ולא מעובד מידע אישי כמשמעותו ב-GDPR, אין צורך בהסכמה מוקדמת. בחרנו בכוונה בפתרון זה במקום בכלי אנליטיקה פרסומי רגיל.</p>
 
-    <h2>ניהול ההסכמה</h2>
-    <p><button class="cb-btn cb-accept" id="reopen-banner" style="background:var(--green);color:var(--paper)">לשנות את העדפות העוגיות</button></p>
+    <h2>אין באנר הסכמה</h2>
+    <p>מאחר שלא נשמרת שום עוגייה הדורשת הסכמה, האתר אינו מציג באנר: הודעה קצרה מופיעה בתחתית כל עמוד. אם נוסיף בעתיד כלי שדורש את הסכמתכם, באנר יאפשר לכם לאשר או לדחות אותו לפני ששום דבר נשמר.</p>
 
     <h2>ניהול עוגיות בדפדפן</h2>
     <ul>
@@ -110,7 +104,7 @@
     <h2>מידע נוסף</h2>
     <p>עיבוד המידע האישי שלכם מתואר ב<a href='/he/legal/privacy-policy'>מדיניות הפרטיות</a>.</p>
 
-    <p class="updated">עודכן לאחרונה: 19 ביולי 2026</p>
+    <p class="updated">עודכן לאחרונה: 22 באוקטובר 2026</p>
   </div>
 </main>
 
@@ -124,27 +118,11 @@
       <a href='/he/legal/cookie-policy'>עוגיות</a> ·
       <a href='/he/legal/terms'>תנאי שירות</a>
     </p>
+    <p class="foot-info">האתר אינו שומר עוגיות פרסום או מדידה. <a href='/he/legal/cookie-policy'>מדיניות עוגיות</a></p>
   </div>
 </footer>
 
-<div id="cookie-banner">
-  <div class="cb-inner">
-    <p>האתר משתמש רק בעוגיות טכניות הנחוצות לפעולתו. שום עוגיית פרסום או אנליטיקה לא נשמרת ללא הסכמתכם. <a href='/he/legal/cookie-policy'>מידע נוסף על עוגיות</a></p>
-    <div class="cb-actions">
-      <button class="cb-btn cb-reject" id="cb-reject">לדחות עוגיות לא חיוניות</button>
-      <button class="cb-btn cb-accept" id="cb-accept">לאשר הכל</button>
-    </div>
-  </div>
-</div>
 
-<script src="/cookies.js"></script>
 <script src="/site-v2.js" defer></script>
-<script>
-  document.getElementById('reopen-banner')?.addEventListener('click',()=>{
-    try{localStorage.removeItem('memoria_cookie_consent')}catch(e){}
-    document.getElementById('cookie-banner').classList.add('show');
-    window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
-  });
-</script>
 </body>
 </html>
